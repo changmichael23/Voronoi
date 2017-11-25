@@ -1,0 +1,39 @@
+﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Bezier.vcxproj).  This can lead to incorrect clean and rebuild behavior.
+  Triangulation.cpp
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(134): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(143): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(156): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(166): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(189): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(196): warning C4018: '<=': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(198): warning C4018: '<=': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(218): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(230): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(341): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(343): warning C4305: '*=': truncation from 'double' to 'float'
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(344): warning C4305: '*=': truncation from 'double' to 'float'
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(346): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(348): warning C4305: '*=': truncation from 'double' to 'float'
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(349): warning C4305: '*=': truncation from 'double' to 'float'
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(355): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(357): warning C4305: '/=': truncation from 'double' to 'float'
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(358): warning C4305: '/=': truncation from 'double' to 'float'
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(360): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(362): warning C4305: '/=': truncation from 'double' to 'float'
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(363): warning C4305: '/=': truncation from 'double' to 'float'
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(654): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(659): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(686): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(692): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(700): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(701): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(712): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(735): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(747): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(771): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(778): warning C4018: '<=': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(780): warning C4018: '<=': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(852): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(858): warning C4018: '<': signed/unsigned mismatch
+  Triangulation.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\Triangulation.exe
+  Triangulation.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\Triangulation.pdb (Full PDB)

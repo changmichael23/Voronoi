@@ -19,9 +19,9 @@
     </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{07815A91-4214-4E15-AD6E-789E57CFCE58}</ProjectGuid>
+    <ProjectGuid>{5241887E-3BA7-4508-B58A-79AB7EAF5F13}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>Bezier</RootNamespace>
+    <RootNamespace>EnvConv2D</RootNamespace>
     <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -150,7 +150,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Bezier.cpp" />
+    <ClCompile Include="EnvConv2D.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
