@@ -1,17 +1,17 @@
 #include <math.h>
 #include <vector>
+#include "Camera.hpp"
+#include "Controller.hpp"
+#include "Graph.hpp"
 #ifdef _MSC_VER
 #pragma comment(lib, "opengl32.lib")
 #include <windows.h>
 #endif
 
-#include "glew.h"
-
 #ifdef _MSC_VER
 #pragma comment(lib, "glew32.lib")
 #endif
 
-#include "freeglut.h"
 
 #include "../common/EsgiShader.h"
 #include "../common/mat4.h"
@@ -22,125 +22,25 @@
 // format des vertices : X, Y, Z, ?, ?, ?, ?, ? = 8 floats
 //#include "../data/DragonData.h"
 
-int mode = 0;
-// 0 = LINE
-// 1 = PATH
-// 2 = REVO
+int sizetab, sizeind;
 
-int sizetab, sizeind,sizeCube = 3;
-int coefLine = 1;
-int pas = 1;
 //--------------------------------------------------------------------------------------------------------------------------------------------------------
 EsgiShader g_BasicShader;
-struct Point2D {
-	float x;
-	float y;
-};
-
-
-struct Point {
-	float x;
-	float y;
-	float z;
-	float n1;
-	float n2;
-	float n3;
-	Point()
-	{
-		x = 0;
-		y = 0;
-		z = 0;
-		n1 = 0;
-		n2 = 0;
-		n3 = 0;
-	}
-
-	Point(float a, float b, float c, float d , float e, float f)
-	{
-		x = a;
-		y = b;
-		z = c;
-		n1 = d;
-		n2 = e;
-		n3 = f;
-	}
-};
 
 std::vector<Point> p3D;           // Tous les points en 3D
 float* tabPoints;         //Tous les points en 3D
-std::vector<Point> transformPointsToCube(std::vector<Point> p);
 GLushort* createInd(int);
 GLushort* indi;			// Tab indice
 
-int width = 1000;
-int height = 1000;
+
 
 GLuint VBO;	// identifiant du Vertex Buffer Object
 GLuint IBO;	// identifiant du Index Buffer Object
 GLuint TexObj; // identifiant du Texture Object
 
-// -----------------------------------------------------------------------------------------------TYPE DE CAMERA----------------------------------------------------------------------------------------------
-int CamType = 0;
-// FPS = 0
-// Orbit = 1
-// -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-//Camera variables
-float posX = 0.0f;
-float posY = -4.7f;
-float posZ = -17.0f;
-float moveSpeed = 10000.0f;
-float rotSpeed = 0.3f;
-float rotX = 0.0f;
-float rotY = 0.0f;
-float distance = -60.0f;
-
-int lastposX = height * 0.5f;
-int lastposY = width * 0.5f;
-
-float deltaAngle = 0.0f;
-int xOrigin = -1;
-
-
-float TimeInSeconds;
-int TimeSinceAppStartedInMS;
-int OldTime = 0;
-float DeltaTime;
 
 float colore[4];
 
-
-void ChangeCam(int type)
-{
-	switch (type)
-	{
-	case 0:
-		CamType = 0;
-		rotX = 0.0f;
-		rotY = 0.0f;
-		posX = 0.0f;
-		posY = -0.5f;
-		posZ = -10.0f;
-		rotSpeed = 0.3f;
-		break;
-	case 1:
-		CamType = 1;
-		rotX = 0.0f;
-		rotY = 0.0f;
-		posX = 0.0f;
-		posY = -0.5f;
-		posZ = 0.0f;
-		distance = -10.0f;
-		break;
-	}
-
-}
-
-
-bool Initialize();
-float* structToTab(std::vector<Point>);
-float* structToTabWithNormals(std::vector<Point> newPoints, int n);
-std::vector<Point> createRandomPoints(int);
 
 bool Initialize()
 {
@@ -262,7 +162,6 @@ void animate()
 			break;
 		}
 
-
 		//
 
 		auto world_location = glGetUniformLocation(program, "u_WorldMatrix");
@@ -326,103 +225,6 @@ void animate()
 	
 }
 
-float COS(float angle)
-{
-	return cos(angle * 2 * 0.00872665);
-}
-float SIN(float angle)
-{
-	return sin(angle * 2 * 0.00872665);
-}
-
-
-void keyboard(unsigned char key, int x, int y)
-{
-	if (key == 'w')
-	{
-		if (CamType == 0)
-		{
-			posZ += moveSpeed *  DeltaTime * COS(rotY);
-			posX += moveSpeed *  DeltaTime * -SIN(rotY);
-			posY += moveSpeed *  DeltaTime * SIN(rotX);
-		}
-		else
-		{
-			distance += moveSpeed *  DeltaTime;
-		}
-	}
-	if (key == 'a')
-	{
-		posZ += moveSpeed *  DeltaTime * COS(rotY - 90);
-		posX += moveSpeed *  DeltaTime * -SIN(rotY - 90);
-
-	}
-	if (key == 's')
-	{
-		if (CamType == 0)
-		{
-			posZ -= moveSpeed *  DeltaTime * COS(rotY);
-			posX -= moveSpeed *  DeltaTime * -SIN(rotY);
-			posY -= moveSpeed *  DeltaTime * SIN(rotX);
-		}
-		else
-		{
-			distance -= moveSpeed *  DeltaTime;
-		}
-	}
-	if (key == 'd')
-	{
-		posZ -= moveSpeed *  DeltaTime * COS(rotY - 90);
-		posX -= moveSpeed *  DeltaTime * -SIN(rotY - 90);
-	}
-	if (key == 27)	// Echap
-	{
-		exit(0);
-	}
-	if (key == 32)	// Space Bar
-	{
-		posY -= moveSpeed *  DeltaTime;
-	}
-	if (key == 'f')
-	{
-		posY += moveSpeed *  DeltaTime;
-	}
-	if (key == '&')	 // 1 Mode FPS
-	{
-		ChangeCam(0);
-	}
-	if (key == 233)	 // 2 Mode Orbit
-	{
-		ChangeCam(1);
-	}
-}
-
-void mouse(int x, int y)
-{
-	
-		//rotX = (float)(y-height*0.5f) * rotSpeed;
-		//rotY = (float)(x-width*0.5f) * rotSpeed;
-		rotX += (y - lastposY)* rotSpeed;
-		rotY += (x - lastposX)* rotSpeed;
-		lastposX = x;
-		lastposY = y;
-	
-}
-
-void SpecialInput(int key, int x, int y)
-{
-	switch (key)
-	{
-	case GLUT_KEY_UP:
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		break;
-	case GLUT_KEY_DOWN:
-		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		break;
-
-	}
-	glutPostRedisplay();
-}
 int main(int argc, const char* argv[])
 {
 	
@@ -471,86 +273,10 @@ int main(int argc, const char* argv[])
 	return 1;
 }
 
-
-float * structToTab(std::vector<Point> newPoints)
-{
-	float* tabP = new float[newPoints.size() * 6];
-	int j = 0;
-	for (int i = 0; i < newPoints.size() * 6; i += 6)
-	{
-		tabP[i] = newPoints[j].x;
-		tabP[i + 1] = newPoints[j].y;
-		tabP[i + 2] = newPoints[j].z;
-		
-		tabP[i + 3] = newPoints[j].n1;
-		tabP[i + 4] = newPoints[j].n2;
-		tabP[i + 5] = newPoints[j].n3;
-		j++;
-	}
-
-	return tabP;
-}
-
-std::vector<Point> createRandomPoints(int n)
-{
-	std::vector<Point> tmp;
-
-	for (int i = 0; i < n; i++)
-	{
-		tmp.push_back(Point(rand() % 500-250, rand() % 500-250, rand() % 500-250,0,0,0));
-	}
-
-
-	return tmp;
-}
-
-
-std::vector<Point> transformPointsToCube(std::vector<Point> p)
-{
-	std::vector<Point> tmp;
-	int j = 0;
-	for (int i = 0; i < p.size(); i++)
-	{
-		tmp.push_back(Point(p[i].x + sizeCube, p[i].y + sizeCube, p[i].z + sizeCube, +1.0f, 0.0f, 0.0f));
-		tmp.push_back(Point(p[i].x + sizeCube, p[i].y + sizeCube, p[i].z - sizeCube, +1.0f, 0.0f, 0.0f));
-		tmp.push_back(Point(p[i].x + sizeCube, p[i].y - sizeCube, p[i].z - sizeCube, +1.0f, 0.0f, 0.0f));
-		tmp.push_back(Point(p[i].x + sizeCube, p[i].y - sizeCube, p[i].z + sizeCube, +1.0f, 0.0f, 0.0f));
-		tmp.push_back(Point(p[i].x - sizeCube, p[i].y + sizeCube, p[i].z + sizeCube, -1.0f, 0.0f, 0.0f));
-		tmp.push_back(Point(p[i].x - sizeCube, p[i].y + sizeCube, p[i].z - sizeCube, -1.0f, 0.0f, 0.0f));
-		tmp.push_back(Point(p[i].x - sizeCube, p[i].y - sizeCube, p[i].z - sizeCube, -1.0f, 0.0f, 0.0f));
-		tmp.push_back(Point(p[i].x - sizeCube, p[i].y - sizeCube, p[i].z + sizeCube, -1.0f, 0.0f, 0.0f));
-
-		tmp.push_back(Point(p[i].x + sizeCube, p[i].y + sizeCube, p[i].z + sizeCube, 0.0f, +1.0f , 0.0f));
-		tmp.push_back(Point(p[i].x + sizeCube, p[i].y + sizeCube, p[i].z - sizeCube, 0.0f, +1.0f, 0.0f));
-		tmp.push_back(Point(p[i].x - sizeCube, p[i].y + sizeCube, p[i].z - sizeCube, 0.0f, +1.0f, 0.0f));
-		tmp.push_back(Point(p[i].x - sizeCube, p[i].y + sizeCube, p[i].z + sizeCube, 0.0f, +1.0f, 0.0f));
-		tmp.push_back(Point(p[i].x + sizeCube, p[i].y - sizeCube, p[i].z + sizeCube, 0.0f, -1.0f, 0.0f));
-		tmp.push_back(Point(p[i].x + sizeCube, p[i].y - sizeCube, p[i].z - sizeCube, 0.0f, -1.0f, 0.0f));
-		tmp.push_back(Point(p[i].x - sizeCube, p[i].y - sizeCube, p[i].z - sizeCube, 0.0f, -1.0f, 0.0f));
-		tmp.push_back(Point(p[i].x - sizeCube, p[i].y - sizeCube, p[i].z + sizeCube, 0.0f, -1.0f, 0.0f));
-		
-		tmp.push_back(Point(p[i].x + sizeCube, p[i].y + sizeCube, p[i].z - sizeCube, 0.0f, 0.0f, -1.0f));
-		tmp.push_back(Point(p[i].x + sizeCube, p[i].y - sizeCube, p[i].z - sizeCube, 0.0f, 0.0f, -1.0f));
-		tmp.push_back(Point(p[i].x - sizeCube, p[i].y - sizeCube, p[i].z - sizeCube, 0.0f, 0.0f, -1.0f));
-		tmp.push_back(Point(p[i].x - sizeCube, p[i].y + sizeCube, p[i].z - sizeCube, 0.0f, 0.0f, -1.0f));
-		tmp.push_back(Point(p[i].x + sizeCube, p[i].y + sizeCube, p[i].z + sizeCube, 0.0f, 0.0f, +1.0f));
-		tmp.push_back(Point(p[i].x + sizeCube, p[i].y - sizeCube, p[i].z + sizeCube, 0.0f, 0.0f, +1.0f));
-		tmp.push_back(Point(p[i].x - sizeCube, p[i].y - sizeCube, p[i].z + sizeCube, 0.0f, 0.0f, +1.0f));
-		tmp.push_back(Point(p[i].x - sizeCube, p[i].y + sizeCube, p[i].z + sizeCube, 0.0f, 0.0f, +1.0f));
-		
-
-
-		j+=8;
-	}
-
-	return tmp;
-
-}
-
 GLushort* createInd(int n)
 {
-	GLushort* tmp = new GLushort[n*24];
-	for (int i = 0; i < n*24; i++)
+	GLushort* tmp = new GLushort[n * 24];
+	for (int i = 0; i < n * 24; i++)
 	{
 		tmp[i] = i;
 	}
