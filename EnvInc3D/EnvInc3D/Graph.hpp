@@ -8,7 +8,15 @@ class Graph {
 	
 	public:
 		Graph() {}
-		std::vector<Summit> getSummitList()
+		Graph(std::vector<Summit> s)
+		{
+			summitList = s;
+		}
+		void setSummitList(const std::vector<Summit> & s)
+		{
+			summitList = s;
+		}
+		const std::vector<Summit> & getSummitList() const
 		{
 			return summitList;
 		}
