@@ -100,7 +100,6 @@ public:
 
 		graph->getFaceList()->push_back(tmpFace);
 
-		algo();
 	}
 
 	void removeBlueFromGraph()
@@ -257,7 +256,6 @@ public:
 
 	}
 
-
 	void algo()
 	{
 
@@ -273,7 +271,6 @@ public:
 			setNormal();
 		}
 	}
-
 
 	void setNormal()
 	{
@@ -293,16 +290,32 @@ public:
 				ac.push_back(graph->getFaceList()->at(i)->getPoints()[(j + 2) % 3].y - graph->getFaceList()->at(i)->getPoints()[j].y);
 				ac.push_back(graph->getFaceList()->at(i)->getPoints()[(j + 2) % 3].z - graph->getFaceList()->at(i)->getPoints()[j].z);
 				std::vector<float> vectNormal = vectorialProduct(ab, ac);
+
+
+				Point tmp = getRandomInsidePoint(*graph->getFaceList()->at(i));
+				std::vector<float> f0;
+				f0.push_back(tmp.x-graph->getFaceList()->at(i)->getPoints()[j].x);
+				f0.push_back(tmp.y - graph->getFaceList()->at(i)->getPoints()[j].y);
+				f0.push_back(tmp.z - graph->getFaceList()->at(i)->getPoints()[j].z);
+
+				if (scalarProduct(vectNormal, f0) < 0.0f)
+				{
+					vectNormal[0] = - vectNormal[0];
+					vectNormal[1] = -vectNormal[1];
+					vectNormal[2] = -vectNormal[2];
+				}
+
+
 				Point tmpP = Point(graph->getFaceList()->at(i)->getPoints()[j].x,
 					graph->getFaceList()->at(i)->getPoints()[j].y,
 					graph->getFaceList()->at(i)->getPoints()[j].z, vectNormal[0], vectNormal[1], vectNormal[2]);
 
 				graph->getFaceList()->at(i)->setPointInd(j, tmpP);
 
-
 			}
 		}
 	}
+
 	void setColorGraph(Point p)
 	{
 		//Faces

@@ -44,8 +44,6 @@ struct Point {
 	}
 };
 
-
-
 float * structToTab(std::vector<Point> newPoints)
 {
 	float* tabP = new float[newPoints.size() * 6];
@@ -74,15 +72,11 @@ std::vector<Point> createRandomPoints(int n)
 {
 	std::vector<Point> tmp;
 
-	for (int i = 0; i < 50; i++)
+	for (int i = 0; i < 10; i++)
 	{
 		tmp.push_back(Point(RandomFloat(-500,500), RandomFloat(-500, 500), RandomFloat(-500, 500), 0, 0, 0));
 		
-
 	}
-
-
-
 	return tmp;
 }
 
@@ -119,8 +113,6 @@ std::vector<Point> transformPointsToCube(std::vector<Point> p)
 		tmp.push_back(Point(p[i].x + sizeCube, p[i].y - sizeCube, p[i].z + sizeCube, 0.0f, 0.0f, +1.0f));
 		tmp.push_back(Point(p[i].x - sizeCube, p[i].y - sizeCube, p[i].z + sizeCube, 0.0f, 0.0f, +1.0f));
 		tmp.push_back(Point(p[i].x - sizeCube, p[i].y + sizeCube, p[i].z + sizeCube, 0.0f, 0.0f, +1.0f));
-
-
 
 		j += 8;
 	}

@@ -98,6 +98,7 @@ bool Initialize()
 	Graph * tmpGraph = new Graph();
 	EnvInc testEnv = *new EnvInc(tmpGraph,centerPoints3D);
 	testEnv.initializeGraph();
+	testEnv.algo();
 	tmpFace = testEnv.getGraph()->getFaceList();
 
 	for (int i = 0; i < tmpFace->size(); i++)
@@ -111,12 +112,6 @@ bool Initialize()
 
 	}
 	
-	/*centerPoints3D.push_back(Point(50, 100, 10));
-	centerPoints3D.push_back(Point(14, 52, 8));
-	centerPoints3D.push_back(Point(57, -45, 25));
-	centerPoints3D.push_back(Point(50, 44, 74));
-	centerPoints3D.push_back(Point(74, 42, 68));
-	centerPoints3D.push_back(Point(-50, 100, 10));*/
 	std::vector<Colore> tmpColore;
 	
 	p3D = transformPointsToCube(centerPoints3D);
