@@ -31,7 +31,7 @@ public:
 	{
 		color = c;
 	}
-	std::vector<Point> getPoints()
+	std::vector<Point> & getPoints()
 	{
 		return points;
 	}
@@ -39,6 +39,12 @@ public:
 	{
 		points = p;
 	}
+	void setPointInd(int ind,Point p)
+	{
+		points[ind] = p;
+	}
+
+
 
 
 };

@@ -64,23 +64,22 @@ float * structToTab(std::vector<Point> newPoints)
 
 	return tabP;
 }
-
+float RandomFloat(float a, float b) {
+	float random = ((float)rand()) / (float)RAND_MAX;
+	float diff = b - a;
+	float r = random * diff;
+	return a + r;
+}
 std::vector<Point> createRandomPoints(int n)
 {
 	std::vector<Point> tmp;
 
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < 50; i++)
 	{
-		//tmp.push_back(Point(rand() % 500 - 250, rand() % 500 - 250, rand() % 500 - 250, 0, 0, 0));
-
+		tmp.push_back(Point(RandomFloat(-500,500), RandomFloat(-500, 500), RandomFloat(-500, 500), 0, 0, 0));
+		
 
 	}
-	
-	tmp.push_back(Point(- 850,-850, 700, 0, 0, 0));
-	tmp.push_back(Point(850,-850, 0, 0, 0, 0));
-	tmp.push_back(Point(0,  850, 0, 0, 0, 0));
-	tmp.push_back(Point(-850,- 850, -700, 0, 0, 0));
-	tmp.push_back(Point(0, 0, 0, 0, 0, 0));
 
 
 

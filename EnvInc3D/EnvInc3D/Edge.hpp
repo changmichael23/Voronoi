@@ -5,28 +5,28 @@ class Edge
 {
 private:
 
-	std::vector<Face> * faceConnected = new std::vector<Face>();
+	std::vector<Face*> * faceConnected = new std::vector<Face*>();
 	Colore color;
 	std::vector<Point> points;
 
 public:
 	Edge() {
 	
-		faceConnected = new std::vector<Face>();
+		faceConnected = new std::vector<Face*>();
 	}
-	Edge(Colore c, std::vector<Face> *f)
+	Edge(Colore c, std::vector<Face*> *f)
 	{
 		color = c;
 		faceConnected = f;
 	}
-	Edge(std::vector<Face> *f, std::vector<Point> p)
+	Edge(std::vector<Face*> *f, std::vector<Point> p)
 	{
 		faceConnected = f;
 		points = p;
 	}
 	Edge(std::vector<Point> p)
 	{
-		faceConnected = new std::vector<Face>();
+		faceConnected = new std::vector<Face*>();
 		points = p;
 	}
 	void setColor(const Colore & c)
@@ -37,15 +37,15 @@ public:
 	{
 		return color;
 	}
-	void setFacesConnected(std::vector<Face> * f)
+	void setFacesConnected(std::vector<Face*> * f)
 	{
 		faceConnected = f;
 	}
-	std::vector<Face> * getFacesConnected()
+	std::vector<Face*> * getFacesConnected()
 	{
 		return faceConnected;
 	}
-	std::vector<Point> getPoints()
+	std::vector<Point>& getPoints()
 	{
 		return points;
 	}
