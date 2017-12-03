@@ -8,13 +8,16 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <vector>
+#include <map>
 #include <string>
 #include <algorithm> 
 #define PI 3.14159265
 
 float r0;
 float r1;
-
+struct Apex;
+struct Edge;
+struct Triangle;
 
 
 typedef struct Point
@@ -23,6 +26,70 @@ typedef struct Point
 	float y;
 } Point;
 
+typedef struct Apex
+{
+	Point* p;
+	Edge* a;
+
+	Apex() : p(nullptr), a(nullptr) {};
+
+	Apex(Point* point) : p(point), a(nullptr) {};
+} Apex;
+
+typedef struct Edge
+{
+	Apex* s1;
+	Apex* s2;
+	Triangle* td;
+	Triangle* tg;
+
+	Edge() : s1(nullptr), s2(nullptr), td(nullptr), tg(nullptr) {};
+
+	Edge(Apex* s1, Apex* s2) : s1(s1), s2(s2), td(nullptr), tg(nullptr) {};
+} Edge;
+
+typedef struct Bounded_Edge
+{
+	Point p1;
+	Point p2;
+
+	Bounded_Edge(Point p1, Point p2) : p1(p1), p2(p2) {};
+} Bounded_Edge;
+
+typedef struct Triangle
+{
+	Edge* a1;
+	Edge* a2;
+	Edge* a3;
+
+	Triangle() : a1(nullptr), a2(nullptr), a3(nullptr) {};
+
+	Triangle(Edge* e1, Edge* e2, Edge* e3) : a1(e1), a2(e2), a3(e3) {};
+} Triangle;
+
+typedef struct Circle
+{
+	Point center;
+	float radius;
+} Circle;
+
+struct points_comparator
+{
+	inline bool operator() (const Point& p1, const Point& p2)
+	{
+		if (p1.x < p2.x) return true;
+		if (p1.x > p2.x) return false;
+		if (p1.y < p2.y) return true;
+		return false;
+	}
+};
+
+std::vector<Apex> apexes;
+std::vector<Edge> edges;
+std::vector<Triangle> triangles;
+std::map<Apex*, std::vector<Bounded_Edge>> voronoi_regions;
+
+float colinearity_tolerance = 0.0001;
 
 std::vector<Point> points;
 std::vector<Point> points1;
@@ -72,7 +139,10 @@ float colorr=0.0f;
 float colorg = 0.0f;
 float colorb = 0.0f;
 void transvecting();
-
+void triangulate();
+bool isTriangleDirect(Triangle);
+bool isTriangleLeft(Triangle, Edge*);
+float determinant(Apex*, Apex*, Apex*);
 
 int main(int argc, char **argv)
 {
@@ -400,6 +470,7 @@ void showMenu()
 		menuPrincipal = glutCreateMenu(drawingMenuCallback);
 		glutAddMenuEntry("Terminer le tracé", 1);
 		glutAddMenuEntry("Annuler le tracé", 2);
+		glutAddMenuEntry("Trianguler", 3);
 	}
 	else
 	{
@@ -479,6 +550,11 @@ void drawingMenuCallback(int menuItem)
 		break;
 	case 2:
 		points = neew;
+		glEnd();
+		glutSwapBuffers();
+		break;
+	case 3:
+		triangulate();
 		glEnd();
 		glutSwapBuffers();
 		break;
@@ -867,3 +943,1028 @@ void transvecting()
 
 }
 
+
+void triangulate()
+{
+	//Sorting points by coordinates
+	//-----------------------------
+	std::sort(points.begin(), points.end(), points_comparator());
+	apexes.reserve(points.size());
+	edges.reserve(points.size() * (points.size() - 1) / 2);
+	triangles.reserve(points.size() * points.size());
+
+
+	//Initializing 2-triangulation
+	//----------------------------
+	int i = 0;
+
+	if (points.size() == 1)
+	{
+		apexes.push_back(Apex(&points.at(i)));
+		return;
+	}
+
+	apexes.push_back(Apex(&points.at(i)));
+	apexes.push_back(Apex(&points.at(i + 1)));
+	edges.push_back(Edge(&apexes.at(i), &apexes.at(i + 1)));
+	apexes.at(i).a = &edges.at(i);
+	apexes.at(i + 1).a = &edges.at(i);
+	i += 2;
+
+	//if point colinear, add it
+	while (i < points.size()
+		&&	abs(((points.at(i - 2).y - points.at(i - 1).y) * (points.at(i - 2).x - points.at(i).x))
+			- ((points.at(i - 2).y - points.at(i).y) * (points.at(i - 2).x - points.at(i - 1).x)))
+		<= colinearity_tolerance)
+	{
+		apexes.push_back(Apex(&points.at(i)));
+		edges.push_back(Edge(&apexes.at(i - 1), &apexes.at(i)));
+		apexes.at(i).a = &edges.at(i - 1);
+		++i;
+	}
+
+	if (i == points.size())
+	{
+		return;
+	}
+
+	int nedges = edges.size();
+	//triangulate all colinear points to first non-colinear one
+	for (int j = 0; j < nedges; ++j)
+	{
+		apexes.push_back(Apex(&points.at(i)));
+
+		if (j == 0)
+		{
+			edges.push_back(Edge(&apexes.at(i), edges.at(j).s1));
+			apexes.at(i).a = &edges.at(i - 1);
+		}
+
+		edges.push_back(Edge(edges.at(j).s2, &apexes.at(i)));
+		triangles.push_back(Triangle(&edges.at(j), &edges.at(edges.size() - 2), &edges.at(edges.size() - 1)));
+		edges.at(j).td = &triangles.at(j);
+		edges.at(edges.size() - 1).td = &triangles.at(j);
+		edges.at(edges.size() - 2).td = &triangles.at(j);
+
+		if (j > 0)
+		{
+			edges.at(edges.size() - 3).tg = &triangles.at(j);
+		}
+	}
+
+
+	//Incrementing triangulation
+	//--------------------------
+	float d, dref;
+	Triangle* tref;
+	Apex a;
+	Edge e1;
+	Edge e2;
+	Triangle tr;
+	std::vector<Apex*> tr_apexes;
+	tr_apexes.reserve(2);
+	std::vector<Edge*> seen_edges;
+	seen_edges.reserve(points.size() - 1);
+	std::map<Apex*, Edge*> added_edges;
+	std::map<Apex*, Edge*>::iterator it;
+	Edge* tr_e1;
+	Edge* tr_e2;
+	for (int j = i + 1; j < points.size(); ++j)
+	{
+		//add point to triangulation apexes
+		apexes.push_back(Apex(&points.at(j)));
+
+		//find seen edges
+		seen_edges = findSeenEdges(&apexes.back());
+
+		//triangulate seen edges
+		for (int k = 0; k < seen_edges.size(); ++k)
+		{
+			e1.s1 = &apexes.at(j);
+			e1.s2 = seen_edges.at(k)->s1;
+			e2.s1 = &apexes.at(j);
+			e2.s2 = seen_edges.at(k)->s2;
+
+			it = added_edges.find(seen_edges.at(k)->s1);
+			//add new edge(s)
+			if (it == added_edges.end())
+			{
+				edges.push_back(e1);
+				added_edges.insert(std::pair<Apex*, Edge*>(seen_edges.at(k)->s1, &edges.back()));
+				tr_e1 = &edges.back();
+			}
+			else
+			{
+				tr_e1 = it->second;
+			}
+
+			it = added_edges.find(seen_edges.at(k)->s2);
+			if (it == added_edges.end())
+			{
+				edges.push_back(e2);
+				added_edges.insert(std::pair<Apex*, Edge*>(seen_edges.at(k)->s2, &edges.back()));
+				tr_e2 = &edges.back();
+			}
+			else
+			{
+				tr_e2 = it->second;
+			}
+
+			//create new triangle
+			tr = Triangle(seen_edges.at(k), tr_e1, tr_e2);
+
+			if (!isTriangleDirect(tr))
+			{
+				tr = Triangle(seen_edges.at(k), tr_e2, tr_e1);
+			}
+
+			//add new triangle to triangulation
+			triangles.push_back(Triangle(seen_edges.at(k), &e1, &e2));
+
+			//add triangle to edges
+			if (isTriangleLeft(tr, tr_e1))
+			{
+				tr_e1->tg = &triangles.back();
+				tr_e2->td = &triangles.back();
+			}
+			else
+			{
+				tr_e1->td = &triangles.back();
+				tr_e2->tg = &triangles.back();
+			}
+			if (isTriangleLeft(tr, seen_edges.at(k)))
+			{
+				seen_edges.at(k)->tg = &triangles.back();
+			}
+			else
+			{
+				seen_edges.at(k)->td = &triangles.back();
+			}
+		}
+
+		//clear seen edges for next point
+		seen_edges.clear();
+		added_edges.clear();
+	}
+}
+
+void delaunayTriangulation()
+{
+	std::vector<Edge*> edges_copy;
+	edges_copy.reserve(points.size() * (points.size() - 1) / 2);
+
+	for (int i = 0; i < edges.size(); ++i)
+	{
+		edges_copy.at(i) = &edges.at(i);
+	}
+
+	Edge *a;
+	Edge A;
+	Apex *s1, *s2, *s3, *s4;
+	Edge *a1, *a2, *a3, *a4;
+	Triangle *t1, *t2;
+
+	while (!edges_copy.empty())
+	{
+		a = edges_copy.back();
+		edges_copy.pop_back();
+
+		if (delaunayCriteria(a))
+		{
+			continue;
+		}
+
+		t1 = a->tg;
+		t2 = a->td;
+		
+		if (t1->a1 == a)
+		{
+			a1 = t1->a2;
+			a4 = t1->a3;
+		}
+		else if (t1->a2 == a)
+		{
+			a1 = t1->a1;
+			a4 = t1->a3;
+		}
+		else
+		{
+			a1 = t1->a1;
+			a4 = t1->a2;
+		}
+
+		if (t2->a1 == a)
+		{
+			a2 = t2->a2;
+			a3 = t2->a3;
+		}
+		else if (t2->a2 == a)
+		{
+			a2 = t2->a1;
+			a3 = t2->a3;
+		}
+		else
+		{
+			a2 = t2->a1;
+			a3 = t2->a2;
+		}
+
+		s1 = a->s1;
+		s2 = a->s2;
+
+		if (a1->s1 == a->s1 || a1->s1 == a->s2)
+		{
+			s3 = a1->s2;
+		}
+		else
+		{
+			s3 = a1->s1;
+		}
+
+		if (a3->s1 == a->s1 || a3->s1 == a->s2)
+		{
+			s4 = a3->s2;
+		}
+		else
+		{
+			s4 = a3->s1;
+		}
+
+		A = Edge(s3, s4);
+		a->s1 = s3;
+		a->s2 = s4;
+		s1->a = a1;
+		s2->a = a4;
+
+		t1->a1 = a;
+		t1->a2 = a1;
+		t1->a3 = a2;
+
+		t2->a1 = a;
+		t2->a2 = a3;
+		t2->a3 = a4;
+
+		if (!isTriangleDirect(*t1))
+		{
+			t1->a2 = a2;
+			t1->a3 = a1;
+		}
+		if (!isTriangleDirect(*t2))
+		{
+			t2->a2 = a4;
+			t2->a3 = a3;
+		}
+
+		if (isTriangleLeft(*t1, a))
+		{
+			a->tg = t1;
+			a->td = t2;
+		}
+		else
+		{
+			a->td = t1;
+			a->tg = t2;
+		}
+		if (isTriangleLeft(*t1, a1))
+		{
+			a1->tg = t1;
+		}
+		else
+		{
+			a1->td = t1;
+		}
+		if (isTriangleLeft(*t1, a2))
+		{
+			a2->tg = t1;
+		}
+		else
+		{
+			a2->td = t1;
+		}
+		if (isTriangleLeft(*t2, a3))
+		{
+			a3->tg = t2;
+		}
+		else
+		{
+			a3->td = t2;
+		}
+		if (isTriangleLeft(*t2, a4))
+		{
+			a4->tg = t2;
+		}
+		else
+		{
+			a4->td = t2;
+		}
+
+		edges_copy.push_back(a1);
+		edges_copy.push_back(a2);
+		edges_copy.push_back(a3);
+		edges_copy.push_back(a4);
+	}
+}
+
+void voronoiDiagram()
+{
+	Circle c;
+	Apex *s1, *s2, *s3;
+	std::map<Triangle*, Circle> circonscript_circles;
+	std::map<Triangle*, Circle>::iterator it1;
+	std::map<Edge*, Bounded_Edge> bounded_edges;
+	std::map<Edge*, Bounded_Edge>::iterator it2;
+	Circle c1, c2;
+	Point middle;
+
+	for (int i = 0; i < triangles.size(); ++i)
+	{
+		std::tie(s1, s2, s3) = apexesOfTriangle(&triangles.at(i));
+		c = circonscriptCircle(s1, s2, s3);
+
+		circonscript_circles.insert(std::pair<Triangle*, Circle>(&triangles.at(i), c));
+	}
+
+	for (int i = 0; i < edges.size(); ++i)
+	{
+		if (edges.at(i).td != nullptr && edges.at(i).tg != nullptr)
+		{
+			it1 = std::find(circonscript_circles.begin(), circonscript_circles.end(), edges.at(i).td);
+			c1 = it1->second;
+			it1 = std::find(circonscript_circles.begin(), circonscript_circles.end(), edges.at(i).tg);
+			c2 = it1->second;
+
+			bounded_edges.insert(std::pair<Edge*, Bounded_Edge>(&edges.at(i), Bounded_Edge(c1.center, c2.center)));
+		}
+		else
+		{
+			if (edges.at(i).td == nullptr)
+			{
+				it1 = std::find(circonscript_circles.begin(), circonscript_circles.end(), edges.at(i).tg);
+				c1 = it1->second;
+
+				middle.x = (edges.at(i).s1->p->x + edges.at(i).s2->p->x) / 2;
+				middle.y = (edges.at(i).s1->p->y + edges.at(i).s2->p->y) / 2;
+			}
+			else
+			{
+				it1 = std::find(circonscript_circles.begin(), circonscript_circles.end(), edges.at(i).td);
+				c1 = it1->second;
+
+				middle.x = (edges.at(i).s1->p->x + edges.at(i).s2->p->x) / 2;
+				middle.y = (edges.at(i).s1->p->y + edges.at(i).s2->p->y) / 2;
+			}
+
+			bounded_edges.insert(std::pair<Edge*, Bounded_Edge>(&edges.at(i), Bounded_Edge(c1.center, middle)));
+		}
+	}
+
+	for (int i = 0; i < apexes.size(); ++i)
+	{
+		std::vector<Bounded_Edge> region;
+
+		for (int j = 0; j < edges.size(); ++j)
+		{
+			if (edges.at(j).s1 == &apexes.at(i) || edges.at(j).s2 == &apexes.at(i))
+			{
+				it2 = std::find(bounded_edges.begin(), bounded_edges.end(), &edges.at(j));
+				region.push_back(it2->second);
+			}
+		}
+
+		voronoi_regions.insert(std::pair<Apex*, std::vector<Bounded_Edge>>(&apexes.at(i), region));
+		region.clear();
+	}
+}
+
+void delaunayAddPoint()
+{
+	for (int i = 0; i < apexes.size(); ++i)
+	{
+		if (apexes.at(i).p->x == points.back().x && apexes.at(i).p->y == points.back().y)
+		{
+			points.pop_back();
+			return;
+		}
+	}
+
+	if (triangles.empty())
+	{
+		if (apexes.empty())
+		{
+			apexes.push_back(Apex(&points.back()));
+			return;
+		}
+
+		if (apexes.size() == 1)
+		{
+			apexes.push_back(Apex(&points.back()));
+			edges.push_back(Edge(&apexes.at(0), &apexes.back()));
+			apexes.at(0).a = &edges.back();
+			apexes.at(1).a = &edges.back();
+			return;
+		}
+
+		if(abs(((apexes.at(0).p->y - apexes.at(1).p->y) * (apexes.at(0).p->x - points.back().x))
+			- ((apexes.at(0).p->y - points.back().y) * (apexes.at(0).p->x - apexes.at(1).p->x)))
+			<= colinearity_tolerance)
+		{
+			if (points.back().x < apexes.at(0).p->x 
+				|| (points.back().x == apexes.at(0).p->x && points.back().y < apexes.at(0).p->y))
+			{
+				apexes.push_back(Apex(&points.back()));
+				edges.push_back(Edge(&apexes.back(), &apexes.at(0)));
+				apexes.back().a = &edges.back();
+			}
+			else if (points.back().x > apexes.back().p->x 
+				|| (points.back().x == apexes.back().p->x && points.back().y > apexes.back().p->y))
+			{
+				apexes.push_back(Apex(&points.back()));
+				edges.push_back(Edge(&apexes.at(apexes.size() - 2), &apexes.back()));
+				apexes.back().a = &edges.back();
+			}
+			else
+			{
+				for (int i = 0; i < edges.size(); ++i)
+				{
+					if ((points.back().x > edges.at(i).s1->p->x && points.back().x < edges.at(i).s2->p->x) 
+						|| (points.back().x == edges.at(i).s1->p->x && points.back().y > edges.at(i).s1->p->y && points.back().y < edges.at(i).s2->p->y))
+					{
+						apexes.push_back(Apex(&points.back()));
+						Apex* s2 = edges.at(i).s2;
+						edges.at(i).s2 = &apexes.back();
+						apexes.back().a = &edges.at(i);
+						edges.push_back(Edge(&apexes.back(), s2));
+						s2->a = &edges.back();
+						break;
+					}
+				}
+			}
+		}
+		else
+		{
+			apexes.push_back(Apex(&points.back()));
+
+			for (int i = 0; i < apexes.size() - 1; ++i)
+			{
+				edges.push_back(Edge(&apexes.at(i), &apexes.back()));
+			}
+			apexes.back().a = &edges.back();
+
+			for (int i = 0; i < (edges.size() - 1) / 2; ++i)
+			{
+				Edge *a1, *a2;
+				Triangle t;
+				a1 = &edges.at(i + (edges.size() - 1) / 2);
+				a2 = &edges.at(i + (edges.size() - 1) / 2 + 1);
+
+				t = Triangle(&edges.at(i), a1, a2);
+
+				if (!isTriangleDirect(t))
+				{
+					t = Triangle(&edges.at(i), a2, a1);
+				}
+
+				triangles.push_back(t);
+
+				if (isTriangleLeft(t, &edges.at(i)))
+				{
+					edges.at(i).tg = &triangles.back();
+				}
+				else
+				{
+					edges.at(i).td = &triangles.back();
+				}
+
+				if (isTriangleLeft(t, a1))
+				{
+					a1->tg = &triangles.back();
+				}
+				else
+				{
+					a1->td = &triangles.back();
+				}
+
+				if (isTriangleLeft(t, a2))
+				{
+					a2->tg = &triangles.back();
+				}
+				else
+				{
+					a2->td = &triangles.back();
+				}
+			}
+		}
+	}
+	else
+	{
+		bool isInTriangle = false;
+		std::vector<Edge*> seen_edges;
+		seen_edges.reserve(edges.size());
+		Edge* a;
+		Circle c;
+		Apex *s1, *s2, *s3;
+		std::vector<Triangle>::iterator it1;
+		std::vector<Edge>::iterator it2;
+
+		apexes.push_back(Apex(&points.back()));
+
+		for (int i = 0; i < triangles.size(); ++i)
+		{
+			if (pointIsInTriangle(&triangles.at(i), &apexes.back()))
+			{
+				if (std::find(seen_edges.begin(), seen_edges.end(), triangles.at(i).a1) == seen_edges.end())
+				{
+					seen_edges.push_back(triangles.at(i).a1);
+				}
+				if (std::find(seen_edges.begin(), seen_edges.end(), triangles.at(i).a2) == seen_edges.end())
+				{
+					seen_edges.push_back(triangles.at(i).a2);
+				}
+				if (std::find(seen_edges.begin(), seen_edges.end(), triangles.at(i).a3) == seen_edges.end())
+				{
+					seen_edges.push_back(triangles.at(i).a3);
+				}
+				isInTriangle = true;
+			}
+		}
+
+		if (!isInTriangle)
+		{
+			seen_edges = findSeenEdges(&apexes.back());
+		}
+
+		while (!seen_edges.empty())
+		{
+			a = seen_edges.back();
+			seen_edges.pop_back();
+
+			if(a->td != nullptr)
+			{
+				std::tie(s1, s2, s3) = apexesOfTriangle(a->td);
+				c = circonscriptCircle(s1, s2, s3);
+
+				if (sqrt(pow(c.center.x - apexes.back().p->x, 2) + pow(c.center.y - apexes.back().p->y, 2)) <= c.radius)
+				{
+					if (a == a->td->a1)
+					{
+						seen_edges.push_back(a->td->a2);
+						seen_edges.push_back(a->td->a3);
+					}
+					else if (a == a->td->a2)
+					{
+						seen_edges.push_back(a->td->a1);
+						seen_edges.push_back(a->td->a3);
+					}
+					else
+					{
+						seen_edges.push_back(a->td->a1);
+						seen_edges.push_back(a->td->a2);
+					}
+
+					triangles.erase(std::remove(triangles.begin(), triangles.end(), a->td), triangles.end());
+					edges.erase(std::remove(edges.begin(), edges.end(), *a), edges.end());
+
+					continue;
+				}
+			}
+			if (a->tg != nullptr)
+			{
+				std::tie(s1, s2, s3) = apexesOfTriangle(a->tg);
+				c = circonscriptCircle(s1, s2, s3);
+
+				if (sqrt(pow(c.center.x - apexes.back().p->x, 2) + pow(c.center.y - apexes.back().p->y, 2)) <= c.radius)
+				{
+					if (a == a->tg->a1)
+					{
+						seen_edges.push_back(a->tg->a2);
+						seen_edges.push_back(a->tg->a3);
+					}
+					else if (a == a->tg->a2)
+					{
+						seen_edges.push_back(a->tg->a1);
+						seen_edges.push_back(a->tg->a3);
+					}
+					else
+					{
+						seen_edges.push_back(a->tg->a1);
+						seen_edges.push_back(a->tg->a2);
+					}
+
+					triangles.erase(std::remove(triangles.begin(), triangles.end(), a->tg), triangles.end());
+					edges.erase(std::remove(edges.begin(), edges.end(), *a), edges.end());
+
+					continue;
+				}
+			}
+
+			edges.push_back(Edge(a->s1, &apexes.back()));
+			edges.push_back(Edge(a->s2, &apexes.back()));
+
+			apexes.back().a = &edges.back();
+
+			Triangle tr = Triangle(a, &edges.back(), &edges.at(edges.size() - 2));
+
+			if (!isTriangleDirect(tr))
+			{
+				tr = Triangle(a, &edges.at(edges.size() - 2), &edges.back());
+			}
+
+			triangles.push_back(tr);
+
+		}
+	}
+}
+
+void delaunayDeletePoint(Point p)
+{
+
+}
+
+bool isTriangleDirect(Triangle tr)
+{
+	Apex *s1 = nullptr, *s2 = nullptr, *s3 = nullptr;
+
+	std::tie(s1, s2, s3) = apexesOfTriangle(&tr);
+
+	return determinant(s1, s2, s3) > 0;
+}
+
+bool isTriangleLeft(Triangle tr, Edge* e)
+{
+	Apex *s1 = nullptr, *s2 = nullptr, *s3 = nullptr;
+
+	if (tr.a1 == e)
+	{
+		if (tr.a1->s1 == tr.a2->s1)
+		{
+			s1 = tr.a1->s1;
+			s2 = tr.a2->s2;
+			s3 = tr.a1->s2;
+		}
+		else if (tr.a1->s1 == tr.a2->s2)
+		{
+			s1 = tr.a1->s1;
+			s2 = tr.a2->s1;
+			s3 = tr.a1->s2;
+		}
+		else if (tr.a1->s2 == tr.a2->s1)
+		{
+			s1 = tr.a1->s2;
+			s2 = tr.a2->s2;
+			s3 = tr.a1->s1;
+		}
+		else if (tr.a1->s2 == tr.a2->s2)
+		{
+			s1 = tr.a1->s2;
+			s2 = tr.a2->s1;
+			s3 = tr.a1->s1;
+		}
+	}
+	else if (tr.a2 == e)
+	{
+		if (tr.a2->s1 == tr.a3->s1)
+		{
+			s1 = tr.a2->s1;
+			s2 = tr.a3->s2;
+			s3 = tr.a2->s2;
+		}
+		else if (tr.a2->s1 == tr.a3->s2)
+		{
+			s1 = tr.a2->s1;
+			s2 = tr.a3->s1;
+			s3 = tr.a2->s2;
+		}
+		else if (tr.a2->s2 == tr.a3->s1)
+		{
+			s1 = tr.a2->s2;
+			s2 = tr.a3->s2;
+			s3 = tr.a2->s1;
+		}
+		else if (tr.a2->s2 == tr.a3->s2)
+		{
+			s1 = tr.a2->s2;
+			s2 = tr.a3->s1;
+			s3 = tr.a2->s1;
+		}
+	}
+	else if (tr.a3 == e)
+	{
+		if (tr.a3->s1 == tr.a1->s1)
+		{
+			s1 = tr.a3->s1;
+			s2 = tr.a1->s2;
+			s3 = tr.a3->s2;
+		}
+		else if (tr.a3->s1 == tr.a1->s2)
+		{
+			s1 = tr.a3->s1;
+			s2 = tr.a1->s1;
+			s3 = tr.a3->s2;
+		}
+		else if (tr.a3->s2 == tr.a1->s1)
+		{
+			s1 = tr.a3->s2;
+			s2 = tr.a1->s2;
+			s3 = tr.a3->s1;
+		}
+		else if (tr.a3->s2 == tr.a1->s2)
+		{
+			s1 = tr.a3->s2;
+			s2 = tr.a1->s1;
+			s3 = tr.a3->s1;
+		}
+	}
+
+	return determinant(s1, s2, s3) > 0;
+}
+
+float determinant(Apex* s1, Apex* s2, Apex* s3)
+{
+	return 0.5 * ((s1->p->x - s2->p->x) * (s3->p->y - s2->p->y) - (s1->p->y - s2->p->y) * (s3->p->x - s2->p->x));
+}
+
+bool delaunayCriteria(Edge *a)
+{
+	if (a->td == nullptr || a->tg == nullptr)
+	{
+		return true;
+	}
+
+	Point c;
+	float rc;
+	Apex *s1, *s2, *s3;
+	Circle circonscript;
+
+	if (a->td != nullptr)
+	{
+		std::tie(s1, s2, s3) = apexesOfTriangle(a->td);
+
+		circonscript = circonscriptCircle(s1, s2, s3);
+
+		for (int i = 0; i < apexes.size(); ++i)
+		{
+			if (&apexes.at(i) == s1
+				|| &apexes.at(i) == s2
+				|| &apexes.at(i) == s3)
+			{
+				continue;
+			}
+
+			if (sqrt(pow(apexes.at(i).p->x - circonscript.center.x, 2) + pow(apexes.at(i).p->y - circonscript.center.y, 2)) <= circonscript.radius)
+			{
+				return false;
+			}
+		}
+	}
+	if (a->tg != nullptr)
+	{
+		std::tie(s1, s2, s3) = apexesOfTriangle(a->tg);
+
+		circonscript = circonscriptCircle(s1, s2, s3);
+
+		for (int i = 0; i < apexes.size(); ++i)
+		{
+			if (&apexes.at(i) == s1
+				|| &apexes.at(i) == s2
+				|| &apexes.at(i) == s3)
+			{
+				continue;
+			}
+
+			if (sqrt(pow(apexes.at(i).p->x - circonscript.center.x, 2) + pow(apexes.at(i).p->y - circonscript.center.y, 2)) <= circonscript.radius)
+			{
+				return false;
+			}
+		}
+	}
+
+	return true;
+}
+
+std::tuple<Apex*, Apex*, Apex*> apexesOfTriangle(Triangle* tr)
+{
+	Apex *s1, *s2, *s3;
+
+	if (tr->a1->s1 == tr->a2->s1)
+	{
+		s1 = tr->a1->s1;
+		s2 = tr->a2->s2;
+		s3 = tr->a1->s2;
+	}
+	else if (tr->a1->s1 == tr->a2->s2)
+	{
+		s1 = tr->a1->s1;
+		s2 = tr->a2->s1;
+		s3 = tr->a1->s2;
+	}
+	else if (tr->a1->s2 == tr->a2->s1)
+	{
+		s1 = tr->a1->s2;
+		s2 = tr->a2->s2;
+		s3 = tr->a1->s1;
+	}
+	else if (tr->a1->s2 == tr->a2->s2)
+	{
+		s1 = tr->a1->s2;
+		s2 = tr->a2->s1;
+		s3 = tr->a1->s1;
+	}
+
+	return std::make_tuple(s1, s2, s3);
+}
+
+Circle circonscriptCircle(Apex* s1, Apex* s2, Apex* s3)
+{
+	Circle c;
+
+	c.center.x = ((pow(s3->p->x, 2) - pow(s2->p->x, 2) + pow(s3->p->y, 2) - pow(s2->p->y, 2))
+		/ (2 * (s3->p->y - s2->p->y))
+		- (pow(s2->p->x, 2) - pow(s1->p->x, 2) + pow(s2->p->y, 2) - pow(s1->p->y, 2))
+		/ (2 * (s2->p->y - s1->p->y)))
+		/ (((s2->p->x - s1->p->x) / (s2->p->y - s1->p->y))
+			- ((s3->p->x - s2->p->x) / (s3->p->y - s2->p->y)));
+
+	c.center.y = -c.center.x * (s2->p->x - s1->p->x) / (s2->p->y - s1->p->y)
+		+ (pow(s2->p->x, 2) - pow(s1->p->x, 2) + pow(s2->p->y, 2) - pow(s1->p->y, 2)) / (2 * (s2->p->y - s1->p->y));
+
+	c.radius = sqrt(pow(s1->p->x - c.center.x, 2) + pow(s1->p->y - c.center.y, 2));
+
+	return c;
+}
+
+bool pointIsInTriangle(Triangle* t, Apex* s)
+{
+	float d, dref;
+	Apex *s1, *s2, *s3;
+	std::tie(s1, s2, s3) = apexesOfTriangle(t);
+
+	if (t->a1->s1 != s1 && t->a1->s2 != s1)
+	{
+		dref = (s1->p->x - t->a1->s1->p->x) * (t->a1->s2->p->y - t->a1->s1->p->y)
+			- (s1->p->y - t->a1->s1->p->y) * (t->a1->s2->p->x - t->a1->s1->p->x);
+		dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+	}
+	else if (t->a1->s1 != s2 && t->a1->s2 != s2)
+	{
+		dref = (s2->p->x - t->a1->s1->p->x) * (t->a1->s2->p->y - t->a1->s1->p->y)
+			- (s2->p->y - t->a1->s1->p->y) * (t->a1->s2->p->x - t->a1->s1->p->x);
+		dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+	}
+	else
+	{
+		dref = (s3->p->x - t->a1->s1->p->x) * (t->a1->s2->p->y - t->a1->s1->p->y)
+			- (s3->p->y - t->a1->s1->p->y) * (t->a1->s2->p->x - t->a1->s1->p->x);
+		dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+	}
+
+	d = (s->p->x - t->a1->s1->p->x) * (t->a1->s2->p->y - t->a1->s1->p->y)
+		- (s->p->y - t->a1->s1->p->y) * (t->a1->s2->p->x - t->a1->s1->p->x);
+	d = (d < 0) ? -1 : (d > 0) ? 1 : 0;
+
+	if (d != dref && d != 0)
+	{
+		return false;
+	}
+
+	if (d == 0)
+	{
+		return true;
+	}
+
+	if (t->a2->s1 != s1 && t->a2->s2 != s1)
+	{
+		dref = (s1->p->x - t->a2->s1->p->x) * (t->a2->s2->p->y - t->a2->s1->p->y)
+			- (s1->p->y - t->a2->s1->p->y) * (t->a2->s2->p->x - t->a2->s1->p->x);
+		dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+	}
+	else if (t->a2->s1 != s2 && t->a2->s2 != s2)
+	{
+		dref = (s2->p->x - t->a2->s1->p->x) * (t->a2->s2->p->y - t->a2->s1->p->y)
+			- (s2->p->y - t->a2->s1->p->y) * (t->a2->s2->p->x - t->a2->s1->p->x);
+		dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+	}
+	else
+	{
+		dref = (s3->p->x - t->a2->s1->p->x) * (t->a2->s2->p->y - t->a2->s1->p->y)
+			- (s3->p->y - t->a2->s1->p->y) * (t->a2->s2->p->x - t->a2->s1->p->x);
+		dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+	}
+
+	d = (s->p->x - t->a2->s1->p->x) * (t->a2->s2->p->y - t->a2->s1->p->y)
+		- (s->p->y - t->a2->s1->p->y) * (t->a2->s2->p->x - t->a2->s1->p->x);
+	d = (d < 0) ? -1 : (d > 0) ? 1 : 0;
+
+	if (d != dref && d != 0)
+	{
+		return false;
+	}
+
+	if (d == 0)
+	{
+		return true;
+	}
+
+	if (t->a3->s1 != s1 && t->a3->s2 != s1)
+	{
+		dref = (s1->p->x - t->a3->s1->p->x) * (t->a3->s2->p->y - t->a3->s1->p->y)
+			- (s1->p->y - t->a3->s1->p->y) * (t->a3->s2->p->x - t->a3->s1->p->x);
+		dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+	}
+	else if (t->a3->s1 != s2 && t->a3->s2 != s2)
+	{
+		dref = (s2->p->x - t->a3->s1->p->x) * (t->a3->s2->p->y - t->a3->s1->p->y)
+			- (s2->p->y - t->a3->s1->p->y) * (t->a3->s2->p->x - t->a3->s1->p->x);
+		dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+	}
+	else
+	{
+		dref = (s3->p->x - t->a3->s1->p->x) * (t->a3->s2->p->y - t->a3->s1->p->y)
+			- (s3->p->y - t->a3->s1->p->y) * (t->a3->s2->p->x - t->a3->s1->p->x);
+		dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+	}
+
+	d = (s->p->x - t->a3->s1->p->x) * (t->a3->s2->p->y - t->a3->s1->p->y)
+		- (s->p->y - t->a3->s1->p->y) * (t->a3->s2->p->x - t->a3->s1->p->x);
+	d = (d < 0) ? -1 : (d > 0) ? 1 : 0;
+
+	if (d != dref && d != 0)
+	{
+		return false;
+	}
+
+	return true;
+}
+
+std::vector<Edge*> findSeenEdges(Apex* s)
+{
+	Triangle* tref;
+	std::vector<Apex*> tr_apexes;
+	tr_apexes.reserve(2);
+	Apex a;
+	std::vector<Edge*> seen_edges;
+	seen_edges.reserve(edges.size());
+	float d, dref;
+
+	for (int k = 0; k < edges.size(); ++k)
+	{
+		//if both triangle non null => continue
+		if (edges.at(k).td != nullptr
+			&& edges.at(k).tg != nullptr)
+		{
+			continue;
+		}
+
+		//find non null triangle
+		tref = (&edges.at(k).td != nullptr) ? edges.at(k).td : edges.at(k).tg;
+
+		//add apexes of edge
+		tr_apexes.push_back(edges.at(k).s1);
+		tr_apexes.push_back(edges.at(k).s2);
+
+		//find apex of triangle not in edge
+		if (tref->a1 != &edges.at(k))
+		{
+			if (std::find(tr_apexes.begin(), tr_apexes.end(), tref->a1->s1)
+				!= tr_apexes.end())
+			{
+				a = *tref->a1->s2;
+			}
+			else
+			{
+				a = *tref->a1->s1;
+			}
+		}
+		else if (tref->a2 != &edges.at(k))
+		{
+			if (std::find(tr_apexes.begin(), tr_apexes.end(), tref->a2->s1)
+				!= tr_apexes.end())
+			{
+				a = *tref->a2->s2;
+			}
+			else
+			{
+				a = *tref->a2->s1;
+			}
+		}
+
+		//calculate reference value for side of edge
+		dref = (a.p->x - edges.at(k).s1->p->x) * (edges.at(k).s2->p->y - edges.at(k).s1->p->y)
+			- (a.p->y - edges.at(k).s1->p->y) * (edges.at(k).s2->p->x - edges.at(k).s1->p->x);
+		dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+
+		//calculate real value for side of edge
+		d = (s->p->x - edges.at(k).s1->p->x) * (edges.at(k).s2->p->y - edges.at(k).s1->p->y)
+			- (s->p->y - edges.at(k).s1->p->y) * (edges.at(k).s2->p->x - edges.at(k).s1->p->x);
+		d = (d < 0) ? -1 : (d > 0) ? 1 : 0;
+
+		//check if edge is seen by point
+		if (d != dref && d != 0)
+		{
+			seen_edges.push_back(&edges.at(k));
+		}
+
+		tr_apexes.clear();
+	}
+
+	return seen_edges;
+}

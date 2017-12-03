@@ -1,39 +1,46 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Bezier.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   Triangulation.cpp
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(134): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(143): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(156): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(166): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(189): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(196): warning C4018: '<=': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(198): warning C4018: '<=': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(218): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(230): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(341): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(343): warning C4305: '*=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(344): warning C4305: '*=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(346): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(348): warning C4305: '*=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(349): warning C4305: '*=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(355): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(357): warning C4305: '/=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(358): warning C4305: '/=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(360): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(362): warning C4305: '/=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(363): warning C4305: '/=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(654): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(659): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(686): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(692): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(700): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(701): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(712): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(735): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(747): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(771): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(778): warning C4018: '<=': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(780): warning C4018: '<=': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(852): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(858): warning C4018: '<': signed/unsigned mismatch
-  Triangulation.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\Triangulation.exe
-  Triangulation.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\Triangulation.pdb (Full PDB)
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(77): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(189): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(198): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(211): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(221): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(244): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(251): warning C4018: '<=': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(253): warning C4018: '<=': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(273): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(285): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(396): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(398): warning C4305: '*=': truncation from 'double' to 'float'
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(399): warning C4305: '*=': truncation from 'double' to 'float'
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(401): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(403): warning C4305: '*=': truncation from 'double' to 'float'
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(404): warning C4305: '*=': truncation from 'double' to 'float'
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(410): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(412): warning C4305: '/=': truncation from 'double' to 'float'
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(413): warning C4305: '/=': truncation from 'double' to 'float'
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(415): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(417): warning C4305: '/=': truncation from 'double' to 'float'
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(418): warning C4305: '/=': truncation from 'double' to 'float'
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(715): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(720): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(747): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(753): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(761): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(762): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(773): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(796): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(808): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(832): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(839): warning C4018: '<=': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(841): warning C4018: '<=': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(913): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(919): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(954): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1005): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1011): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1056): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1061): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1073): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1267): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+  Triangulation.vcxproj -> C:\Users\maxim\Desktop\ESGI\5A\Maths pour l'info\Voronoi\Triangulation\Debug\Triangulation.exe

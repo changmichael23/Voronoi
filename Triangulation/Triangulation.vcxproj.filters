@@ -18,7 +18,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Bezier.cpp">
+    <ClCompile Include="Triangulation.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
