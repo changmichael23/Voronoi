@@ -1,4 +1,4 @@
-
+#include <string>
 #include <vector>
 int sizeCube = 3;
 
@@ -19,7 +19,7 @@ struct Point {
 		n3 = 0;
 	}
 
-	Point(float a, float b, float c, float d= 0.0f, float e= 0.0f, float f= 0.0f)
+	Point(float a, float b, float c, float d = 0.0f, float e = 0.0f, float f = 0.0f)
 	{
 		x = a;
 		y = b;
@@ -28,9 +28,21 @@ struct Point {
 		n2 = e;
 		n3 = f;
 	}
+
+	bool operator==(const Point &p)
+	{
+		if (x == p.x && y == p.y && z == p.z)
+		{
+			return true;
+		}
+		return false;
+	}
+
+	std::string toString()
+	{
+		return "x = " + std::to_string(x) + ", y = " + std::to_string(y) + ", z =" + std::to_string(z);
+	}
 };
-
-
 
 float * structToTab(std::vector<Point> newPoints)
 {
@@ -50,17 +62,21 @@ float * structToTab(std::vector<Point> newPoints)
 
 	return tabP;
 }
-
+float RandomFloat(float a, float b) {
+	float random = ((float)rand()) / (float)RAND_MAX;
+	float diff = b - a;
+	float r = random * diff;
+	return a + r;
+}
 std::vector<Point> createRandomPoints(int n)
 {
 	std::vector<Point> tmp;
 
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < 10; i++)
 	{
-		tmp.push_back(Point(rand() % 500 - 250, rand() % 500 - 250, rand() % 500 - 250, 0, 0, 0));
+		tmp.push_back(Point(RandomFloat(-500,500), RandomFloat(-500, 500), RandomFloat(-500, 500), 0, 0, 0));
+		
 	}
-
-
 	return tmp;
 }
 
@@ -97,8 +113,6 @@ std::vector<Point> transformPointsToCube(std::vector<Point> p)
 		tmp.push_back(Point(p[i].x + sizeCube, p[i].y - sizeCube, p[i].z + sizeCube, 0.0f, 0.0f, +1.0f));
 		tmp.push_back(Point(p[i].x - sizeCube, p[i].y - sizeCube, p[i].z + sizeCube, 0.0f, 0.0f, +1.0f));
 		tmp.push_back(Point(p[i].x - sizeCube, p[i].y + sizeCube, p[i].z + sizeCube, 0.0f, 0.0f, +1.0f));
-
-
 
 		j += 8;
 	}

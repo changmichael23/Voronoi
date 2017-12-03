@@ -1,45 +1,65 @@
-#include "Point.hpp"
+
+
 #include "Edge.hpp"
-
-#include <vector>
-
 class Summit {
 	// each point connected to edges
-	private:
+private:
 	Point point;
-	std::vector<Edge> edgesConnected;
+
+	std::vector<Edge*> * edgesConnected;
 	Colore color;
 
 public:
-	Summit() {}
-	Summit(Colore c, std::vector<Edge> e, Point p)
+	Summit() {
+		edgesConnected = new std::vector<Edge*>();
+	}
+	Summit(Point p)
+	{
+		point = p;
+		edgesConnected = new std::vector<Edge*>();
+	}
+	Summit(Colore c, Point p)
 	{
 		color = c;
+		point = p;
+	}
+
+	Summit(Colore c, std::vector<Edge*> *e, Point p)
+	{
+		color = c;
+
 		edgesConnected = e;
 		point = p;
 	}
+
 	void setPoint(const Point & p)
 	{
 		point = p;
 	}
-	const Point & getPoint() const
+
+	Point getPoint()
 	{
 		return point;
 	}
+
 	void setColor(const Colore & c)
 	{
 		color = c;
 	}
+
 	const Colore & getColor() const
 	{
 		return color;
 	}
-	void setEdgesConnected(const std::vector<Edge> & f)
+
+	void setEdgesConnected(std::vector<Edge*> * f)
 	{
 		edgesConnected = f;
 	}
-	const std::vector<Edge> & getEdgesConnected() const
+
+	std::vector<Edge*> * getEdgesConnected()
 	{
 		return edgesConnected;
 	}
+
 };

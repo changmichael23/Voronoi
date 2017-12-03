@@ -1,6 +1,8 @@
 varying vec3 v_Position;
 varying vec2 v_TexCoords;
 varying vec4 v_Normal;
+varying vec4 v_Color;
+
 
 uniform sampler2D u_Texture;
 
@@ -16,7 +18,7 @@ const vec3 materialDiffuseColor = vec3(0.8, 0.8, 0.8);
 const vec3 materialSpecularColor = vec3(1.0, 1.0, 1.0);
 const float u_Shininess=10;
 
-uniform vec4 color;
+//uniform vec4 color;
 
 void main(void)
 {
@@ -48,5 +50,5 @@ void main(void)
 	vec3 ambiantColor = lightAmbiantColor * vec3(materialAmbiantColor);
 	vec4 specular = vec4(pow(max(dot(R,E),0.0),u_Shininess)*specularColor,1.0) ;
 	//gl_FragColor = diffuseFactor;
-	gl_FragColor = diffuse*color+ vec4(ambiantColor, 1.0) *color+specular;
+	gl_FragColor = diffuse*v_Color+ vec4(ambiantColor, 1.0) *v_Color+specular;
 }
