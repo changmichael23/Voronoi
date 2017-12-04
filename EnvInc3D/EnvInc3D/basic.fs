@@ -6,7 +6,7 @@ varying vec4 v_Color;
 
 uniform sampler2D u_Texture;
 
-const vec3 directionalLight = normalize(-vec3(1.0, -10.0, -10.5));
+const vec3 directionalLight = normalize(-vec3(0.0, -1.0, 0.0));
 
 // composantes ambiantes
 const vec3 lightAmbiantColor = vec3(0.2, 0.2, 0.2);
@@ -23,7 +23,7 @@ const float u_Shininess=10;
 void main(void)
 {
 	vec3 diffuseColor = lightDiffuseColor * materialDiffuseColor;
-
+	//vec3 diffuseColor = materialDiffuseColor;
     vec2 uv = vec2(v_TexCoords.x, 1.0 - v_TexCoords.y);
 	// on a en fait passer des normales comme couleur
 	//vec4 color = vec4(v_Normal.rgb * 0.5 + 0.5, 1.0);
@@ -50,5 +50,6 @@ void main(void)
 	vec3 ambiantColor = lightAmbiantColor * vec3(materialAmbiantColor);
 	vec4 specular = vec4(pow(max(dot(R,E),0.0),u_Shininess)*specularColor,1.0) ;
 	//gl_FragColor = diffuseFactor;
+	//gl_FragColor = diffuse*v_Color+ vec4(ambiantColor, 1.0) *v_Color;
 	gl_FragColor = diffuse*v_Color+ vec4(ambiantColor, 1.0) *v_Color+specular;
 }

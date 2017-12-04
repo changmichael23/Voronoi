@@ -59,24 +59,27 @@ float * structToTabColor(std::vector<Point> newPoints, std::vector<Colore> c)
 		tabP[i + 4] = newPoints[j].n2;
 		tabP[i + 5] = newPoints[j].n3;
 
-		if (c[j] == Colore(purple))
+		/*if (c[j] == Colore(purple))
 		{
-			tabP[i + 6] = 1;
-			tabP[i + 7] = 0;
-			tabP[i + 8] = 1;
+			tabP[i + 6] = RandomFloat(0,1);
+			tabP[i + 7] = RandomFloat(0, 1);
+			tabP[i + 8] = RandomFloat(0, 1);
 		}
 		if (c[j] == Colore(red))
 		{
-			tabP[i + 6] = 1;
-			tabP[i + 7] = 0;
-			tabP[i + 8] = 0;
+			tabP[i + 6] = RandomFloat(0, 1);
+			tabP[i + 7] = RandomFloat(0, 1);
+			tabP[i + 8] = RandomFloat(0, 1);
 		}
 		if (c[j] == Colore(blue))
 		{
-			tabP[i + 6] = 0;
-			tabP[i + 7] = 0;
-			tabP[i + 8] = 1;
-		}
+			tabP[i + 6] = RandomFloat(0, 1);
+			tabP[i + 7] = RandomFloat(0, 1);
+			tabP[i + 8] = RandomFloat(0, 1);
+		}*/
+		tabP[i + 6] = 0;
+		tabP[i + 7] = 1;
+		tabP[i + 8] = 0;
 		j++;
 	}
 

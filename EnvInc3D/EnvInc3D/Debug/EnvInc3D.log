@@ -32,9 +32,9 @@ c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envinc3d\c
 c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\math.h(1001): warning C4005: 'M_PI': macro redefinition
   c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envinc3d\common\mat4.h(12): note: see previous definition of 'M_PI'
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envinc3d\envinc3d\main.cpp(52): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envinc3d\envinc3d\main.cpp(104): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envinc3d\envinc3d\main.cpp(119): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envinc3d\envinc3d\main.cpp(256): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envinc3d\envinc3d\main.cpp(107): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envinc3d\envinc3d\main.cpp(122): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envinc3d\envinc3d\main.cpp(259): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envinc3d\envinc3d\envinc.hpp(485): warning C4715: 'EnvInc::getRandomInsidePoint': not all control paths return a value
   EnvInc3D.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\EnvInc3D.exe
   EnvInc3D.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\EnvInc3D.pdb (Full PDB)
