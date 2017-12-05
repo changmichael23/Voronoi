@@ -129,7 +129,13 @@ std::tuple<Apex*, Apex*, Apex*> apexesOfTriangle(Triangle*);
 Circle circonscriptCircle(Apex*, Apex*, Apex*);
 bool pointIsInTriangle(Triangle*, Apex*);
 std::vector<Edge*> findSeenEdges(Apex*);
-float orientedAngle(Edge*, Edge*);
+std::vector<Edge*> findAdjacentEdges(Point*);
+float orientedAngle(Edge*, Edge*, Point*);
+std::vector<Edge*> findOrientedAdjacentEdges(Point*);
+std::vector<Triangle*> findOrientedAdjacentTriangles(std::vector<Edge*>);
+std::vector<Edge*> findNonAdjacentEdges(std::vector<Edge*>, std::vector<Triangle*>);
+void addTriangleToItsEdges(Triangle*);
+bool edgeExists(Apex*, Apex*);
 
 int main(int argc, char **argv)
 {
@@ -998,6 +1004,35 @@ void delaunayDeletePoint(Point* p)
 		std::vector<Triangle*> adjacent_triangles = findOrientedAdjacentTriangles(adjacent_edges);
 		std::vector<Edge*> non_adjacent_edges = findNonAdjacentEdges(adjacent_edges, adjacent_triangles);
 
+		std::map<Apex*, std::vector<Edge*>> adjacent_apexes;
+
+		for (int i = 0; i < non_adjacent_edges.size(); ++i)
+		{
+			if (std::find(adjacent_apexes.begin(), adjacent_apexes.end(), non_adjacent_edges.at(i)->s1) == adjacent_apexes.end())
+			{
+				std::vector<Edge*> adj_edges;
+				adj_edges.reserve(2);
+				adj_edges.push_back(non_adjacent_edges.at(i));
+				adjacent_apexes.insert(std::pair<Apex*, std::vector<Edge*>>(non_adjacent_edges.at(i)->s1, adj_edges));
+			}
+			else
+			{
+				adjacent_apexes.at(non_adjacent_edges.at(i)->s1).push_back(non_adjacent_edges.at(i));
+			}
+
+			if (std::find(adjacent_apexes.begin(), adjacent_apexes.end(), non_adjacent_edges.at(i)->s2) == adjacent_apexes.end())
+			{
+				std::vector<Edge*> adj_edges;
+				adj_edges.reserve(2);
+				adj_edges.push_back(non_adjacent_edges.at(i));
+				adjacent_apexes.insert(std::pair<Apex*, std::vector<Edge*>>(non_adjacent_edges.at(i)->s2, adj_edges));
+			}
+			else
+			{
+				adjacent_apexes.at(non_adjacent_edges.at(i)->s1).push_back(non_adjacent_edges.at(i));
+			}
+		}
+
 		apexes.erase(std::find(apexes.begin(), apexes.end(), s));
 
 		for (int i = 0; i < adjacent_edges.size(); ++i)
@@ -1010,44 +1045,17 @@ void delaunayDeletePoint(Point* p)
 			triangles.erase(std::find(triangles.begin(), triangles.end(), adjacent_triangles.at(i)));
 		}
 
+		bool isConv, exists;
+		Apex *s1, *s2;
+		Edge a;
+		Triangle tr;
+		Circle c;
+
 		if (non_adjacent_edges.back()->s1 == non_adjacent_edges.at(0)->s1
 			|| non_adjacent_edges.back()->s1 == non_adjacent_edges.at(0)->s2
 			|| non_adjacent_edges.back()->s2 == non_adjacent_edges.at(0)->s1
 			|| non_adjacent_edges.back()->s2 == non_adjacent_edges.at(0)->s2)
 		{
-			bool isConv;
-			Apex *s1, *s2;
-			std::map<Apex*, std::vector<Edge*>> adjacent_apexes;
-			Edge a;
-			Triangle tr;
-			Circle c;
-
-			for (int i = 0; i < non_adjacent_edges.size(); ++i)
-			{
-				if (std::find(adjacent_apexes.begin(), adjacent_apexes.end(), non_adjacent_edges.at(i)->s1) == adjacent_apexes.end())
-				{
-					std::vector<Edge*> adj_edges;
-					adj_edges.reserve(2);
-					adj_edges.push_back(non_adjacent_edges.at(i));
-					adjacent_apexes.insert(std::pair<Apex*, std::vector<Edge*>>(non_adjacent_edges.at(i)->s1, adj_edges));
-				}
-				else
-				{
-					adjacent_apexes.at(non_adjacent_edges.at(i)->s1).push_back(non_adjacent_edges.at(i));
-				}
-
-				if (std::find(adjacent_apexes.begin(), adjacent_apexes.end(), non_adjacent_edges.at(i)->s2) == adjacent_apexes.end())
-				{
-					std::vector<Edge*> adj_edges;
-					adj_edges.reserve(2);
-					adj_edges.push_back(non_adjacent_edges.at(i));
-					adjacent_apexes.insert(std::pair<Apex*, std::vector<Edge*>>(non_adjacent_edges.at(i)->s2, adj_edges));
-				}
-				else
-				{
-					adjacent_apexes.at(non_adjacent_edges.at(i)->s1).push_back(non_adjacent_edges.at(i));
-				}
-			}
 
 			while (non_adjacent_edges.size() > 3)
 			{
@@ -1070,6 +1078,11 @@ void delaunayDeletePoint(Point* p)
 					else
 					{
 						s2 = pair.second.at(1)->s1;
+					}
+
+					if (edgeExists(s1, s2))
+					{
+						continue;
 					}
 
 					a = Edge(s1, s2);
@@ -1104,6 +1117,7 @@ void delaunayDeletePoint(Point* p)
 						{
 							non_adjacent_edges.erase(std::find(non_adjacent_edges.begin(), non_adjacent_edges.end(), ar));
 						}
+						adjacent_apexes.erase(pair.first);
 						break;
 					}
 				}
@@ -1125,7 +1139,81 @@ void delaunayDeletePoint(Point* p)
 		}
 		else
 		{
+			bool hasFoundApex = true;
 
+			while (hasFoundApex)
+			{
+				hasFoundApex = false;
+
+				for (std::pair<Apex*, std::vector<Edge*>> pair : adjacent_apexes)
+				{
+					isConv = true;
+
+					if (pair.second.at(0)->s1 == pair.first)
+					{
+						s1 = pair.second.at(0)->s2;
+					}
+					else
+					{
+						s1 = pair.second.at(0)->s1;
+					}
+
+					if (pair.second.at(1)->s1 == pair.first)
+					{
+						s2 = pair.second.at(1)->s2;
+					}
+					else
+					{
+						s2 = pair.second.at(1)->s1;
+					}
+					
+					if (edgeExists(s1, s2))
+					{
+						continue;
+					}
+
+					a = Edge(s1, s2);
+					tr = Triangle(&a, pair.second.at(0), pair.second.at(1));
+
+					if (!isTriangleDirect(tr))
+					{
+						tr = Triangle(&a, pair.second.at(1), pair.second.at(0));
+					}
+
+					c = circonscriptCircle(pair.first, s1, s2);
+
+					for (std::pair<Apex*, std::vector<Edge*>> pair2 : adjacent_apexes)
+					{
+						if (pair2.first == pair.first
+							|| pair2.first == s1
+							|| pair2.first == s2)
+						{
+							continue;
+						}
+
+						if (sqrt(pow(pair2.first->p->x - c.center.x, 2) + pow(pair2.first->p->y - c.center.y, 2)) < c.radius)
+						{
+							isConv = false;
+							break;
+						}
+					}
+
+					if (isConv)
+					{
+						hasFoundApex = true;
+						for (Edge* ar : pair.second)
+						{
+							non_adjacent_edges.erase(std::find(non_adjacent_edges.begin(), non_adjacent_edges.end(), ar));
+						}
+						adjacent_apexes.erase(pair.first);
+						break;
+					}
+				}
+
+				edges.push_back(a);
+				triangles.push_back(tr);
+				non_adjacent_edges.push_back(&edges.back());
+			}
 		}
 	}
 }
@@ -1535,9 +1623,46 @@ std::vector<Edge*> findAdjacentEdges(Point* p)
 	return adjacent_edges;
 }
 
-float orientedAngle(Edge* a1, Edge* a2)
+float orientedAngle(Edge* a1, Edge* a2, Point* p)
 {
+	Apex *s, *s1, *s2;
 
+	for (Apex apex : apexes)
+	{
+		if (apex.p == p)
+		{
+			s = &apex;
+			continue;
+		}
+		if (&apex == a1->s1)
+		{
+			s1 = &apex;
+			continue;
+		}
+		if (&apex == a1->s2)
+		{
+			s1 = &apex;
+			continue;
+		}
+		if (&apex == a2->s1)
+		{
+			s2 = &apex;
+			continue;
+		}
+		if (&apex == a2->s2)
+		{
+			s2 = &apex;
+			continue;
+		}
+	}
+
+	float angle = atan2(s2->p->y - s->p->y, s2->p->x - s->p->x) - atan2(s1->p->y - s->p->y, s1->p->x - s->p->x);
+	if (angle < 0)
+	{
+		angle += 2 * PI;
+	}
+
+	return angle;
 }
 
 std::vector<Edge*> findOrientedAdjacentEdges(Point* p)
@@ -1549,7 +1674,7 @@ std::vector<Edge*> findOrientedAdjacentEdges(Point* p)
 
 	for (int i = 1; i < adjacent_edges.size(); ++i)
 	{
-		oriented_angles.insert(std::pair<Edge*, float>(adjacent_edges.at(i), orientedAngle(aref, adjacent_edges.at(i))));
+		oriented_angles.insert(std::pair<Edge*, float>(adjacent_edges.at(i), orientedAngle(aref, adjacent_edges.at(i), p)));
 	}
 
 	typedef std::function<bool(std::pair<Edge*, float>, std::pair<Edge*, float>)> Comparator;
@@ -1653,4 +1778,18 @@ void addTriangleToItsEdges(Triangle* t)
 	{
 		t->a3->td = t;
 	}
+}
+
+bool edgeExists(Apex* s1, Apex* s2)
+{
+	for (Edge edge : edges)
+	{
+		if ((edge.s1 == s1 && edge.s2 == s2)
+			|| (edge.s1 == s2 && edge.s2 == s1))
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
