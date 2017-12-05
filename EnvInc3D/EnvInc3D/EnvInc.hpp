@@ -99,7 +99,7 @@ public:
 		graph->getEdgeList()->at(5)->getFacesConnected()->push_back(tmpFace);
 
 		graph->getFaceList()->push_back(tmpFace);
-
+		setNormal();
 	}
 
 	void removeBlueFromGraph()
@@ -268,8 +268,8 @@ public:
 			connectNewPoint(tmp);
 
 			pointsLeft.pop_back();
-			setNormal();
-		}
+			
+		}setNormal();
 	}
 
 	void setNormal()
@@ -294,11 +294,11 @@ public:
 
 				Point tmp = getRandomInsidePoint(*graph->getFaceList()->at(i));
 				std::vector<float> f0;
-				f0.push_back(tmp.x-graph->getFaceList()->at(i)->getPoints()[j].x);
+				f0.push_back(tmp.x-	 graph->getFaceList()->at(i)->getPoints()[j].x);
 				f0.push_back(tmp.y - graph->getFaceList()->at(i)->getPoints()[j].y);
 				f0.push_back(tmp.z - graph->getFaceList()->at(i)->getPoints()[j].z);
 
-				if (scalarProduct(vectNormal, f0) < 0.0f)
+				if (scalarProduct(vectNormal, f0) > 0.0f)
 				{
 					vectNormal[0] = - vectNormal[0];
 					vectNormal[1] = -vectNormal[1];

@@ -2,7 +2,7 @@
 
 #include "glew.h"
 #include "freeglut.h"
-
+#include <iostream>
 
 float TimeInSeconds;
 int TimeSinceAppStartedInMS;
@@ -71,11 +71,11 @@ void keyboard(unsigned char key, int x, int y)
 	{
 		posY += moveSpeed *  DeltaTime;
 	}
-	if (key == '&')	 // 1 Mode FPS
+	if (key == '1')	 // 1 Mode FPS
 	{
 		ChangeCam(0);
 	}
-	if (key == 233)	 // 2 Mode Orbit
+	if (key == '2')	 // 2 Mode Orbit
 	{
 		ChangeCam(1);
 	}
@@ -86,8 +86,11 @@ void mouse(int x, int y)
 
 	//rotX = (float)(y-height*0.5f) * rotSpeed;
 	//rotY = (float)(x-width*0.5f) * rotSpeed;
-	rotX += (y - lastposY)* rotSpeed;
-	rotY += (x - lastposX)* rotSpeed;
+	if (abs(y - lastposY) < 10 && abs(x - lastposX) < 10)
+	{
+		rotX += (y - lastposY)* rotSpeed;
+		rotY += (x - lastposX)* rotSpeed;
+	}
 	lastposX = x;
 	lastposY = y;
 
