@@ -39,9 +39,17 @@ GLuint VBO1;	// identifiant du Vertex Buffer Object 1
 GLuint IBO,IBO1;	// identifiant du Index Buffer Object
 GLuint TexObj; // identifiant du Texture Object
 
-GLint firsts[6] = { 0,4,8,12,17,21 };
-GLsizei count[6] = { 4,4,4,5,4,4 };
-GLsizei nbCount = 6;
+std::vector<int>* indicesVector = new std::vector<int>();
+
+
+//int nbCount = 6+6*1;
+//int firsts[18] = { 0,4,8,12,17,21,25,30,34,38,42,46,50,55,59,63,67,71 };
+//int count[18] = { 4,4,4,5,4,4,5,4,4,4,4,4,5,4,4,4,4,4 };
+
+
+int nbCount;
+int* firsts ;
+int* count;
 float colore[4];
 
 std::vector<Face*> *tmpFace = new std::vector<Face*>();
@@ -101,25 +109,9 @@ bool Initialize()
 
 	std::vector<Point> centerPoints3D = createRandomPoints(10);
 
-	Graph * tmpGraph = new Graph();
-	EnvInc testEnv = *new EnvInc(tmpGraph,centerPoints3D);
-	testEnv.initializeGraph();
-	testEnv.algo();
-	tmpFace = testEnv.getGraph()->getFaceList();
 
-	for (int i = 0; i < tmpFace->size(); i++)
-	{
-		tmpVectorPoints.push_back(tmpFace->at(i)->getPoints()[0]);
-		col.push_back(tmpFace->at(i)->getColor());
-		tmpVectorPoints.push_back(tmpFace->at(i)->getPoints()[1]);
-		col.push_back(tmpFace->at(i)->getColor());
-		tmpVectorPoints.push_back(tmpFace->at(i)->getPoints()[2]);
-		col.push_back(tmpFace->at(i)->getColor());
-
-	}
-	
 	std::vector<Colore> tmpColore;
-	
+
 	//p3D = transformPointsToCube(centerPoints3D);
 	p3D = createVoronoiExtCube();
 	for (int i = 0; i < p3D.size(); i++)
@@ -127,18 +119,54 @@ bool Initialize()
 		tmpColore.push_back(Colore(red));
 	}
 
-	tabPoints = structToTabColor(p3D,tmpColore);
+	tabPoints = structToTabColor(p3D, tmpColore);
 
-	indi = createInd(centerPoints3D.size()*20);
-	//indTmp = createInd(tmpVectorPoints.size());
-	//tmpPoints = structToTabColor(tmpVectorPoints,col);
+	indi = createInd(centerPoints3D.size() * 20);
+
 	std::vector<Colore> tm;
-	
+	std::vector<std::vector<Point>> allVectorPoints;
 	tmpVectorPoints.clear();
-	tmpVectorPoints = createVoronoi2DFaces();
+	tmpVectorPoints = createVoronoi2DFaces(indicesVector);
+
+	std::vector<Point> voronoiIns1;
+	voronoiIns1.push_back(Point(-50, 25, 150, 0.0f, 0.0f, +1.0f));
+	voronoiIns1.push_back(Point(0, 50, 150, 0.0f, 0.0f, +1.0f));
+	voronoiIns1.push_back(Point(25, 50, 150, 0.0f, 0.0f, +1.0f));
+	voronoiIns1.push_back(Point(25, -25, 150, 0.0f, 0.0f, +1.0f));
+	voronoiIns1.push_back(Point(-50, -25, 150, 0.0f, 0.0f, +1.0f));
+
+
+	allVectorPoints.push_back(voronoiIns1);
+
+	std::vector<Point> voronoiIns2;
+	voronoiIns2.push_back(Point(25, 50, 150, 0.0f, 0.0f, +1.0f));
+	voronoiIns2.push_back(Point(50, 50, 150, 0.0f, 0.0f, +1.0f));
+	voronoiIns2.push_back(Point(50, -25, 150, 0.0f, 0.0f, +1.0f));
+	voronoiIns2.push_back(Point(25, -25, 150, 0.0f, 0.0f, +1.0f));
+
+
+	allVectorPoints.push_back(voronoiIns2);
+
+	std::vector<Point> newTmp = tmpVectorPoints;
+	tmpVectorPoints = combineVector(newTmp, algo3d(allVectorPoints, indicesVector));
+
+
+
+
+
+
+
+
+
 	indTmp = createInd(tmpVectorPoints.size());
 	tmpPoints = structToTabColor(tmpVectorPoints, tm);
 
+
+
+
+	firsts = firstsFromVectorIndex(indicesVector);
+	count = countFromVectorIndex(indicesVector);
+	nbCount = nbCountFromVectorIndex(indicesVector);
 
 	glewInit();
 	g_BasicShader.LoadVertexShader("basic.vs");
@@ -198,7 +226,7 @@ bool Initialize()
 	ChangeCam(CamType);
 
 
-	
+
 
 	return true;
 }

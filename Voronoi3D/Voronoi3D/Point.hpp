@@ -1,5 +1,6 @@
 #include <string>
 #include <vector>
+#include <ctime>
 int sizeCube = 3;
 
 struct Point {
@@ -80,7 +81,6 @@ std::vector<Point> createRandomPoints(int n)
 	return tmp;
 }
 
-
 std::vector<Point> transformPointsToCube(std::vector<Point> p)
 {
 	std::vector<Point> tmp;
@@ -159,17 +159,17 @@ std::vector<Point> createVoronoiExtCube()
 
 }
 
-std::vector<Point> createVoronoi2DFaces()
+std::vector<Point> createVoronoi2DFaces(std::vector<int> *indVector)
 {
 	std::vector<std::vector<Point>> tmp;
-	
+
 	std::vector<Point> t;
 	t.push_back(Point(0, 100, 150, 0.0f, 0.0f, +1.0f));
 	t.push_back(Point(0, 50, 150, 0.0f, 0.0f, +1.0f));
 	t.push_back(Point(100, 50, 150, 0.0f, 0.0f, +1.0f));
 	t.push_back(Point(100, 100, 150, 0.0f, 0.0f, +1.0f));
 	tmp.push_back(t);
-
+	indVector->push_back(4);
 	//t.clear();
 
 	t.push_back(Point(0, 100, 150, 0.0f, 0.0f, +1.0f));
@@ -177,6 +177,7 @@ std::vector<Point> createVoronoi2DFaces()
 	t.push_back(Point(-100, 0, 150, 0.0f, 0.0f, +1.0f));
 	t.push_back(Point(-100, 100, 150, 0.0f, 0.0f, +1.0f));
 	tmp.push_back(t);
+	indVector->push_back(4);
 	//t.clear();
 
 	t.push_back(Point(-100, 0, 150, 0.0f, 0.0f, +1.0f));
@@ -184,16 +185,29 @@ std::vector<Point> createVoronoi2DFaces()
 	t.push_back(Point(-50, -100, 150, 0.0f, 0.0f, +1.0f));
 	t.push_back(Point(-100, -100, 150, 0.0f, 0.0f, +1.0f));
 	tmp.push_back(t);
+	indVector->push_back(4);
 	//t.clear();
 
 
 	t.push_back(Point(-50, 25, 150, 0.0f, 0.0f, +1.0f));
 	t.push_back(Point(0, 50, 150, 0.0f, 0.0f, +1.0f));
-	t.push_back(Point(50, 50, 150, 0.0f, 0.0f, +1.0f));
-	t.push_back(Point(50, -25, 150, 0.0f, 0.0f, +1.0f));
+	//t.push_back(Point(50, 50, 150, 0.0f, 0.0f, +1.0f));
+	t.push_back(Point(25, 50, 150, 0.0f, 0.0f, +1.0f));
+	//t.push_back(Point(50, -25, 150, 0.0f, 0.0f, +1.0f));
+	t.push_back(Point(25, -25, 150, 0.0f, 0.0f, +1.0f));
 	t.push_back(Point(-50, -25, 150, 0.0f, 0.0f, +1.0f));
 	tmp.push_back(t);
 	//t.clear();
+	indVector->push_back(5);
+
+	
+	t.push_back(Point(25, 50, 150, 0.0f, 0.0f, +1.0f));
+	t.push_back(Point(50, 50, 150, 0.0f, 0.0f, +1.0f));
+	t.push_back(Point(50, -25, 150, 0.0f, 0.0f, +1.0f));
+	t.push_back(Point(25, -25, 150, 0.0f, 0.0f, +1.0f));
+
+	indVector->push_back(4);
+
 
 
 	t.push_back(Point(50, 50, 150, 0.0f, 0.0f, +1.0f));
@@ -202,6 +216,8 @@ std::vector<Point> createVoronoi2DFaces()
 	t.push_back(Point(50, -100, 150, 0.0f, 0.0f, +1.0f));
 	tmp.push_back(t);
 	//t.clear();
+	indVector->push_back(4);
+
 
 	t.push_back(Point(50, -25, 150, 0.0f, 0.0f, +1.0f));
 	t.push_back(Point(50, -100, 150, 0.0f, 0.0f, +1.0f));
@@ -209,6 +225,116 @@ std::vector<Point> createVoronoi2DFaces()
 	t.push_back(Point(-50, -25, 150, 0.0f, 0.0f, +1.0f));
 	tmp.push_back(t);
 	//t.clear();
+	indVector->push_back(4);
+
 
 	return t;
+}
+
+// Create new faces from previous point with new points based on final point and delta, updates indexVector
+std::vector<Point> newIterationPoint(std::vector<Point> voronoiIns, std::vector<Point> * newTabPointsTmp, std::vector<int> *indVector, float ind = 1, Point finalPoint = Point(0, 0, 0, 0, 0, 0))
+{
+	std::vector<Point> newTabPoints;
+
+	newTabPointsTmp->clear();
+	//push new Points
+	for (int i = 0; i < voronoiIns.size(); i++)
+	{
+		std::vector<float> vectorToFinal;
+		vectorToFinal.push_back(finalPoint.x - voronoiIns[i].x);
+		vectorToFinal.push_back(finalPoint.y - voronoiIns[i].y);
+		vectorToFinal.push_back(finalPoint.z - voronoiIns[i].z);
+
+		Point tmp = Point(Point(voronoiIns[i].x + vectorToFinal[0] * ind, voronoiIns[i].y + vectorToFinal[1] * ind, voronoiIns[i].z + vectorToFinal[2] * ind, 0.0f, 0.0f, 1.0f));
+		newTabPoints.push_back(tmp);
+		newTabPointsTmp->push_back(tmp);
+	}
+	indVector->push_back(voronoiIns.size());
+
+
+	for (int i = 0; i < voronoiIns.size(); i++)
+	{
+		int j = (i + 1) % voronoiIns.size();
+		newTabPoints.push_back(Point(voronoiIns[i].x, voronoiIns[i].y, voronoiIns[i].z, 0.0f, 0.0f, 1.0f));
+		newTabPoints.push_back(Point(voronoiIns[j].x, voronoiIns[j].y, voronoiIns[j].z, 0.0f, 0.0f, 1.0f));
+		newTabPoints.push_back(newTabPointsTmp->at(j));
+		newTabPoints.push_back(newTabPointsTmp->at(i));
+
+		indVector->push_back(4);
+	}
+
+
+	return newTabPoints;
+}
+
+std::vector<Point> combineVector(std::vector<Point> t, std::vector<Point> t1)
+{
+	std::vector<Point> tmp;
+	for (int i = 0; i < t.size(); i++)
+	{
+		tmp.push_back(t[i]);
+	}
+	for (int i = 0; i < t1.size(); i++)
+	{
+		tmp.push_back(t1[i]);
+	}
+
+	return tmp;
+}
+
+int* firstsFromVectorIndex(std::vector<int>* indVector)
+{
+	int *tmp = new int[indVector->size()];
+	tmp[0] = 0;
+	for (int i = 1; i < indVector->size(); i++)
+	{
+
+		tmp[i] = indVector->at(i - 1) + tmp[i - 1];
+	}
+
+	return tmp;
+}
+
+int* countFromVectorIndex(std::vector<int>* indVector)
+{
+	int *tmp = new int[indVector->size()];
+	for (int i = 0; i < indVector->size(); i++)
+	{
+		tmp[i] = indVector->at(i);
+	}
+
+
+	return tmp;
+}
+
+int nbCountFromVectorIndex(std::vector<int>* indVector)
+{
+	return indVector->size();
+}
+
+std::vector<Point> algo3d(std::vector<std::vector<Point>> voronoiIns, std::vector<int> *indVector, float delta = 0.01, Point finalPoint = Point(0, 0, 0, 0, 0, 0))
+{
+	std::vector<Point> localBuffer;
+	float localDelta = delta;
+	std::vector<std::vector<Point>> currentTabPointsTmp;
+	std::vector<Point> * newTabPointsTmp = new std::vector<Point>();
+	
+		while (localDelta <= 1)
+		{
+			finalPoint = Point(RandomFloat(-1, 1)/localDelta, RandomFloat(-1, 1) / localDelta, 0, 0.0f, 0.0f, 1.0f);
+			for (int i = 0; i < voronoiIns.size(); i++)
+			{
+				
+				if (localDelta==delta)
+				{
+					currentTabPointsTmp.push_back(voronoiIns[i]);
+				}
+				localBuffer = combineVector(localBuffer, newIterationPoint(currentTabPointsTmp[i], newTabPointsTmp, indVector, localDelta, finalPoint));
+				currentTabPointsTmp[i] = *newTabPointsTmp;
+				
+			}
+			localDelta += delta;
+		}
+
+	return localBuffer;
 }

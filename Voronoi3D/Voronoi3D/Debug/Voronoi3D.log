@@ -4,9 +4,16 @@ c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\camera.hpp(23): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\controller.hpp(15): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\controller.hpp(19): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(51): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(52): warning C4018: '<': signed/unsigned mismatch
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(88): warning C4018: '<': signed/unsigned mismatch
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(128): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(241): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(255): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(273): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(277): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(289): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(301): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(325): warning C4018: '<': signed/unsigned mismatch
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\graph.hpp(51): warning C4018: '<': signed/unsigned mismatch
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\graph.hpp(56): warning C4018: '<': signed/unsigned mismatch
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\envinc.hpp(108): warning C4018: '<': signed/unsigned mismatch
@@ -33,12 +40,8 @@ c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\common\mat4.h(112): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\math.h(1001): warning C4005: 'M_PI': macro redefinition
   c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\common\mat4.h(12): note: see previous definition of 'M_PI'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\main.cpp(54): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\main.cpp(110): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\main.cpp(125): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\main.cpp(269): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  EsgiShader.cpp
-  Generating Code...
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\envinc.hpp(485): warning C4715: 'EnvInc::getRandomInsidePoint': not all control paths return a value
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\main.cpp(62): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\main.cpp(117): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\main.cpp(297): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
   Voronoi3D.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\Voronoi3D.exe
   Voronoi3D.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\Voronoi3D.pdb (Full PDB)
