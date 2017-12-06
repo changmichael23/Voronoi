@@ -200,7 +200,7 @@ int main(int argc, char **argv)
 	glClearColor(1.0, 1.0, 1.0, 0.50);
 	glColor3f(1.0, 1.0, 1.0);			     	 // couleur: blanc
 	glPointSize(2.0);							 // taille d'un point: 2px
-	glLineWidth(10);
+	glLineWidth(1);
 
 												 /* Enregistrement des fonctions de rappel
 												 => initialisation des fonctions callback appelées par glut */
@@ -231,25 +231,21 @@ void dessin()
 	glClearColor(1.0, 1.0, 1.0, 0.50);
 	glClear(GL_COLOR_BUFFER_BIT);
 	std::tie(r, g, b) = triangulationColor;
+
+	glBegin(GL_POINTS);
 	glColor3f(r, g, b);
-	
 	for (int i = 0; i < apexes.size(); i++)
 	{
-		glBegin(GL_POINTS);
 		glVertex2f(apexes.at(i).p->x, apexes.at(i).p->y);
 	}
 
 	glEnd();
 	glutSwapBuffers();
-	
+
+	glBegin(GL_LINES);
+	glColor3f(r, g, b);
 	for (int k = 0; k < edges.size(); ++k)
 	{
-		std::cout << "Edge : " << k << std::endl;
-		glBegin(GL_LINE);
-		glColor3f(r, g, b);
-
-		std::cout << "Edge : " << edges.at(k).s1->p->x << " / " << edges.at(k).s1->p->y << std::endl;
-		std::cout << "Edge : " << edges.at(k).s2->p->x << " / " << edges.at(k).s2->p->y << std::endl;
 		glVertex2f(edges.at(k).s1->p->x, edges.at(k).s1->p->y);
 		glVertex2f(edges.at(k).s2->p->x, edges.at(k).s2->p->y);
 	}
@@ -318,6 +314,7 @@ void mouse(int button, int state, int x, int y)
 
 		voronoi = false;
 		triangulate();
+		delaunayTriangulation();
 	}
 	else if (button == GLUT_MIDDLE_BUTTON && state == GLUT_UP)
 	{
@@ -600,7 +597,7 @@ void delaunayTriangulation()
 
 	for (int i = 0; i < edges.size(); ++i)
 	{
-		edges_copy.at(i) = &edges.at(i);
+		edges_copy.push_back(&edges.at(i));
 	}
 
 	Edge *a;
@@ -675,7 +672,6 @@ void delaunayTriangulation()
 			s4 = a3->s1;
 		}
 
-		A = Edge(s3, s4);
 		a->s1 = s3;
 		a->s2 = s4;
 		s1->a = a1;
@@ -699,6 +695,9 @@ void delaunayTriangulation()
 			t2->a2 = a4;
 			t2->a3 = a3;
 		}
+
+		a->td = nullptr;
+		a->tg = nullptr;
 
 		addTriangleToItsEdges(t1);
 		addTriangleToItsEdges(t2);
@@ -1343,46 +1342,41 @@ bool delaunayCriteria(Edge *a)
 	Apex *s1, *s2, *s3;
 	Circle circonscript;
 
-	if (a->td != nullptr)
+	//Pour td
+	std::tie(s1, s2, s3) = apexesOfTriangle(a->td);
+	circonscript = circonscriptCircle(s1, s2, s3);
+
+	for (int i = 0; i < apexes.size(); ++i)
 	{
-		std::tie(s1, s2, s3) = apexesOfTriangle(a->td);
-
-		circonscript = circonscriptCircle(s1, s2, s3);
-
-		for (int i = 0; i < apexes.size(); ++i)
+		if (&apexes.at(i) == s1
+			|| &apexes.at(i) == s2
+			|| &apexes.at(i) == s3)
 		{
-			if (&apexes.at(i) == s1
-				|| &apexes.at(i) == s2
-				|| &apexes.at(i) == s3)
-			{
-				continue;
-			}
+			continue;
+		}
 
-			if (sqrt(pow(apexes.at(i).p->x - circonscript.center.x, 2) + pow(apexes.at(i).p->y - circonscript.center.y, 2)) <= circonscript.radius)
-			{
-				return false;
-			}
+		if (sqrt(pow(apexes.at(i).p->x - circonscript.center.x, 2) + pow(apexes.at(i).p->y - circonscript.center.y, 2)) <= circonscript.radius)
+		{
+			return false;
 		}
 	}
-	if (a->tg != nullptr)
+
+	//Pour tg
+	std::tie(s1, s2, s3) = apexesOfTriangle(a->tg);
+	circonscript = circonscriptCircle(s1, s2, s3);
+
+	for (int i = 0; i < apexes.size(); ++i)
 	{
-		std::tie(s1, s2, s3) = apexesOfTriangle(a->tg);
-
-		circonscript = circonscriptCircle(s1, s2, s3);
-
-		for (int i = 0; i < apexes.size(); ++i)
+		if (&apexes.at(i) == s1
+			|| &apexes.at(i) == s2
+			|| &apexes.at(i) == s3)
 		{
-			if (&apexes.at(i) == s1
-				|| &apexes.at(i) == s2
-				|| &apexes.at(i) == s3)
-			{
-				continue;
-			}
+			continue;
+		}
 
-			if (sqrt(pow(apexes.at(i).p->x - circonscript.center.x, 2) + pow(apexes.at(i).p->y - circonscript.center.y, 2)) <= circonscript.radius)
-			{
-				return false;
-			}
+		if (sqrt(pow(apexes.at(i).p->x - circonscript.center.x, 2) + pow(apexes.at(i).p->y - circonscript.center.y, 2)) <= circonscript.radius)
+		{
+			return false;
 		}
 	}
 

@@ -1,55 +1,55 @@
 ﻿  Triangulation.cpp
 c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(138): warning C4305: 'initializing': truncation from 'double' to 'float'
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(236): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(245): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(265): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(267): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(300): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(328): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(476): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(534): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(543): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(519): warning C4101: 'dref': unreferenced local variable
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(520): warning C4101: 'tref': unreferenced local variable
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(519): warning C4101: 'd': unreferenced local variable
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(601): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(726): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(734): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(768): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(772): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(825): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(845): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(851): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(883): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(994): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1055): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1084): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1089): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1094): warning C4101: 'exists': unreferenced local variable
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1331): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1352): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1373): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1342): warning C4101: 'rc': unreferenced local variable
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1341): warning C4101: 'c': unreferenced local variable
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1453): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1459): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1465): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1470): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1486): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1492): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1498): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1503): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1519): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1525): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1531): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1536): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1556): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1601): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1606): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1625): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1672): warning C4305: '+=': truncation from 'double' to 'float'
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1685): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1717): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1719): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1745): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(237): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(247): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(261): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(263): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(296): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(325): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(473): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(531): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(540): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(516): warning C4101: 'dref': unreferenced local variable
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(517): warning C4101: 'tref': unreferenced local variable
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(516): warning C4101: 'd': unreferenced local variable
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(598): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(725): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(733): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(767): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(771): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(824): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(844): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(850): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(882): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(993): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1054): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1083): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1088): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1093): warning C4101: 'exists': unreferenced local variable
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1330): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1351): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1372): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1341): warning C4101: 'rc': unreferenced local variable
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1340): warning C4101: 'c': unreferenced local variable
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1452): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1458): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1464): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1469): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1485): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1491): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1497): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1502): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1518): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1524): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1530): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1535): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1555): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1600): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1605): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1624): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1671): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1684): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1716): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1718): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\triangulation\triangulation.cpp(1744): warning C4018: '<': signed/unsigned mismatch
   Triangulation.vcxproj -> C:\Users\maxim\Desktop\ESGI\5A\Maths pour l'info\Voronoi\Triangulation\Debug\Triangulation.exe
