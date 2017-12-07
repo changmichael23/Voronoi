@@ -626,8 +626,8 @@ void delaunayTriangulation()
 		}
 		else if (t1->a2 == a)
 		{
-			a1 = t1->a1;
-			a4 = t1->a3;
+			a1 = t1->a3;
+			a4 = t1->a1;
 		}
 		else
 		{
@@ -637,8 +637,8 @@ void delaunayTriangulation()
 
 		if (t2->a1 == a)
 		{
-			a2 = t2->a2;
-			a3 = t2->a3;
+			a2 = t2->a3;
+			a3 = t2->a2;
 		}
 		else if (t2->a2 == a)
 		{
@@ -647,8 +647,8 @@ void delaunayTriangulation()
 		}
 		else
 		{
-			a2 = t2->a1;
-			a3 = t2->a2;
+			a2 = t2->a2;
+			a3 = t2->a1;
 		}
 
 		s1 = a->s1;
