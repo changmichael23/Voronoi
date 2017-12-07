@@ -455,6 +455,11 @@ void triangulate()
 	//----------------------------
 	int i = 0;
 
+	if (points.size() == 0)
+	{
+		return;
+	}
+
 	if (points.size() == 1)
 	{
 		apexes.push_back(Apex(&points.at(i)));
@@ -1339,45 +1344,54 @@ bool delaunayCriteria(Edge *a)
 
 	Point c;
 	float rc;
-	Apex *s1, *s2, *s3;
+	Apex *s1, *s2, *s3, *s4, *ts1, *ts2, *ts3;
 	Circle circonscript;
 
+	s1 = a->s1;
+	s2 = a->s2;
+
+	std::tie(ts1, ts2, ts3) = apexesOfTriangle(a->td);
+	if (ts1 != s1 && ts1 != s2)
+	{
+		s3 = ts1;
+	}
+	else if (ts2 != s1 && ts2 != s2)
+	{
+		s3 = ts2;
+	}
+	else
+	{
+		s3 = ts3;
+	}
+
+	std::tie(ts1, ts2, ts3) = apexesOfTriangle(a->tg);
+	if (ts1 != s1 && ts1 != s2)
+	{
+		s4 = ts1;
+	}
+	else if (ts2 != s1 && ts2 != s2)
+	{
+		s4 = ts2;
+	}
+	else
+	{
+		s4 = ts3;
+	}
+
 	//Pour td
-	std::tie(s1, s2, s3) = apexesOfTriangle(a->td);
 	circonscript = circonscriptCircle(s1, s2, s3);
 
-	for (int i = 0; i < apexes.size(); ++i)
+	if (sqrt(pow(s4->p->x - circonscript.center.x, 2) + pow(s4->p->y - circonscript.center.y, 2)) <= circonscript.radius)
 	{
-		if (&apexes.at(i) == s1
-			|| &apexes.at(i) == s2
-			|| &apexes.at(i) == s3)
-		{
-			continue;
-		}
-
-		if (sqrt(pow(apexes.at(i).p->x - circonscript.center.x, 2) + pow(apexes.at(i).p->y - circonscript.center.y, 2)) <= circonscript.radius)
-		{
-			return false;
-		}
+		return false;
 	}
 
 	//Pour tg
-	std::tie(s1, s2, s3) = apexesOfTriangle(a->tg);
-	circonscript = circonscriptCircle(s1, s2, s3);
+	circonscript = circonscriptCircle(s1, s2, s4);
 
-	for (int i = 0; i < apexes.size(); ++i)
+	if (sqrt(pow(s3->p->x - circonscript.center.x, 2) + pow(s3->p->y - circonscript.center.y, 2)) <= circonscript.radius)
 	{
-		if (&apexes.at(i) == s1
-			|| &apexes.at(i) == s2
-			|| &apexes.at(i) == s3)
-		{
-			continue;
-		}
-
-		if (sqrt(pow(apexes.at(i).p->x - circonscript.center.x, 2) + pow(apexes.at(i).p->y - circonscript.center.y, 2)) <= circonscript.radius)
-		{
-			return false;
-		}
+		return false;
 	}
 
 	return true;
@@ -1419,6 +1433,21 @@ Circle circonscriptCircle(Apex* s1, Apex* s2, Apex* s3)
 {
 	Circle c;
 
+	/*c.center.x = ((pow(s3->p->x, 2) + pow(s3->p->y, 2) - pow(s1->p->x, 2) - pow(s1->p->y, 2)) / 2
+		- (s3->p->y - s1->p->y) * (pow(s2->p->x, 2) + pow(s2->p->y, 2) - pow(s1->p->x, 2) - pow(s1->p->y, 2)) / 2 / (s2->p->y - s1->p->y))
+		/ (s3->p->x - s1->p->x - (s2->p->y - s1->p->y) * (s2->p->x - s1->p->x) / (s2->p->y - s1->p->y));
+
+	c.center.y = (pow(s2->p->x, 2) + pow(s2->p->y, 2) - pow(s1->p->x, 2) - pow(s1->p->y, 2)) / 2 / (s2->p->y - s1->p->y)
+		- c.center.x * (s2->p->x - s1->p->x) / (s2->p->y - s1->p->y);
+
+
+	/*c.center.y = (pow(s3->p->x, 2) + pow(s3->p->y, 2) - pow(s1->p->x, 2) - pow(s1->p->y, 2)
+		- (s3->p->x - s1->p->x) / (s2->p->x - s1->p->x) * (pow(s2->p->x, 2) + pow(s2->p->y, 2) - pow(s1->p->x, 2) - pow(s1->p->y, 2)))
+		/ (s3->p->y - s2->p->y - 2 * (s3->p->x - s1->p->x) * (s2->p->y - s1->p->y) / (s2->p->x - s1->p->x));
+
+	c.center.x = (pow(s2->p->x, 2) + pow(s2->p->y, 2) - pow(s1->p->x, 2) - pow(s1->p->y, 2)) / (2 * (s2->p->x - s1->p->x))
+		- c.center.y * (s2->p->y - s1->p->y) / (s2->p->x - s1->p->x);
+		/*
 	c.center.x = ((pow(s3->p->x, 2) - pow(s2->p->x, 2) + pow(s3->p->y, 2) - pow(s2->p->y, 2))
 		/ (2 * (s3->p->y - s2->p->y))
 		- (pow(s2->p->x, 2) - pow(s1->p->x, 2) + pow(s2->p->y, 2) - pow(s1->p->y, 2))
@@ -1428,6 +1457,29 @@ Circle circonscriptCircle(Apex* s1, Apex* s2, Apex* s3)
 
 	c.center.y = -c.center.x * (s2->p->x - s1->p->x) / (s2->p->y - s1->p->y)
 		+ (pow(s2->p->x, 2) - pow(s1->p->x, 2) + pow(s2->p->y, 2) - pow(s1->p->y, 2)) / (2 * (s2->p->y - s1->p->y));
+*/
+
+	float x1, x2, y1, y2;
+	float a1, a2, b1, b2;
+
+	x1 = (s1->p->x + s2->p->x) / 2;
+	y1 = (s1->p->y + s2->p->y) / 2;
+	x2 = (s1->p->x + s3->p->x) / 2;
+	y2 = (s1->p->y + s3->p->y) / 2;
+
+	a1 = (s1->p->y - s2->p->y) / (s1->p->x - s2->p->x);
+	a2 = (s1->p->y - s3->p->y) / (s1->p->x - s3->p->x);
+
+	b1 = y1 + 1 / a1 * x1;
+	b2 = y2 + 1 / a2 * x2;
+
+	c.center.x = (b2 - b1) / (1 / a2 - 1 / a1);
+	c.center.y = -1 / a1 * c.center.x + b1;
+
+	float a, b, d;
+	a = sqrt(pow(s1->p->x - c.center.x, 2) + pow(s1->p->y - c.center.y, 2));
+	b = sqrt(pow(s2->p->x - c.center.x, 2) + pow(s2->p->y - c.center.y, 2));
+	d = sqrt(pow(s3->p->x - c.center.x, 2) + pow(s3->p->y - c.center.y, 2));
 
 	c.radius = sqrt(pow(s1->p->x - c.center.x, 2) + pow(s1->p->y - c.center.y, 2));
 
