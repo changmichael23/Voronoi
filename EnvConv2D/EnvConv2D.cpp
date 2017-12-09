@@ -22,7 +22,8 @@ int isDrawing;
 void mouse(int button, int state, int x, int y);
 void SpecialInput(int key, int x, int y);
 void showMenu();
-
+void EnveloppeMenuCallback(int);
+void dessin();
 
 int main(int argc, char **argv)
 {

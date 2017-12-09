@@ -1,39 +1,6 @@
 ﻿C:\Program Files (x86)\MSBuild\Microsoft.Cpp\v4.0\V140\Microsoft.CppBuild.targets(392,5): warning MSB8028: The intermediate directory (Debug\) contains files shared from another project (Bezier.vcxproj).  This can lead to incorrect clean and rebuild behavior.
   EnvConv2D.cpp
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(128): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(137): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(150): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(163): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(186): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(193): warning C4018: '<=': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(195): warning C4018: '<=': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(215): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(227): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(338): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(340): warning C4305: '*=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(341): warning C4305: '*=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(343): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(345): warning C4305: '*=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(346): warning C4305: '*=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(352): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(354): warning C4305: '/=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(355): warning C4305: '/=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(357): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(359): warning C4305: '/=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(360): warning C4305: '/=': truncation from 'double' to 'float'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(651): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(656): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(683): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(689): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(697): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(698): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(709): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(732): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(744): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(768): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(775): warning C4018: '<=': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(777): warning C4018: '<=': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(849): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(855): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(77): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\envconv2d\envconv2d.cpp(88): warning C4018: '<': signed/unsigned mismatch
   EnvConv2D.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\EnvConv2D.exe
   EnvConv2D.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\EnvConv2D.pdb (Full PDB)
