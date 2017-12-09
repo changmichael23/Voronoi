@@ -124,44 +124,44 @@ void dessinBezier()
 	glClearColor(1.0, 1.0, 1.0, 0.50);
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(1.0f, 0, 0.0f);
-
+	glBegin(GL_POINTS);
 	for (int i = 0; i < points.size(); i++)
 	{
-		glBegin(GL_POINTS);
+		
 		glVertex2f(points[i].x, points[i].y);
 	}
 	glEnd();
-	glutSwapBuffers();
+
 	glColor3f(colorr, colorg,colorb);
-	
+	glBegin(GL_LINE_STRIP);
 		for (int k = 0; k < p.size(); k++)
 		{
 			
-			glBegin(GL_POLYGON);
-			glBegin(GL_LINE_STRIP);
+			
 			
 			glVertex2f(p[k].x, p[k].y);
 
 		}
 
 		glEnd();
-		glutSwapBuffers();
 		glColor3f(1.0f, 0, 0.0f);
+		glBegin(GL_POINTS);
 		for (int i = 0; i < points1.size(); i++)
 		{
-			glBegin(GL_POINTS);
+			
 			glVertex2f(points1[i].x, points1[i].y);
 		}
 		glEnd();
-		glutSwapBuffers();
 		if(r.size()>=1)
 		glColor3f(r[r.size()-1], g[g.size() - 1], b[b.size() - 1]);
+
+
+		glBegin(GL_LINE_STRIP);
 
 		for (int k = 0; k < p1.size(); k++)
 		{
 
-			glBegin(GL_POLYGON);
-			glBegin(GL_LINE_STRIP);
+			
 
 			glVertex2f(p1[k].x, p1[k].y);
 
