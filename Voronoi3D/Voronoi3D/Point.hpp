@@ -312,29 +312,32 @@ int nbCountFromVectorIndex(std::vector<int>* indVector)
 	return indVector->size();
 }
 
-std::vector<Point> algo3d(std::vector<std::vector<Point>> voronoiIns, std::vector<int> *indVector, float delta = 0.01, Point finalPoint = Point(0, 0, 0, 0, 0, 0))
+std::vector<Point> algo3d(std::vector<std::vector<Point>> voronoiIns, std::vector<int> *indVector, float delta = 0.1, Point finalPoint = Point(0, 0, 0, 0, 0, 0))
 {
 	std::vector<Point> localBuffer;
 	float localDelta = delta;
 	std::vector<std::vector<Point>> currentTabPointsTmp;
 	std::vector<Point> * newTabPointsTmp = new std::vector<Point>();
 	
-		while (localDelta <= 1)
+		while (localDelta< 1.01 && localDelta >=0)
 		{
-			finalPoint = Point(RandomFloat(-1, 1)/localDelta, RandomFloat(-1, 1) / localDelta, 0, 0.0f, 0.0f, 1.0f);
-			for (int i = 0; i < voronoiIns.size(); i++)
-			{
-				
-				if (localDelta==delta)
+				finalPoint = Point(RandomFloat(-1, 1) / localDelta, RandomFloat(-1, 1) / localDelta, 0, 0.0f, 0.0f, 1.0f);
+				for (int i = 0; i < voronoiIns.size(); i++)
 				{
-					currentTabPointsTmp.push_back(voronoiIns[i]);
+
+					if (localDelta == delta)
+					{
+						currentTabPointsTmp.push_back(voronoiIns[i]);
+					}
+					localBuffer = combineVector(localBuffer, newIterationPoint(currentTabPointsTmp[i], newTabPointsTmp, indVector, localDelta, finalPoint));
+					currentTabPointsTmp[i] = *newTabPointsTmp;
+
 				}
-				localBuffer = combineVector(localBuffer, newIterationPoint(currentTabPointsTmp[i], newTabPointsTmp, indVector, localDelta, finalPoint));
-				currentTabPointsTmp[i] = *newTabPointsTmp;
-				
+
+				localDelta = 1.0 / (1 / localDelta - 1);
 			}
-			localDelta += delta;
-		}
+			
+		
 
 	return localBuffer;
 }
