@@ -22,7 +22,7 @@
     <ProjectGuid>{5241887E-3BA7-4508-B58A-79AB7EAF5F13}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>EnvConv2D</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -89,7 +89,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../libs/gl/;../libs/freeglut/include/GL/;../libs/glew-2.0.0/include/GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\libs\glm\glm;../libs/gl/;../libs/freeglut/include/GL/;../libs/glew-2.0.0/include/GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -121,7 +121,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../libs/gl/;../libs/freeglut/include/GL/;../libs/glew-2.0.0/include/GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\libs\glm\glm;../libs/gl/;../libs/freeglut/include/GL/;../libs/glew-2.0.0/include/GL;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -151,6 +151,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="EnvConv2D.cpp" />
+    <ClCompile Include="Fonctions.cpp" />
+    <ClCompile Include="Point2D.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Fonctions.h" />
+    <ClInclude Include="Point2D.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

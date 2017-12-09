@@ -1,4 +1,5 @@
 #include "glew.h"
+#include "Fonctions.h"
 #ifdef _MSC_VER
 #pragma comment(lib, "glew32.lib") 
 #endif
@@ -16,18 +17,10 @@ float r0;
 float r1;
 
 
-
-typedef struct Point
-{
-	float x;
-	float y;
-} Point;
-
-
-std::vector<Point> points;
-std::vector<Point> points1;
-std::vector<Point> p;
-std::vector<Point> p1;
+std::vector<Point2D> points;
+std::vector<Point2D> points1;
+std::vector<Point2D> p;
+std::vector<Point2D> p1;
 
 int bezier2;
 int typeRaccord;
@@ -39,12 +32,12 @@ int n = 10;
 int menuPrincipal = 0;
 int isDrawing;
 int bezierfin;
-std::vector<Point> neew;
+std::vector<Point2D> neew;
 int isRotating;
 int isTranslating;
-std::vector<Point> translate;
-std::vector<Point> rotate;
-std::vector<Point> transvect;
+std::vector<Point2D> translate;
+std::vector<Point2D> rotate;
+std::vector<Point2D> transvect;
 int isCreating2ndCurve;
 void dessinBezier();
 void bezier();
@@ -125,6 +118,7 @@ int main(int argc, char **argv)
 	glutMainLoop();								  // lancement de la boucle de réception des évènements
 	return 0;
 }
+
 void dessinBezier()
 {
 	glClearColor(1.0, 1.0, 1.0, 0.50);
@@ -181,7 +175,7 @@ void dessinBezier()
 void bezier()
 {
 	float t;
-	Point tmp[50];
+	Point2D tmp[50];
 	
 	p = neew;
 	for (int k = 0; k < n; k++)
@@ -243,7 +237,7 @@ void mouse_activeFunc(int x, int y)
 
 void mouse(int button, int state, int x, int y)
 {
-	Point tmp;
+	Point2D tmp;
 
 	// Si on appuie sur le bouton de gauche
 
@@ -280,7 +274,7 @@ void mouse(int button, int state, int x, int y)
 				tmp.x = x - 250.0f;
 				tmp.y = -y + 250.0f;
 				points1.push_back(tmp);
-				Point tmp1;
+				Point2D tmp1;
 				if (points1.size() == 1)
 				{
 
@@ -304,11 +298,11 @@ void mouse(int button, int state, int x, int y)
 							tmp1.y = points1[0].y + (points[points.size() - 1].y - points[points.size() - 2].y)*r1 / r0;
 							points1.push_back(tmp1);
 
-							Point D;
+							Point2D D;
 							D.x = points[points.size() - 2].x + (points[points.size() - 2].x - points[points.size() - 3].x)*r1 / r0 - points[points.size() - 1].x + points1[0].x;
 							D.y = points[points.size() - 2].y + (points[points.size() - 2].y - points[points.size() - 3].y)*r1 / r0 - points[points.size() - 1].y + points1[0].y;
 
-							Point tmp2;
+							Point2D tmp2;
 							tmp2.x = points1[1].x + (points1[1].x - D.x)*r1 / r0;
 							tmp2.y = points1[1].y + (points1[1].y - D.y)*r1 / r0;
 							points1.push_back(tmp2);
@@ -646,7 +640,7 @@ void raccordBezierMenuCallback(int menuItem)
 
 void translating()
 {
-	Point vecTranslate;
+	Point2D vecTranslate;
 	
 	vecTranslate.x = translate[translate.size()-1].x- translate[translate.size() - 2].x;
 	vecTranslate.y = translate.at(translate.size() - 1).y - translate.at(translate.size() - 2).y;
@@ -667,9 +661,9 @@ void translating()
 
 void rotating()
 {
-	Point oa;
-	Point ob;
-	Point tmpp;
+	Point2D oa;
+	Point2D ob;
+	Point2D tmpp;
 	float co;
 	float theta;
 
@@ -682,7 +676,7 @@ void rotating()
 	co = (oa.x*ob.x + oa.y*ob.y) / (sqrt(pow(oa.x, 2) + pow(oa.y, 2))*sqrt(pow(ob.x, 2) + pow(ob.y, 2)));
 	theta= acos(co);
 	std::cerr << theta * 180 / PI << " "<< theta<<std::endl;
-	std::vector<Point> tab,tab1;
+	std::vector<Point2D> tab,tab1;
 	for (int j = 0; j < points.size(); j++)
 	{
 		tab.push_back(points[j]);
@@ -734,7 +728,7 @@ void raccord()
 	int i = points.size();
 	for (int j = 1; j < points1.size(); j++)
 	{
-		Point tmp;
+		Point2D tmp;
 		tmp.x = points1[j].x + points[i - 1].x - points1[0].x;
 
 		tmp.y = points1[j].y + points[i - 1].y - points1[0].y;
@@ -746,7 +740,7 @@ void raccord()
 
 	for (int j = 0; j < p1.size(); j++)
 	{
-		Point tmp;
+		Point2D tmp;
 		tmp.x = p1[j].x + points[i - 1].x - points1[0].x;
 
 		tmp.y = p1[j].y + points[i - 1].y - points1[0].y;
@@ -763,7 +757,7 @@ void raccord()
 void bezier1() {
 	
 		float t;
-		Point tmp[50];
+		Point2D tmp[50];
 
 		p1 = neew;
 		for (int k = 0; k < n; k++)
@@ -844,7 +838,7 @@ void colorMenuCallBack(int a)
 
 void transvecting()
 {
-		Point vecTranslate;
+		Point2D vecTranslate;
 		float tmp;
 		vecTranslate.x = transvect[transvect.size() - 1].x - transvect[transvect.size() - 2].x;
 		vecTranslate.y = transvect.at(transvect.size() - 1).y - transvect.at(transvect.size() - 2).y;
