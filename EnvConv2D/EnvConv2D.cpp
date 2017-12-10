@@ -134,8 +134,8 @@ void EnveloppeMenuCallback(int menuItem)
 	{
 	case 1:
 		// Jarvis
-
-
+		
+		p = jarvisMarch(points);
 		isDrawing = 0;
 		break;
 	case 2:
