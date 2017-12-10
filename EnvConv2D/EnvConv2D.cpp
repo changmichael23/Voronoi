@@ -24,6 +24,7 @@ void SpecialInput(int key, int x, int y);
 void showMenu();
 void EnveloppeMenuCallback(int);
 void dessin();
+void update();
 
 int main(int argc, char **argv)
 {
@@ -54,7 +55,7 @@ int main(int argc, char **argv)
 	showMenu();
 	glutMouseFunc(mouse);
 	glutDisplayFunc(dessin);
-
+	glutIdleFunc(update);
 
 	/* rq: le callback de fonction (fonction de rappel) est une fonction qui est passée en argument à une
 	autre fonction. Ici, le main fait usage des deux fonctions de rappel (qui fonctionnent en même temps)
@@ -66,6 +67,11 @@ int main(int argc, char **argv)
 	
 	glutMainLoop();								  // lancement de la boucle de réception des évènements
 	return 0;
+}
+
+void update()
+{
+	glutPostRedisplay();
 }
 
 void dessin()
@@ -84,7 +90,7 @@ void dessin()
 	if (isDrawing == 0)
 	{
 		glColor3f(0.0f, 0.0f, 1.0f);
-		glBegin(GL_LINES);
+		glBegin(GL_LINE_STRIP);
 		for (int k = 0; k < p.size(); k++)
 		{
 			
