@@ -14,6 +14,7 @@ c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(289): warning C4018: '<': signed/unsigned mismatch
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(301): warning C4018: '<': signed/unsigned mismatch
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(325): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\point.hpp(337): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\graph.hpp(51): warning C4018: '<': signed/unsigned mismatch
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\graph.hpp(56): warning C4018: '<': signed/unsigned mismatch
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\envinc.hpp(108): warning C4018: '<': signed/unsigned mismatch
