@@ -95,6 +95,7 @@ std::vector<Point2D> jarvisMarch(std::vector<Point2D> vecpoints)
 		}
 		vectorDirector = makeVector(vecpoints[i], vecpoints[inew]);
 		i = inew;
+		points.push_back(vecpoints[inew]);
 
 
 	} while (i != first_index);
