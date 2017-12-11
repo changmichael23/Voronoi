@@ -1,1 +1,103 @@
-﻿
+﻿  Triangulation.cpp
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\point.hpp(54): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\point.hpp(90): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\point.hpp(244): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\point.hpp(258): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\point.hpp(277): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\point.hpp(281): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\point.hpp(293): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\point.hpp(305): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\point.hpp(327): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\point.hpp(329): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\point.hpp(342): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\point.hpp(354): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\camera.hpp(22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\camera.hpp(23): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\controller.hpp(14): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\controller.hpp(18): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\common\mat4.h(55): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\common\mat4.h(65): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\common\mat4.h(75): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\common\mat4.h(85): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\common\mat4.h(86): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\common\mat4.h(112): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(170): warning C4305: 'initializing': truncation from 'double' to 'float'
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(219): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(274): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(310): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(313): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(360): warning C4101: 'c': unreferenced local variable
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(360): warning C4101: 'h': unreferenced local variable
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(360): warning C4101: 'w': unreferenced local variable
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(532): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(541): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(556): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(558): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(619): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(727): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(761): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(928): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(991): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1000): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(976): warning C4101: 'dref': unreferenced local variable
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(977): warning C4101: 'tref': unreferenced local variable
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(976): warning C4101: 'd': unreferenced local variable
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1058): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1210): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1218): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1247): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1251): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1262): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1266): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1277): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1281): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1302): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1306): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1317): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1321): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1332): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1336): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1349): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1353): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1410): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1430): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1436): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1469): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1556): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1614): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1684): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1712): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1763): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1824): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1853): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1858): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(1863): warning C4101: 'exists': unreferenced local variable
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2100): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2111): warning C4101: 'rc': unreferenced local variable
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2110): warning C4101: 'c': unreferenced local variable
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2233): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2239): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2245): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2250): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2266): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2272): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2278): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2283): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2299): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2305): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2311): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2316): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2336): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2381): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2386): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2405): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2420): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2452): warning C4305: '+=': truncation from 'double' to 'float'
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2465): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2498): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2500): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\triangulation\triangulation.cpp(2529): warning C4018: '<': signed/unsigned mismatch
+  EsgiShader.cpp
+  Generating Code...
+  Triangulation.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\Triangulation.exe
+  Triangulation.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\Triangulation.pdb (Full PDB)
