@@ -517,12 +517,17 @@ void triangulate()
 		}
 
 		edges.push_back(Edge(edges.at(j).s2, &apexes.at(i)));
-		triangles.push_back(Triangle(&edges.at(j), &edges.at(edges.size() - 2), &edges.at(edges.size() - 1)));
+
+		Triangle t = Triangle(&edges.at(j), &edges.at(edges.size() - 2), &edges.at(edges.size() - 1));
+
+		if (!isTriangleDirect(t))
+		{
+			t = Triangle(&edges.at(j), &edges.at(edges.size() - 1), &edges.at(edges.size() - 2));
+		}
+
+		triangles.push_back(t);
 
 		addTriangleToItsEdges(&triangles.back());
-		//edges.at(j).td = &triangles.at(j);
-		//edges.at(edges.size() - 1).td = &triangles.at(j);
-		//edges.at(edges.size() - 2).td = &triangles.at(j);
 
 		if (j > 0)
 		{
@@ -692,8 +697,8 @@ void delaunayTriangulation()
 
 		a->s1 = s3;
 		a->s2 = s4;
-		//s1->a = a1;
-		//s2->a = a4;
+		s1->a = a1;
+		s2->a = a4;
 
 		t1->a1 = a;
 		t1->a2 = a1;
@@ -757,7 +762,9 @@ void voronoiDiagram()
 
 	Circle c;
 	Apex *s1, *s2, *s3;
+	Apex *s4, *s5, *s6;
 	std::map<Triangle*, Circle> circonscript_circles;
+	std::map<Triangle*, Circle>::iterator it0;
 	std::map<Triangle*, Circle>::iterator it1;
 	std::map<Edge*, Bounded_Edge> bounded_edges;
 	std::map<Edge*, Bounded_Edge>::iterator it2;
@@ -776,8 +783,8 @@ void voronoiDiagram()
 	{
 		if (edges.at(i).td != nullptr && edges.at(i).tg != nullptr)
 		{
-			it1 = circonscript_circles.find(edges.at(i).td);
-			c1 = it1->second;
+			it0 = circonscript_circles.find(edges.at(i).td);
+			c1 = it0->second;
 			it1 = circonscript_circles.find(edges.at(i).tg);
 			c2 = it1->second;
 
@@ -785,6 +792,9 @@ void voronoiDiagram()
 		}
 		else
 		{
+			float dref, d;
+			Apex s;
+
 			if (edges.at(i).td == nullptr)
 			{
 				it1 = circonscript_circles.find(edges.at(i).tg);
@@ -792,6 +802,53 @@ void voronoiDiagram()
 
 				middle.x = (edges.at(i).s1->p->x + edges.at(i).s2->p->x) / 2;
 				middle.y = (edges.at(i).s1->p->y + edges.at(i).s2->p->y) / 2;
+
+				std::tie(s4, s5, s6) = apexesOfTriangle(edges.at(i).tg);
+				if (s4 != edges.at(i).s1 && s4 != edges.at(i).s2)
+				{
+					dref = (s4->p->x - edges.at(i).s1->p->x) * (edges.at(i).s2->p->y - edges.at(i).s1->p->y)
+						- (s4->p->y - edges.at(i).s1->p->y) * (edges.at(i).s2->p->x - edges.at(i).s1->p->x);
+					dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+
+					d = (c1.center.x - edges.at(i).s1->p->x) * (edges.at(i).s2->p->y - edges.at(i).s1->p->y)
+						- (c1.center.y - edges.at(i).s1->p->y) * (edges.at(i).s2->p->x - edges.at(i).s1->p->x);
+					d = (d < 0) ? -1 : (d > 0) ? 1 : 0;
+
+					if (d != dref)
+					{
+						continue;
+					}
+				}
+				else if (s5 != edges.at(i).s1 && s5 != edges.at(i).s2)
+				{
+					dref = (s5->p->x - edges.at(i).s1->p->x) * (edges.at(i).s2->p->y - edges.at(i).s1->p->y)
+						- (s5->p->y - edges.at(i).s1->p->y) * (edges.at(i).s2->p->x - edges.at(i).s1->p->x);
+					dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+
+					d = (c1.center.x - edges.at(i).s1->p->x) * (edges.at(i).s2->p->y - edges.at(i).s1->p->y)
+						- (c1.center.y - edges.at(i).s1->p->y) * (edges.at(i).s2->p->x - edges.at(i).s1->p->x);
+					d = (d < 0) ? -1 : (d > 0) ? 1 : 0;
+
+					if (d != dref)
+					{
+						continue;
+					}
+				}
+				else if (s6 != edges.at(i).s1 && s6 != edges.at(i).s2)
+				{
+					dref = (s6->p->x - edges.at(i).s1->p->x) * (edges.at(i).s2->p->y - edges.at(i).s1->p->y)
+						- (s6->p->y - edges.at(i).s1->p->y) * (edges.at(i).s2->p->x - edges.at(i).s1->p->x);
+					dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+
+					d = (c1.center.x - edges.at(i).s1->p->x) * (edges.at(i).s2->p->y - edges.at(i).s1->p->y)
+						- (c1.center.y - edges.at(i).s1->p->y) * (edges.at(i).s2->p->x - edges.at(i).s1->p->x);
+					d = (d < 0) ? -1 : (d > 0) ? 1 : 0;
+
+					if (d != dref)
+					{
+						continue;
+					}
+				}
 			}
 			else
 			{
@@ -800,6 +857,53 @@ void voronoiDiagram()
 
 				middle.x = (edges.at(i).s1->p->x + edges.at(i).s2->p->x) / 2;
 				middle.y = (edges.at(i).s1->p->y + edges.at(i).s2->p->y) / 2;
+
+				std::tie(s4, s5, s6) = apexesOfTriangle(edges.at(i).td);
+				if (s4 != edges.at(i).s1 && s4 != edges.at(i).s2)
+				{
+					dref = (s4->p->x - edges.at(i).s1->p->x) * (edges.at(i).s2->p->y - edges.at(i).s1->p->y)
+						- (s4->p->y - edges.at(i).s1->p->y) * (edges.at(i).s2->p->x - edges.at(i).s1->p->x);
+					dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+
+					d = (c1.center.x - edges.at(i).s1->p->x) * (edges.at(i).s2->p->y - edges.at(i).s1->p->y)
+						- (c1.center.y - edges.at(i).s1->p->y) * (edges.at(i).s2->p->x - edges.at(i).s1->p->x);
+					d = (d < 0) ? -1 : (d > 0) ? 1 : 0;
+
+					if (d != dref)
+					{
+						continue;
+					}
+				}
+				else if (s5 != edges.at(i).s1 && s5 != edges.at(i).s2)
+				{
+					dref = (s5->p->x - edges.at(i).s1->p->x) * (edges.at(i).s2->p->y - edges.at(i).s1->p->y)
+						- (s5->p->y - edges.at(i).s1->p->y) * (edges.at(i).s2->p->x - edges.at(i).s1->p->x);
+					dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+
+					d = (c1.center.x - edges.at(i).s1->p->x) * (edges.at(i).s2->p->y - edges.at(i).s1->p->y)
+						- (c1.center.y - edges.at(i).s1->p->y) * (edges.at(i).s2->p->x - edges.at(i).s1->p->x);
+					d = (d < 0) ? -1 : (d > 0) ? 1 : 0;
+
+					if (d != dref)
+					{
+						continue;
+					}
+				}
+				else if (s6 != edges.at(i).s1 && s6 != edges.at(i).s2)
+				{
+					dref = (s6->p->x - edges.at(i).s1->p->x) * (edges.at(i).s2->p->y - edges.at(i).s1->p->y)
+						- (s6->p->y - edges.at(i).s1->p->y) * (edges.at(i).s2->p->x - edges.at(i).s1->p->x);
+					dref = (dref < 0) ? -1 : (dref > 0) ? 1 : 0;
+
+					d = (c1.center.x - edges.at(i).s1->p->x) * (edges.at(i).s2->p->y - edges.at(i).s1->p->y)
+						- (c1.center.y - edges.at(i).s1->p->y) * (edges.at(i).s2->p->x - edges.at(i).s1->p->x);
+					d = (d < 0) ? -1 : (d > 0) ? 1 : 0;
+
+					if (d != dref)
+					{
+						continue;
+					}
+				}
 			}
 
 			bounded_edges.insert(std::pair<Edge*, Bounded_Edge>(&edges.at(i), Bounded_Edge(c1.center, middle)));
@@ -815,6 +919,10 @@ void voronoiDiagram()
 			if (edges.at(j).s1 == &apexes.at(i) || edges.at(j).s2 == &apexes.at(i))
 			{
 				it2 = bounded_edges.find(&edges.at(j));
+				if (it2 == bounded_edges.end())
+				{
+					continue;
+				}
 				region.push_back(it2->second);
 			}
 		}
