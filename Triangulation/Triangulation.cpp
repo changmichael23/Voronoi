@@ -1,6 +1,7 @@
 #include "glew.h"
 #ifdef _MSC_VER
-#pragma comment(lib, "glew32.lib") 
+#pragma comment(lib, "glew32.lib")
+#include <windows.h>
 #endif
 #include <iostream>
 
@@ -14,6 +15,37 @@
 #include <functional> 
 #include <set> 
 #define PI 3.14159265
+
+#include "Point.hpp"
+#include <math.h>
+#include "Camera.hpp"
+#include "Controller.hpp"
+#include "common/EsgiShader.h"
+#include "common/mat4.h"
+#include "Controller.hpp"
+int sizetab, sizeind;
+
+//--------------------------------------------------------------------------------------------------------------------------------------------------------
+EsgiShader g_BasicShader;
+bool voronoi3d=false;
+int nbCount;
+int* firsts;
+int* count;
+std::vector<Colore> col;
+std::vector<Point3D> p3D, tmpVectorPoints;           // Tous les Point3Ds en 3D
+float* tabPoints, *tmpPoints;         //Tous les Point3Ds en 3D
+GLushort* createInd(int);
+GLushort* indi, *indTmp;			// Tab indice
+
+
+GLuint VAO;
+GLuint VBO0;	// identifiant du Vertex Buffer Object 0
+GLuint VBO1;	// identifiant du Vertex Buffer Object 1
+GLuint IBO, IBO1;	// identifiant du Index Buffer Object
+GLuint TexObj; // identifiant du Texture Object
+
+std::vector<int>* indicesVector = new std::vector<int>();
+
 
 struct Point;
 struct Apex;
@@ -177,6 +209,257 @@ std::vector<Edge*> findNonAdjacentEdges(std::vector<Edge*>, std::vector<Triangle
 void addTriangleToItsEdges(Triangle*);
 bool edgeExists(Apex*, Apex*);
 
+
+
+
+float * structToTabColor(std::vector<Point3D> newPoints, std::vector<Colore> c,bool col=false)
+{
+	float* tabP = new float[newPoints.size() * 9];
+	int j = 0;
+	for (int i = 0; i < newPoints.size() * 9; i += 9)
+	{
+		tabP[i] = newPoints[j].x;
+		tabP[i + 1] = newPoints[j].y;
+		tabP[i + 2] = newPoints[j].z;
+
+		tabP[i + 3] = newPoints[j].n1;
+		tabP[i + 4] = newPoints[j].n2;
+		tabP[i + 5] = newPoints[j].n3;
+
+		/*if (c[j] == Colore(purple))
+		{
+		tabP[i + 6] = 1;
+		tabP[i + 7] = 0;
+		tabP[i + 8] = 1;
+		}
+		if (c[j] == Colore(red))
+		{
+		tabP[i + 6] = 1;
+		tabP[i + 7] = 0;
+		tabP[i + 8] = 0;
+		}
+		if (c[j] == Colore(blue))
+		{
+		tabP[i + 6] = 0;
+		tabP[i + 7] = 0;
+		tabP[i + 8] = 1;
+		}*/
+		if (!col)
+		{
+			tabP[i + 6] = RandomFloat(0, 1);
+			tabP[i + 7] = RandomFloat(0, 1);
+			tabP[i + 8] = RandomFloat(0, 1);
+		}
+		else
+		{
+			tabP[i + 6] = 1.0f;
+			tabP[i + 7] = 1.0f;
+			tabP[i + 8] = 1.0f;
+		}
+		j++;
+	}
+
+	return tabP;
+}
+
+bool Initialize()
+{
+	std::vector<Point3D> centerPoints3D = createRandomPoints(10);
+
+
+	std::vector<Colore> tmpColore;
+
+	//p3D = transformPointsToCube(centerPoints3D);
+	p3D = createVoronoiExtCube();
+	for (int i = 0; i < p3D.size(); i++)
+	{
+		tmpColore.push_back(Colore(red));
+	}
+
+	tabPoints = structToTabColor(p3D, tmpColore);
+
+	indi = createInd(centerPoints3D.size() * 24);
+
+	std::vector<Colore> tm;
+	std::vector<std::vector<Point3D>> allVectorPoints;
+	tmpVectorPoints.clear();
+	//tmpVectorPoints = createVoronoi2DFaces(indicesVector);
+/*
+	std::vector<Point3D> voronoiIns1;
+	voronoiIns1.push_back(Point3D(-50, 25, 150, 0.0f, 0.0f, +1.0f));
+	voronoiIns1.push_back(Point3D(0, 50, 150, 0.0f, 0.0f, +1.0f));
+	voronoiIns1.push_back(Point3D(25, 50, 150, 0.0f, 0.0f, +1.0f));
+	voronoiIns1.push_back(Point3D(25, -25, 150, 0.0f, 0.0f, +1.0f));
+	voronoiIns1.push_back(Point3D(-50, -25, 150, 0.0f, 0.0f, +1.0f));
+
+
+	allVectorPoints.push_back(voronoiIns1);
+
+	std::vector<Point3D> voronoiIns2;
+	voronoiIns2.push_back(Point3D(25, 50, 150, 0.0f, 0.0f, +1.0f));
+	voronoiIns2.push_back(Point3D(50, 50, 150, 0.0f, 0.0f, +1.0f));
+	voronoiIns2.push_back(Point3D(50, -25, 150, 0.0f, 0.0f, +1.0f));
+	voronoiIns2.push_back(Point3D(25, -25, 150, 0.0f, 0.0f, +1.0f));
+
+
+	allVectorPoints.push_back(voronoiIns2);*/
+
+	std::vector<Point3D> newTmp = tmpVectorPoints;
+
+	
+	for (int i = 0; i < apexes.size(); i++)
+	{
+		
+			for (int k = 0; k < voronoi_regions.at(&apexes.at(i)).size(); k++)
+			{
+				std::vector<Point3D> tmpP3d = *new std::vector<Point3D>();
+				/*glVertex2f(voronoi_regions.at(&apexes.at(i)).at(k).p1.x,
+					voronoi_regions.at(&apexes.at(i)).at(k).p1.y);
+				glVertex2f(voronoi_regions.at(&apexes.at(i)).at(k).p2.x,
+					voronoi_regions.at(&apexes.at(i)).at(k).p2.y);*/
+
+				tmpP3d.push_back(Point3D(voronoi_regions.at(&apexes.at(i)).at(k).p1.x, voronoi_regions.at(&apexes.at(i)).at(k).p1.y, 150, 0.0f, 0.0f, +1.0f));
+				tmpP3d.push_back(Point3D(voronoi_regions.at(&apexes.at(i)).at(k).p2.x, voronoi_regions.at(&apexes.at(i)).at(k).p2.y, 150, 0.0f, 0.0f, +1.0f));
+				allVectorPoints.push_back(tmpP3d);
+				
+			}
+			
+			//indicesVector->push_back(voronoi_regions.at(&apexes.at(i)).size()*2);
+			
+	}
+
+
+
+	tmpVectorPoints = combineVector(newTmp, algo3d(allVectorPoints, indicesVector));
+
+
+
+
+
+
+
+
+
+	indTmp = createInd(tmpVectorPoints.size());
+	tmpPoints = structToTabColor(tmpVectorPoints, tm,true);
+
+
+
+
+	firsts = firstsFromVectorIndex(indicesVector);
+	count = countFromVectorIndex(indicesVector);
+	nbCount = nbCountFromVectorIndex(indicesVector);
+
+	glewInit();
+	g_BasicShader.LoadVertexShader("basic.vs");
+	g_BasicShader.LoadFragmentShader("basic.fs");
+	g_BasicShader.CreateProgram();
+
+	glGenTextures(1, &TexObj);
+	glBindTexture(GL_TEXTURE_2D, TexObj);
+	int w, h, c; //largeur, hauteur et # de composantes du fichier
+	/*uint8_t* bitmapRGBA = stbi_load("../data/dragon.png",
+		&w, &h, &c, STBI_rgb_alpha);*/
+
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); //GL_NEAREST)
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, // Destination
+	//	GL_RGBA, GL_UNSIGNED_BYTE, bitmapRGBA);		// Source
+
+	glGenerateMipmap(GL_TEXTURE_2D);
+
+	//stbi_image_free(bitmapRGBA);
+
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glGenVertexArrays(1, &VBO0); // Créer le VAO
+	glBindVertexArray(VBO0); // Lier le VAO pour l'utiliser
+	glEnableVertexAttribArray(0);
+
+
+	//glGenBuffers(1, &VBO0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO0);
+	glBufferData(GL_ARRAY_BUFFER, p3D.size() * 9 * sizeof(float), tabPoints, GL_STATIC_DRAW);
+	//---
+	glGenVertexArrays(1, &VBO1); // Créer le VAO
+	glBindVertexArray(VBO1); // Lier le VAO pour l'utiliser
+	glEnableVertexAttribArray(0);
+
+
+	//glGenBuffers(1, &VBO0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+	glBufferData(GL_ARRAY_BUFFER, tmpVectorPoints.size() * 9 * sizeof(float), tmpPoints, GL_STATIC_DRAW);
+
+	// rendu indexe
+	glGenBuffers(1, &IBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, p3D.size() * sizeof(GLushort), indi, GL_STATIC_DRAW);
+	glGenBuffers(1, &IBO1);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, tmpVectorPoints.size() * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
+
+	// le fait de specifier 0 comme BO desactive l'usage des BOs
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	ChangeCam(CamType);
+	return true;
+}
+
+void SpecialInput(int key, int x, int y)
+{
+	switch (key)
+	{
+	case GLUT_KEY_UP:
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		glLineWidth(10.0f);
+		break;
+	case GLUT_KEY_DOWN:
+		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		glLineWidth(1.0f);
+		break;
+	case GLUT_KEY_RIGHT:
+		voronoi3d = true;
+		glLineWidth(10.0f);
+		Initialize();
+		break;
+
+	}
+	glutPostRedisplay();
+}
+
+void Terminate()
+{
+	glDeleteTextures(1, &TexObj);
+	glDeleteBuffers(1, &IBO);
+	glDeleteBuffers(1, &VBO0);
+	glDeleteBuffers(1, &IBO1);
+	glDeleteBuffers(1, &VBO1);
+	g_BasicShader.DestroyProgram();
+}
+
+void update()
+{
+	if (voronoi3d)
+	{
+		glutPostRedisplay();
+	}
+}
+void mouse1(int x, int y)
+{
+	if(voronoi3d)
+	{
+		//rotX = (float)(y-height*0.5f) * rotSpeed;
+		//rotY = (float)(x-width*0.5f) * rotSpeed;
+		rotX += (y - lastposY)* rotSpeed;
+		rotY += (x - lastposX)* rotSpeed;
+		lastposX = x;
+		lastposY = y;
+	}
+}
 int main(int argc, char **argv)
 {
 	/*r.push_back(0.0f);
@@ -194,10 +477,10 @@ int main(int argc, char **argv)
 	glutInit(&argc, argv);											// Initialisation
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);		// Mode d'affichage RGB, et test prafondeur
 
-	glutInitWindowSize(500, 500);									// Dimension fenêtre
-	glutInitWindowPosition(100, 100);								// Position coin haut gauche
+	glutInitWindowSize(800, 800);									// Dimension fenêtre
+	glutInitWindowPosition(100, 10);								// Position coin haut gauche
 	glutCreateWindow("Triangulation");								// Nom
-	gluOrtho2D(-250.0, 250.0, -250.0, 250.0);						// Repère 2D délimitant les abscisses et les ordonnées
+	gluOrtho2D(-400.0, 400.0, -400.0, 400.0);						// Repère 2D délimitant les abscisses et les ordonnées
 
 
 																	// Initialisation d'OpenGL
@@ -213,9 +496,12 @@ int main(int argc, char **argv)
 
 	showMenu();
 	glutMouseFunc(mouse);
+	glutSpecialFunc(SpecialInput);
+	glutPassiveMotionFunc(mouse1);
 	//glutMotionFunc(mouse_activeFunc);
 	glutDisplayFunc(dessin);
-
+	glutIdleFunc(update);
+	glutKeyboardFunc(keyboard);
 
 	/* rq: le callback de fonction (fonction de rappel) est une fonction qui est passée en argument à une
 	autre fonction. Ici, le main fait usage des deux fonctions de rappel (qui fonctionnent en même temps)
@@ -226,136 +512,286 @@ int main(int argc, char **argv)
 	/* Entrée dans la boucle principale de glut, traitement des évènements */
 	
 	glutMainLoop();								  // lancement de la boucle de réception des évènements
+	
+	Terminate();
 	return 0;
 }
 
 void dessin()
 {
-	float r, g, b;
-
-	glClearColor(1.0, 1.0, 1.0, 0.50);
-	glClear(GL_COLOR_BUFFER_BIT);
-	std::tie(r, g, b) = triangulationColor;
-
-	glBegin(GL_POINTS);
-	glColor3f(r, g, b);
-	for (int i = 0; i < apexes.size(); i++)
+	if (!voronoi3d)
 	{
-		glVertex2f(apexes.at(i).p->x, apexes.at(i).p->y);
-	}
+		float r, g, b;
 
-	glEnd();
-	glutSwapBuffers();
+		glClearColor(1.0, 1.0, 1.0, 0.50);
+		glClear(GL_COLOR_BUFFER_BIT);
+		std::tie(r, g, b) = triangulationColor;
 
-	glBegin(GL_LINES);
-	glColor3f(r, g, b);
-	for (int k = 0; k < edges.size(); ++k)
-	{
-		glVertex2f(edges.at(k).s1->p->x, edges.at(k).s1->p->y);
-		glVertex2f(edges.at(k).s2->p->x, edges.at(k).s2->p->y);
-	}
-
-	glEnd();
-	glutSwapBuffers();
-
-	if (voronoi)
-	{
-		std::tie(r, g, b) = voronoiColor;
+		glBegin(GL_POINTS);
 		glColor3f(r, g, b);
-
-		glBegin(GL_LINES);
-
 		for (int i = 0; i < apexes.size(); i++)
 		{
-			for (int k = 0; k < voronoi_regions.at(&apexes.at(i)).size(); k++)
-			{
-				glVertex2f(voronoi_regions.at(&apexes.at(i)).at(k).p1.x, 
-					voronoi_regions.at(&apexes.at(i)).at(k).p1.y);
-				glVertex2f(voronoi_regions.at(&apexes.at(i)).at(k).p2.x,
-					voronoi_regions.at(&apexes.at(i)).at(k).p2.y);
-			}
+			glVertex2f(apexes.at(i).p->x, apexes.at(i).p->y);
 		}
 
 		glEnd();
+
+		glBegin(GL_LINES);
+		glColor3f(r, g, b);
+		for (int k = 0; k < edges.size(); ++k)
+		{
+			glVertex2f(edges.at(k).s1->p->x, edges.at(k).s1->p->y);
+			glVertex2f(edges.at(k).s2->p->x, edges.at(k).s2->p->y);
+		}
+
+		glEnd();
+
+		if (voronoi)
+		{
+			std::tie(r, g, b) = voronoiColor;
+			glColor3f(r, g, b);
+
+			glBegin(GL_LINES);
+
+			for (int i = 0; i < apexes.size(); i++)
+			{
+				for (int k = 0; k < voronoi_regions.at(&apexes.at(i)).size(); k++)
+				{
+					glVertex2f(voronoi_regions.at(&apexes.at(i)).at(k).p1.x,
+						voronoi_regions.at(&apexes.at(i)).at(k).p1.y);
+					glVertex2f(voronoi_regions.at(&apexes.at(i)).at(k).p2.x,
+						voronoi_regions.at(&apexes.at(i)).at(k).p2.y);
+				}
+			}
+
+			glEnd();
+
+		}
+
+
+		glutSwapBuffers();
+	}
+	else {
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		// afin d'obtenir le deltatime actuel
+		TimeSinceAppStartedInMS = glutGet(GLUT_ELAPSED_TIME);
+		TimeInSeconds = TimeSinceAppStartedInMS / 1000.0f;
+		DeltaTime = (TimeSinceAppStartedInMS - OldTime) / 1000.0f;
+		OldTime = TimeSinceAppStartedInMS;
+
+		glViewport(0, 0, width, height);
+		glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
+		//glColorMask(GL_TRUE, GL_FALSE, GL_TRUE, GL_TRUE);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glEnable(GL_DEPTH_TEST);
+
+		auto program = g_BasicShader.GetProgram();
+		glUseProgram(program);
+
+		/*	uint32_t texUnit = 0;
+		glActiveTexture(GL_TEXTURE0 + texUnit);
+		glBindTexture(GL_TEXTURE_2D, TexObj);
+		auto texture_location = glGetUniformLocation(program, "u_Texture");
+		glUniform1i(texture_location, texUnit);
+		*/
+		// UNIFORMS
+		Esgi::Mat4 worldMatrix;
+		worldMatrix.MakeScale(1.0f, 1.0f, 1.0f);
+
+		//  Camera Matrix
+		Esgi::Mat4 cameraMatrix;
+		switch (CamType)
+		{
+		case 0:	//FPS
+			cameraMatrix = FPSCamera(posX, posY, posZ, rotX, rotY);
+			break;
+		case 1:	//Orbit
+			cameraMatrix = OrbitCamera(posX, posY, posZ, distance, rotX, rotY);
+			break;
+		}
+
+		//
+
+		auto world_location = glGetUniformLocation(program, "u_WorldMatrix");
+		glUniformMatrix4fv(world_location, 1, GL_FALSE, worldMatrix.m);
+
+		Esgi::Mat4 projectionMatrix;
+		float w = glutGet(GLUT_WINDOW_WIDTH), h = glutGet(GLUT_WINDOW_HEIGHT);
+		// ProjectionMatrix
+		float aspectRatio = w / h;			// facteur d'aspect
+		float fovy = 45.0f;					// degree d'ouverture
+		float nearZ = 0.1f;
+		float farZ = 10000.0f;
+		projectionMatrix.Perspective(fovy, aspectRatio, nearZ, farZ);
+
+		//projectionMatrix.MakeScale(1.0f / (0.5f*w), 1.0f / (0.5f*h), 1.0f);
+
+		auto projection_location = glGetUniformLocation(program, "u_ProjectionMatrix");
+		glUniformMatrix4fv(projection_location, 1, GL_FALSE, projectionMatrix.m);
+
+		auto camera_location = glGetUniformLocation(program, "u_CameraMatrix");
+		glUniformMatrix4fv(camera_location, 1, GL_FALSE, cameraMatrix.m);
+
+		auto time_location = glGetUniformLocation(program, "u_Time");
+		glUniform1f(time_location, TimeInSeconds);
+
+		/*auto c_location = glGetUniformLocation(program, "color");
+		glUniform4fv(c_location, 1, colore);*/
+
+		// ATTRIBUTES
+		auto normal_location = glGetAttribLocation(program, "a_Normal");
+		auto position_location = glGetAttribLocation(program, "a_Position");
+		auto color_location = glGetAttribLocation(program, "a_Color");
+		//auto texcoords_location = glGetAttribLocation(program, "a_TexCoords");
+		//glVertexAttrib3f(color_location, 0.0f, 1.0f, 0.0f);
+
+		// Le fait de specifier la ligne suivante va modifier le fonctionnement interne de glVertexAttribPointer
+		// lorsque GL_ARRAY_BUFFER != 0 cela indique que les donnees sont stockees sur le GPU
+		glBindBuffer(GL_ARRAY_BUFFER, VBO0);
+
+		//glBindVertexArray(VAO);
+
+		glVertexAttribPointer(position_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(0 * sizeof(float)));
+		glVertexAttribPointer(normal_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(3 * sizeof(float)));
+		glVertexAttribPointer(color_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(6 * sizeof(float)));
+		// on interprete les 3 valeurs inconnues comme RGB alors que ce sont les normales
+		//glVertexAttribPointer(texcoords_location, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), reinterpret_cast<const void *>(6 * sizeof(float)));
+
+		//glEnableVertexAttribArray(texcoords_location);
+		glEnableVertexAttribArray(position_location);
+		glEnableVertexAttribArray(normal_location);
+		glEnableVertexAttribArray(color_location);
+		//glEnableVertexAttribArray(texcoords_location);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+		glDrawElements(GL_QUADS, p3D.size(), GL_UNSIGNED_SHORT, nullptr);
+
+		//-----------
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+
+		//glBindVertexArray(VAO);
+
+		glVertexAttribPointer(position_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(0 * sizeof(float)));
+		glVertexAttribPointer(normal_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(3 * sizeof(float)));
+		glVertexAttribPointer(color_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(6 * sizeof(float)));
+		// on interprete les 3 valeurs inconnues comme RGB alors que ce sont les normales
+		//glVertexAttribPointer(texcoords_location, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), reinterpret_cast<const void *>(6 * sizeof(float)));
+
+		//glEnableVertexAttribArray(texcoords_location);
+		glEnableVertexAttribArray(position_location);
+		glEnableVertexAttribArray(normal_location);
+		glEnableVertexAttribArray(color_location);
+		//glEnableVertexAttribArray(texcoords_location);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
+		//glDrawElements(GL_TRIANGLES, tmpVectorPoints.size(), GL_UNSIGNED_SHORT, nullptr);
+		glMultiDrawArrays(GL_LINES, firsts, count, nbCount);
+		//----------------
+		//glPointSize(10);
+		glDisableVertexAttribArray(position_location);
+		glDisableVertexAttribArray(normal_location);
+		glDisableVertexAttribArray(color_location);
+		//glDisableVertexAttribArray(texcoords_location);
+		glUseProgram(0);
+
+
+		//Repositionnement du curseur 
+		//glutWarpPointer(width*0.5f, height*0.5f);
+		glEnd();
+
+
 		glutSwapBuffers();
 	}
 }
 
 void mouse(int button, int state, int x, int y)
 {
-	Point tmp;
-	bool deletePoint = false;
-	Point* p = nullptr;
-
-	if (points.size() == maxPoints)
+	if (!voronoi3d)
 	{
-		return;
-	}
-	
-	// Si on appuie sur le bouton de gauche	
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
-	{
-		tmp.x = x - 250.0f;
-		tmp.y = -y + 250.0f;
+		Point tmp;
+		bool deletePoint = false;
+		Point* p = nullptr;
 
-		for (int i = 0; i < points.size(); ++i)
+		if (points.size() == maxPoints)
 		{
-			if (tmp.x == points.at(i).x && tmp.y == points.at(i).y)
+			return;
+		}
+
+		// Si on appuie sur le bouton de gauche	
+		if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
+		{
+			tmp.x = x - 400.0f;
+			tmp.y = -y + 400.0f;
+
+			for (int i = 0; i < points.size(); ++i)
 			{
-				p = &points.at(i);
-				deletePoint = true;
-				break;
+				if (tmp.x == points.at(i).x && tmp.y == points.at(i).y)
+				{
+					p = &points.at(i);
+					deletePoint = true;
+					break;
+				}
+			}
+
+			if (deletePoint)
+			{
+				points.erase(std::find(points.begin(), points.end(), *p));
+			}
+			else
+			{
+				points.push_back(tmp);
+			}
+			//voronoi = false;
+			triangulate();
+			delaunayTriangulation();
+
+			if (voronoi)
+			{
+				voronoiDiagram();
+			}
+
+		}
+		else if (button == GLUT_MIDDLE_BUTTON && state == GLUT_UP)
+		{
+			tmp.x = x - 400.0f;
+			tmp.y = -y + 400.0f;
+			//voronoi = false;
+
+			for (int i = 0; i < points.size(); ++i)
+			{
+				if (tmp.x == points.at(i).x && tmp.y == points.at(i).y)
+				{
+					p = &points.at(i);
+					deletePoint = true;
+					break;
+				}
+			}
+
+			if (deletePoint)
+			{
+				delaunayDeletePoint(p);
+			}
+			else
+			{
+				points.push_back(tmp);
+				delaunayAddPoint();
+			}
+
+			if (voronoi)
+			{
+				voronoiDiagram();
 			}
 		}
-
-		if (deletePoint)
-		{
-			points.erase(std::find(points.begin(), points.end(), *p));
-		}
-		else
-		{
-			points.push_back(tmp);
-		}
-		//voronoi = false;
-		triangulate();
-		delaunayTriangulation();
-
-		if (voronoi)
-		{
-			voronoiDiagram();
-		}
-
 	}
-	else if (button == GLUT_MIDDLE_BUTTON && state == GLUT_UP)
+	else
 	{
-		tmp.x = x - 250.0f;
-		tmp.y = -y + 250.0f;
-		//voronoi = false;
-
-		for (int i = 0; i < points.size(); ++i)
-		{
-			if (tmp.x == points.at(i).x && tmp.y == points.at(i).y)
-			{
-				p = &points.at(i);
-				deletePoint = true;
-				break;
-			}
-		}
-
-		if (deletePoint)
-		{
-			delaunayDeletePoint(p);
-		}
-		else
-		{
-			points.push_back(tmp);
-			delaunayAddPoint();
-		}
-
-		if (voronoi)
-		{
-			voronoiDiagram();
-		}
+		//rotX = (float)(y-height*0.5f) * rotSpeed;
+		//rotY = (float)(x-width*0.5f) * rotSpeed;
+		rotX += (y - lastposY)* rotSpeed;
+		rotY += (x - lastposX)* rotSpeed;
+		lastposX = x;
+		lastposY = y;
 	}
 }
 

@@ -22,7 +22,7 @@
     <ProjectGuid>{07815A91-4214-4E15-AD6E-789E57CFCE58}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
     <RootNamespace>Triangulation</RootNamespace>
-    <WindowsTargetPlatformVersion>10.0.10586.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -150,7 +150,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Common\EsgiShader.cpp" />
     <ClCompile Include="Triangulation.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="basic.fs" />
+    <None Include="basic.vs" />
+    <None Include="basicLight.fs" />
+    <None Include="basicLight.vs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Camera.hpp" />
+    <ClInclude Include="Colore.hpp" />
+    <ClInclude Include="Common\EsgiShader.h" />
+    <ClInclude Include="Common\mat4.h" />
+    <ClInclude Include="Controller.hpp" />
+    <ClInclude Include="Point.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
