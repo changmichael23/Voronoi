@@ -1018,7 +1018,7 @@ void delaunayAddPoint()
 	}
 	else
 	{
-		bool isInTriangle = false;
+		bool isInTriangle = false, needToContinue = false;
 		std::vector<Edge*> seen_edges;
 		seen_edges.reserve(maxPoints * (maxPoints - 1) / 2);
 		Edge* a;
@@ -1026,6 +1026,7 @@ void delaunayAddPoint()
 		Apex *s1, *s2, *s3;
 		std::vector<Triangle>::iterator it1;
 		std::vector<Edge>::iterator it2;
+		Triangle td, tg;
 
 		apexes.push_back(Apex(&points.back()));
 
@@ -1046,6 +1047,7 @@ void delaunayAddPoint()
 					seen_edges.push_back(triangles.at(i).a3);
 				}
 				isInTriangle = true;
+				break;
 			}
 		}
 
@@ -1059,50 +1061,134 @@ void delaunayAddPoint()
 			a = seen_edges.back();
 			seen_edges.pop_back();
 
+			if (a->td != nullptr)
+			{
+				td = *a->td;
+			}
+			if (a->tg != nullptr)
+			{
+				tg = *a->tg;
+			}
+
 			if(a->td != nullptr)
 			{
-				std::tie(s1, s2, s3) = apexesOfTriangle(a->td);
+				std::tie(s1, s2, s3) = apexesOfTriangle(&td);
 				c = circonscriptCircle(s1, s2, s3);
 
 				if (sqrt(pow(c.center.x - apexes.back().p->x, 2) + pow(c.center.y - apexes.back().p->y, 2)) <= c.radius)
 				{
-					if (a == a->td->a1)
+					if (a == td.a1)
 					{
-						if (std::find(seen_edges.begin(), seen_edges.end(), a->td->a2) == seen_edges.end())
+						if (std::find(seen_edges.begin(), seen_edges.end(), td.a2) == seen_edges.end())
 						{
-							seen_edges.push_back(a->td->a2);
-							a->td->a2->td = nullptr;
+							seen_edges.push_back(td.a2);
+							//a->td->a2->td = nullptr;
 						}
-						if (std::find(seen_edges.begin(), seen_edges.end(), a->td->a3) == seen_edges.end())
+						if (std::find(seen_edges.begin(), seen_edges.end(), td.a3) == seen_edges.end())
 						{
-							seen_edges.push_back(a->td->a3);
-							a->td->a3->td = nullptr;
+							seen_edges.push_back(td.a3);
+							//a->td->a3->td = nullptr;
 						}
 					}
-					else if (a == a->td->a2)
+					else if (a == td.a2)
 					{
-						if (std::find(seen_edges.begin(), seen_edges.end(), a->td->a1) == seen_edges.end())
+						if (std::find(seen_edges.begin(), seen_edges.end(), td.a1) == seen_edges.end())
 						{
-							seen_edges.push_back(a->td->a1);
-							a->td->a1->td = nullptr;
+							seen_edges.push_back(td.a1);
+							//a->td->a1->td = nullptr;
 						}
-						if (std::find(seen_edges.begin(), seen_edges.end(), a->td->a3) == seen_edges.end())
+						if (std::find(seen_edges.begin(), seen_edges.end(), td.a3) == seen_edges.end())
 						{
-							seen_edges.push_back(a->td->a3);
-							a->td->a3->td = nullptr;
+							seen_edges.push_back(td.a3);
+							//a->td->a3->td = nullptr;
 						}
 					}
 					else
 					{
-						if (std::find(seen_edges.begin(), seen_edges.end(), a->td->a1) == seen_edges.end())
+						if (std::find(seen_edges.begin(), seen_edges.end(), td.a1) == seen_edges.end())
 						{
-							seen_edges.push_back(a->td->a1);
-							a->td->a1->td = nullptr;
+							seen_edges.push_back(td.a1);
+							//a->td->a1->td = nullptr;
 						}
-						if (std::find(seen_edges.begin(), seen_edges.end(), a->td->a2) == seen_edges.end())
+						if (std::find(seen_edges.begin(), seen_edges.end(), td.a2) == seen_edges.end())
 						{
-							seen_edges.push_back(a->td->a2);
-							a->td->a2->td = nullptr;
+							seen_edges.push_back(td.a2);
+							//a->td->a2->td = nullptr;
+						}
+					}
+
+					for (int i = 0; i < edges.size(); ++i)
+					{
+						if (&edges.at(i) == a)
+						{
+							continue;
+						}
+						if (edges.at(i).td == a->td)
+						{
+							edges.at(i).td = nullptr;
+						}
+						if (edges.at(i).tg == a->td)
+						{
+							edges.at(i).tg = nullptr;
+						}
+					}
+
+					if (a->tg != nullptr)
+					{
+						if (a == tg.a1)
+						{
+							if (std::find(seen_edges.begin(), seen_edges.end(), tg.a2) == seen_edges.end())
+							{
+								seen_edges.push_back(tg.a2);
+								//a->td->a2->td = nullptr;
+							}
+							if (std::find(seen_edges.begin(), seen_edges.end(), tg.a3) == seen_edges.end())
+							{
+								seen_edges.push_back(tg.a3);
+								//a->td->a3->td = nullptr;
+							}
+						}
+						else if (a == tg.a2)
+						{
+							if (std::find(seen_edges.begin(), seen_edges.end(), tg.a1) == seen_edges.end())
+							{
+								seen_edges.push_back(tg.a1);
+								//a->td->a1->td = nullptr;
+							}
+							if (std::find(seen_edges.begin(), seen_edges.end(), tg.a3) == seen_edges.end())
+							{
+								seen_edges.push_back(tg.a3);
+								//a->td->a3->td = nullptr;
+							}
+						}
+						else
+						{
+							if (std::find(seen_edges.begin(), seen_edges.end(), tg.a1) == seen_edges.end())
+							{
+								seen_edges.push_back(tg.a1);
+								//a->td->a1->td = nullptr;
+							}
+							if (std::find(seen_edges.begin(), seen_edges.end(), tg.a2) == seen_edges.end())
+							{
+								seen_edges.push_back(tg.a2);
+								//a->td->a2->td = nullptr;
+							}
+						}
+
+						for (int i = 0; i < edges.size(); ++i)
+						{
+							if (&edges.at(i) == a)
+							{
+								continue;
+							}
+							if (edges.at(i).td == a->tg)
+							{
+								edges.at(i).td = nullptr;
+							}
+							if (edges.at(i).tg == a->tg)
+							{
+								edges.at(i).tg = nullptr;
+							}
 						}
 					}
 
@@ -1114,48 +1200,64 @@ void delaunayAddPoint()
 			}
 			if (a->tg != nullptr)
 			{
-				std::tie(s1, s2, s3) = apexesOfTriangle(a->tg);
+				std::tie(s1, s2, s3) = apexesOfTriangle(&tg);
 				c = circonscriptCircle(s1, s2, s3);
 
 				if (sqrt(pow(c.center.x - apexes.back().p->x, 2) + pow(c.center.y - apexes.back().p->y, 2)) <= c.radius)
 				{
-					if (a == a->tg->a1)
+					if (a == tg.a1)
 					{
-						if (std::find(seen_edges.begin(), seen_edges.end(), a->tg->a2) == seen_edges.end())
+						if (std::find(seen_edges.begin(), seen_edges.end(), tg.a2) == seen_edges.end())
 						{
-							seen_edges.push_back(a->tg->a2);
-							a->tg->a2->tg = nullptr;
+							seen_edges.push_back(tg.a2);
+							//a->tg->a2->tg = nullptr;
 						}
-						if (std::find(seen_edges.begin(), seen_edges.end(), a->tg->a3) == seen_edges.end())
+						if (std::find(seen_edges.begin(), seen_edges.end(), tg.a3) == seen_edges.end())
 						{
-							seen_edges.push_back(a->tg->a3);
-							a->tg->a3->tg = nullptr;
+							seen_edges.push_back(tg.a3);
+							//a->tg->a3->tg = nullptr;
 						}
 					}
-					else if (a == a->tg->a2)
+					else if (a == tg.a2)
 					{
-						if (std::find(seen_edges.begin(), seen_edges.end(), a->tg->a1) == seen_edges.end())
+						if (std::find(seen_edges.begin(), seen_edges.end(), tg.a1) == seen_edges.end())
 						{
-							seen_edges.push_back(a->tg->a1);
-							a->tg->a1->tg = nullptr;
+							seen_edges.push_back(tg.a1);
+							//a->tg->a1->tg = nullptr;
 						}
-						if (std::find(seen_edges.begin(), seen_edges.end(), a->tg->a3) == seen_edges.end())
+						if (std::find(seen_edges.begin(), seen_edges.end(), tg.a3) == seen_edges.end())
 						{
-							seen_edges.push_back(a->tg->a3);
-							a->tg->a3->tg = nullptr;
+							seen_edges.push_back(tg.a3);
+							//a->tg->a3->tg = nullptr;
 						}
 					}
 					else
 					{
-						if (std::find(seen_edges.begin(), seen_edges.end(), a->tg->a1) == seen_edges.end())
+						if (std::find(seen_edges.begin(), seen_edges.end(), tg.a1) == seen_edges.end())
 						{
-							seen_edges.push_back(a->tg->a1);
-							a->tg->a1->tg = nullptr;
+							seen_edges.push_back(tg.a1);
+							//a->tg->a1->tg = nullptr;
 						}
-						if (std::find(seen_edges.begin(), seen_edges.end(), a->tg->a2) == seen_edges.end())
+						if (std::find(seen_edges.begin(), seen_edges.end(), tg.a2) == seen_edges.end())
 						{
-							seen_edges.push_back(a->tg->a2);
-							a->tg->a2->tg = nullptr;
+							seen_edges.push_back(tg.a2);
+							//a->tg->a2->tg = nullptr;
+						}
+					}
+
+					for (int i = 0; i < edges.size(); ++i)
+					{
+						if (&edges.at(i) == a)
+						{
+							continue;
+						}
+						if (edges.at(i).td == a->tg)
+						{
+							edges.at(i).td = nullptr;
+						}
+						if (edges.at(i).tg == a->tg)
+						{
+							edges.at(i).tg = nullptr;
 						}
 					}
 
@@ -1167,18 +1269,49 @@ void delaunayAddPoint()
 			}
 
 			Edge cop = Edge(a->s1, a->s2);
-			//Edge* cop_p = &(*std::find(edges.begin(), edges.end(), cop));
+			Edge* cop_p = &(*std::find(edges.begin(), edges.end(), cop));
+			Edge *s4 = nullptr, *s5 = nullptr;
+			bool s1Exists = false, s2Exists = false;
 
-			edges.push_back(Edge(a->s1, &apexes.back()));
-			edges.push_back(Edge(a->s2, &apexes.back()));
+			for (int i = 0; i < edges.size(); ++i)
+			{
+				if (edges.at(i).s1 == cop_p->s1 || edges.at(i).s2 == cop_p->s1)
+				{
+					if (edges.at(i).s1 == &apexes.back() || edges.at(i).s2 == &apexes.back())
+					{
+						s4 = &edges.at(i);
+						s1Exists = true;
+					}
+				}
+				if (edges.at(i).s1 == cop_p->s2 || edges.at(i).s2 == cop_p->s2)
+				{
+					if (edges.at(i).s1 == &apexes.back() || edges.at(i).s2 == &apexes.back())
+					{
+						s5 = &edges.at(i);
+						s2Exists = true;
+					}
+				}
+			}
+
+			if (!s1Exists)
+			{
+				edges.push_back(Edge(cop_p->s1, &apexes.back()));
+				s4 = &edges.back();
+			}
+
+			if (!s2Exists)
+			{
+				edges.push_back(Edge(cop_p->s2, &apexes.back()));
+				s5 = &edges.back();
+			}
 
 			apexes.back().a = &edges.back();
 
-			Triangle tr = Triangle(a, &edges.back(), &edges.at(edges.size() - 2));
+			Triangle tr = Triangle(cop_p, s5, s4);
 
 			if (!isTriangleDirect(tr))
 			{
-				tr = Triangle(a, &edges.at(edges.size() - 2), &edges.back());
+				tr = Triangle(cop_p, s4, s5);
 			}
 
 			triangles.push_back(tr);
