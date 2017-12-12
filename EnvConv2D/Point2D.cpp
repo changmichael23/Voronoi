@@ -12,9 +12,34 @@ float Point2D::distance(Point2D point)
 	return res;
 }
 
+Point2D Point2D::operator+(const Point2D & point)
+{
+	Point2D ret;
+	this->x += point.x;
+	this->y += point.y;
+	ret = Point2D(x, y);
+	return ret;
+}
+
+Point2D Point2D::operator-(const Point2D & point)
+{
+	Point2D ret;
+	this->x -= point.x;
+	this->y -= point.y;
+	ret = Point2D(x, y);
+	return ret;
+}
+
 std::ostream& operator<<(std::ostream& os, const Point2D &point)
 {
 	return os << "X : " << point.x << "Y : " << point.y;
+}
+
+bool Point2D::operator<=(const Point2D& point) const
+{
+	if (x <= point.x || (x == point.x && y <= point.y))
+		return true;
+	return false;
 }
 
 bool Point2D::operator<(const Point2D& point) const

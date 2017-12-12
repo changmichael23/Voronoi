@@ -15,7 +15,12 @@ public:
 	Point2D();
 	float distance(Point2D point);
 
+	Point2D operator+(const Point2D & point);
+
+	Point2D operator-(const Point2D & point);
+
 	friend std::ostream& operator<<(std::ostream& os, const Point2D &point);
+	bool operator<=(const Point2D & point) const;
 	bool operator<(const Point2D& point) const;
 	bool operator == (const Point2D &point) const;
 	bool operator != (const Point2D& point) const;
