@@ -104,7 +104,7 @@ void dessin()
 			glVertex2f(p[k].x, p[k].y);
 
 		}
-		glVertex2f(p[0].x, p[0].y);
+		//glVertex2f(p[0].x, p[0].y);
 		glEnd();
 
 	}

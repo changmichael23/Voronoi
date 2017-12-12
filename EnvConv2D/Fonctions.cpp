@@ -116,24 +116,6 @@ Point2D barycentre(std::vector<Point2D> vecpoints)
 	return ret;
 }
 
-//int ccw(Point2D a, Point2D b, Point2D c) {
-//	int area = (b.x - a.x) * (c.y - a.y) - (b.y - a.y) * (c.x - a.x);
-//	if (area > 0)
-//		return -1;
-//	else if (area < 0)
-//		return 1;
-//	return 0;
-//}
-//
-//bool POLAR_ORDER(Point2D a, Point2D b) {
-//	Point2D vecDir = bary + Point2D(0, 1);
-//	glm::vec2 vectorDirector = makeVector(bary, vecDir);
-//	int order = ccw(bary, a, b);
-//	if (order == 0)
-//		return a.distance(bary) < a.distance(bary);
-//	return (order == -1);
-//}
-
 double dotProduct(glm::vec2 vecA, glm::vec2 vecB)
 {
 	return glm::dot(vecA, vecB);
@@ -176,6 +158,7 @@ bool isConvexPoint(Point2D p, Point2D prevPoint, Point2D nextPoint)
 
 std::vector<Point2D> findAndSuppressConcavePoints(std::vector<Point2D> vecpoints)
 {
+	Point2D saveBegin;
 	int initial;
 	if (vecpoints.size() > 0)
 		initial = 0;
@@ -221,6 +204,8 @@ std::vector<Point2D> findAndSuppressConcavePoints(std::vector<Point2D> vecpoints
 		}
 	} while (pivot != initial || go == false);
 
+	L.push_back(L[0]);
+
 	return L;
 }
 
@@ -238,6 +223,7 @@ std::vector<Point2D> grahamScan(std::vector<Point2D> vecpoints)
 	double min_angle = 999;
 	int smallerDotProdIndex = 0;
 	float distanceToBar = 99999;
+	
 
 	do
 	{
@@ -264,7 +250,7 @@ std::vector<Point2D> grahamScan(std::vector<Point2D> vecpoints)
 
 	} while (foundPoints < n);
 	points = findAndSuppressConcavePoints(points);
-	//points.push_back(points[0]);
+	//points.push_back(saveBegin);
 
 	return points;
 }
