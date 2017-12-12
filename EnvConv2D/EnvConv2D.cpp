@@ -17,6 +17,8 @@
 std::vector<Point2D> points;
 std::vector<Point2D> p;
 
+Point2D bar;
+
 int menuPrincipal;
 int isDrawing;
 void mouse(int button, int state, int x, int y);
@@ -38,7 +40,7 @@ int main(int argc, char **argv)
 
 	glutInitWindowSize(500, 500);									// Dimension fenêtre
 	glutInitWindowPosition(100, 100);								// Position coin haut gauche
-	glutCreateWindow("Bezier");										// Nom
+	glutCreateWindow("Jarvis&Graham");										// Nom
 	gluOrtho2D(-250.0, 250.0, -250.0, 250.0);						// Repère 2D délimitant les abscisses et les ordonnées
 
 
@@ -55,7 +57,7 @@ int main(int argc, char **argv)
 	showMenu();
 	glutMouseFunc(mouse);
 	glutDisplayFunc(dessin);
-	glutIdleFunc(update);
+	//glutIdleFunc(update);
 
 	/* rq: le callback de fonction (fonction de rappel) est une fonction qui est passée en argument à une
 	autre fonction. Ici, le main fait usage des deux fonctions de rappel (qui fonctionnent en même temps)
@@ -90,6 +92,11 @@ void dessin()
 	if (isDrawing == 0)
 	{
 		glColor3f(0.0f, 0.0f, 1.0f);
+		if (bar.x != NULL && bar.y != NULL) {
+			glBegin(GL_POINTS);
+			glVertex2f(bar.x, bar.y);
+			glEnd();
+		}
 		glBegin(GL_LINE_STRIP);
 		for (int k = 0; k < p.size(); k++)
 		{
@@ -97,7 +104,7 @@ void dessin()
 			glVertex2f(p[k].x, p[k].y);
 
 		}
-
+		glVertex2f(p[0].x, p[0].y);
 		glEnd();
 
 	}
@@ -129,7 +136,7 @@ void showMenu()
 	menuPrincipal = glutCreateMenu(EnveloppeMenuCallback);
 
 	glutAddMenuEntry("Jarvis", 1);
-	glutAddMenuEntry("Graham-Scan", 1);
+	glutAddMenuEntry("Graham-Scan", 2);
 
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
@@ -140,13 +147,13 @@ void EnveloppeMenuCallback(int menuItem)
 	{
 	case 1:
 		// Jarvis
-		
 		p = jarvisMarch(points);
 		isDrawing = 0;
 		break;
 	case 2:
 		// Graham Scan
-
+		bar = barycentre(points);
+		p = grahamScan(points);
 		isDrawing = 0;
 		break;
 	}
