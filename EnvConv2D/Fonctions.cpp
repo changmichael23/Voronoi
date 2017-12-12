@@ -42,7 +42,7 @@ double angleVec(glm::vec2 vector, TPoint p1, TPoint p2)
 	else if (result > 1.0) result = 1.0;
 	double angle = acos(result);
 
-	if (determinant == 0) // colinear
+	if (determinant == 0)
 		return INFINITY;
 	return angle * 180 / M_PI;
 }
@@ -116,11 +116,6 @@ Point2D barycentre(std::vector<Point2D> vecpoints)
 	return ret;
 }
 
-double dotProduct(glm::vec2 vecA, glm::vec2 vecB)
-{
-	return glm::dot(vecA, vecB);
-}
-
 template<class TPoint>
 double fullAngle(glm::vec2 vector, TPoint p1, TPoint p2)
 {
@@ -128,7 +123,7 @@ double fullAngle(glm::vec2 vector, TPoint p1, TPoint p2)
 	int norm_vector_points = normVector(p1, p2);
 	int norm_vector = normVector(vector);
 
-	double dot = dotProduct(vectorPoint, vector);
+	double dot = glm::dot(vectorPoint, vector);
 
 	int determinant = vectorPoint.x * vector.y - vectorPoint.y * vector.x;
 	double result = dot / (norm_vector_points * norm_vector);
@@ -250,7 +245,6 @@ std::vector<Point2D> grahamScan(std::vector<Point2D> vecpoints)
 
 	} while (foundPoints < n);
 	points = findAndSuppressConcavePoints(points);
-	//points.push_back(saveBegin);
 
 	return points;
 }

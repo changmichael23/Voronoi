@@ -22,8 +22,6 @@ std::vector<Point2D> jarvisMarch(std::vector<Point2D> vecpoints);
 
 Point2D barycentre(std::vector<Point2D> vecpoints);
 
-double dotProduct(glm::vec2 vecA, glm::vec2 vecB);
-
 bool isConvexPoint(Point2D p, Point2D prevPoint, Point2D nextPoint);
 
 std::vector<Point2D> findAndSuppressConcavePoints(std::vector<Point2D> vecpoints);
