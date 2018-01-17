@@ -102,8 +102,8 @@ struct Patch
 
 	Point bezierPatch(float u, float v)
 	{
-		Point* uCurve;
-		Point* cP;
+		Point* uCurve = new Point[n];
+		Point* cP = new Point[n * m];
 
 		for (int i = 0; i < n; ++i)
 		{
@@ -140,7 +140,7 @@ struct Patch
 
 	int Factorial(int x)
 	{
-		return (x == 1) ? x : x * Factorial(x - 1);
+		return (x == 1 || x == 0) ? 1 : x * Factorial(x - 1);
 	}
 };
 

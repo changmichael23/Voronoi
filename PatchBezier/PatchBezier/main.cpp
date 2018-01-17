@@ -68,6 +68,7 @@ State gs;
 EditMode em;
 RotateMode rm;
 int menu_Main, menu_sub1, menu_sub2;
+void CreateGlutMenu();
 
 float * structToTabColor(std::vector<Point> newPoints, std::vector<Colore> c)
 {
@@ -128,10 +129,13 @@ void MenuFunction(int i)
 	case 6: CancelEdit(); break;
 	case 7: ChangeRotationMethod(); break;
 	case 8: DeletePatch(); break;
-	case 10: QuitDelete(); break;
+	case 9: QuitDelete(); break;
+	case 10: ConfirmDelete(); break;
 	default:
 		break;
 	}
+	glutDestroyMenu(menu_Main);
+	CreateGlutMenu();
 }
 
 void CreateGlutMenu()
@@ -479,7 +483,7 @@ int main(int argc, const char* argv[])
 	glutPassiveMotionFunc(mouse);
 	glutSpecialFunc(SpecialInput);
 	glutKeyboardFunc(keyboard);
-
+	CreateGlutMenu();
 
 	glutMainLoop();
 

@@ -39,6 +39,7 @@ void ConfirmPatch()
 {
 	gs = idle;
 	patches.push_back(tmpPatch);
+	patches.back().generateCurve();
 }
 
 void RotatePatch(int i)
