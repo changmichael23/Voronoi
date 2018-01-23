@@ -3,7 +3,7 @@
 
 #include <string>
 #include <vector>
-extern int sizeCube;
+extern float sizeCube;
 
 struct Point {
 	float x;

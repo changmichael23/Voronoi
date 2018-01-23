@@ -65,10 +65,10 @@
     <ClInclude Include="PatchesController.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\Patch.hpp">
+    <ClInclude Include="UtilEnums.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="UtilEnums.hpp">
+    <ClInclude Include="Patch.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

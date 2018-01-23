@@ -160,7 +160,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\Patch.hpp" />
+    <ClInclude Include="Patch.hpp" />
     <ClInclude Include="UtilEnums.hpp" />
     <ClInclude Include="PatchesController.hpp" />
     <ClInclude Include="..\Common\EsgiShader.h" />
