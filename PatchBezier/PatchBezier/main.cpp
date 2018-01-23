@@ -30,11 +30,11 @@ int sizetab, sizeind;
 EsgiShader g_BasicShader;
 
 std::vector<Point> pointsControles3D;           // Tous les points en 3D
-//std::vector<Point> tmpVectorPoints;
+std::vector<Point> gridPoints3D;
 float* tabPoints, *tmpPoints;         //Tous les points en 3D
 GLushort* createInd(int);
 GLushort* indi;			// Tab indice
-//GLushort*  *indTmp;			// Tab indice
+GLushort* indTmp;			// Tab indice
 
 
 
@@ -114,6 +114,19 @@ float * structToTabColor(std::vector<Point> newPoints, std::vector<Colore> c)
 	return tabP;
 }
 
+float * structToTabTmp(std::vector<Point> newPoints, std::vector<Colore> c)
+{
+	float* tabP = new float[newPoints.size() * 3];
+	int j = 0;
+	for (int i = 0; i < newPoints.size() * 3; i += 3)
+	{
+		tabP[i] = newPoints[j].x;
+		tabP[i + 1] = newPoints[j].y;
+		tabP[i + 2] = newPoints[j].z;
+		j++;
+	}
+	return tabP;
+}
 void MenuFunction(int i)
 {
 	switch (i)
@@ -222,9 +235,15 @@ bool Initialize()
 
 	tabPoints = structToTabColor(pointsControles3D,tmpColore);
 
+	gridPoints3D = patches[0].gridPoints;
+
+
 	indi = createInd(centerPoints3D.size()*24);
-	//indTmp = createInd(tmpVectorPoints.size());
-	//tmpPoints = structToTabColor(tmpVectorPoints,col);
+	indTmp = createInd(gridPoints3D.size());
+
+
+
+	tmpPoints = structToTabTmp(gridPoints3D,col);
 
 	glewInit();
 	g_BasicShader.LoadVertexShader("basic.vs");
@@ -260,23 +279,24 @@ bool Initialize()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO0);
 	glBufferData(GL_ARRAY_BUFFER, pointsControles3D.size() * 9 * sizeof(float), tabPoints, GL_STATIC_DRAW);
 	//---
-	//glGenVertexArrays(1, &VBO1); // Créer le VAO
-	//glBindVertexArray(VBO1); // Lier le VAO pour l'utiliser
-	//glEnableVertexAttribArray(0);
+	glGenVertexArrays(1, &VBO1); // Créer le VAO
+	glBindVertexArray(VBO1); // Lier le VAO pour l'utiliser
+	glEnableVertexAttribArray(0);
 
 
 	//glGenBuffers(1, &VBO0);
 
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-	//glBufferData(GL_ARRAY_BUFFER, tmpVectorPoints.size() * 9 * sizeof(float), tmpPoints, GL_STATIC_DRAW);
+	// 3 pour l instant vu qu il n y a pas les normales
+	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+	glBufferData(GL_ARRAY_BUFFER, gridPoints3D.size() * 3 * sizeof(float), tmpPoints, GL_STATIC_DRAW);
 
 	// rendu indexe
 	glGenBuffers(1, &IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, pointsControles3D.size() * sizeof(GLushort), indi, GL_STATIC_DRAW);
-	//glGenBuffers(1, &IBO1);
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-	//glBufferData(GL_ELEMENT_ARRAY_BUFFER, tmpVectorPoints.size() * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
+	glGenBuffers(1, &IBO1);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, gridPoints3D.size() * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
 
 	// le fait de specifier 0 comme BO desactive l'usage des BOs
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -295,8 +315,8 @@ void Terminate()
 	glDeleteTextures(1, &TexObj);
 	glDeleteBuffers(1, &IBO);
 	glDeleteBuffers(1, &VBO0);
-	//glDeleteBuffers(1, &IBO1);
-	//glDeleteBuffers(1, &VBO1);
+	glDeleteBuffers(1, &IBO1);
+	glDeleteBuffers(1, &VBO1);
 	g_BasicShader.DestroyProgram();
 }
 
@@ -403,12 +423,12 @@ void animate()
 
 	//-----------
 
-	//glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
 
-
-	//glVertexAttribPointer(position_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(0 * sizeof(float)));
-	//glVertexAttribPointer(normal_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(3 * sizeof(float)));
-	//glVertexAttribPointer(color_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(6 * sizeof(float)));
+	int sizeP = 3;
+	glVertexAttribPointer(position_location, 3, GL_FLOAT, GL_FALSE, sizeP * sizeof(float), reinterpret_cast<const void *>(0 * sizeof(float)));
+	//glVertexAttribPointer(normal_location, 3, GL_FLOAT, GL_FALSE, sizeP * sizeof(float), reinterpret_cast<const void *>(3 * sizeof(float)));
+	//glVertexAttribPointer(color_location, 3, GL_FLOAT, GL_FALSE, sizeP * sizeof(float), reinterpret_cast<const void *>(6 * sizeof(float)));
 	
 	
 	glEnableVertexAttribArray(position_location);
@@ -416,7 +436,7 @@ void animate()
 	glEnableVertexAttribArray(color_location);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-	//glDrawElements(GL_TRIANGLES, tmpVectorPoints.size(), GL_UNSIGNED_SHORT, nullptr);
+	glDrawElements(GL_LINE_STRIP, gridPoints3D.size(), GL_UNSIGNED_SHORT, nullptr);
 
 	//----------------
 	glDisableVertexAttribArray(position_location);
