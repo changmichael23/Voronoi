@@ -168,12 +168,7 @@
     <ClInclude Include="Camera.hpp" />
     <ClInclude Include="Colore.hpp" />
     <ClInclude Include="Controller.hpp" />
-    <ClInclude Include="Edge.hpp" />
-    <ClInclude Include="EnvInc.hpp" />
-    <ClInclude Include="Face.hpp" />
-    <ClInclude Include="Graph.hpp" />
     <ClInclude Include="Point.hpp" />
-    <ClInclude Include="Summit.hpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="basic.fs" />

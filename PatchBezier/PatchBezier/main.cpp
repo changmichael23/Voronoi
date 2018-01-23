@@ -5,7 +5,7 @@
 #include "UtilEnums.hpp"
 #include "PatchesController.hpp"
 #include "Controller.hpp"
-#include "EnvInc.hpp"
+#include "Colore.hpp"
 #ifdef _MSC_VER
 #pragma comment(lib, "opengl32.lib")
 #include <windows.h>
@@ -47,7 +47,6 @@ GLuint TexObj; // identifiant du Texture Object
 float colore[4];
 float sizeCube = 0.1f;
 
-std::vector<Face*> *tmpFace = new std::vector<Face*>();
 std::vector<Colore> col;
 
 //PatchController variables

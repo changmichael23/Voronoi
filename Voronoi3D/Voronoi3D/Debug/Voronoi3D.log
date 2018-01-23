@@ -44,7 +44,5 @@ c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\math.h(1001): w
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\main.cpp(62): warning C4018: '<': signed/unsigned mismatch
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\main.cpp(117): warning C4018: '<': signed/unsigned mismatch
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\voronoi3d\voronoi3d\main.cpp(297): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  EsgiShader.cpp
-  Generating Code...
   Voronoi3D.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\Voronoi3D.exe
   Voronoi3D.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\Voronoi3D.pdb (Full PDB)
