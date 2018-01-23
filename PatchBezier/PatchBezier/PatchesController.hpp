@@ -13,13 +13,13 @@ void StartNewPatch()
 	gs = drawing;
 	int n, m;
 
-	std::cout << "Saisir le nombre de lignes du patch : ";
+	std::cout << "Saisir l'ordre n du patch : ";
 	std::cin >> n;
-	std::cout << "Saisir le nombre de colonnes du patch : ";
+	std::cout << "Saisir l'ordre m du patch : ";
 	std::cin >> m;
 
 	tmpPatch = Patch(n, m);
-	nbPoints = n * m;
+	nbPoints = (n + 1) * (m + 1);
 	pointIdx = 0;
 }
 

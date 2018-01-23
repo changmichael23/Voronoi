@@ -2,11 +2,10 @@
   main.cpp
 c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\camera.hpp(22): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\camera.hpp(23): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\point.hpp(54): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\point.hpp(91): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\point.hpp(78): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\point.hpp(115): warning C4018: '<': signed/unsigned mismatch
 c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\patch.hpp(32): warning C4244: 'argument': conversion from 'int' to 'float', possible loss of data
 c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\patch.hpp(92): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\patch.hpp(136): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
 c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\controller.hpp(18): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
 c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\controller.hpp(22): warning C4244: 'return': conversion from 'double' to 'float', possible loss of data
 c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\graph.hpp(51): warning C4018: '<': signed/unsigned mismatch
@@ -39,8 +38,5 @@ c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier
 c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\main.cpp(205): warning C4018: '<': signed/unsigned mismatch
 c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\main.cpp(220): warning C4018: '<': signed/unsigned mismatch
 c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\main.cpp(357): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-  Generating Code...
 c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\envinc.hpp(485): warning C4715: 'EnvInc::getRandomInsidePoint': not all control paths return a value
-  Skipping... (no relevant changes detected)
-  EsgiShader.cpp
   EnvInc3D.vcxproj -> C:\Users\maxim\Desktop\ESGI\5A\Maths pour l'info\Voronoi\PatchBezier\PatchBezier\Debug\PatchBezier.exe

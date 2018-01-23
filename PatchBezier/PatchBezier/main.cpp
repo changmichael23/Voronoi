@@ -52,7 +52,7 @@ std::vector<Patch> patches = std::vector<Patch>();
 Patch tmpPatch;
 int nbPoints;
 int pointIdx, patchIdx;
-int precision = 16;
+int precision = 4;
 
 //Controller variables
 float TimeInSeconds;

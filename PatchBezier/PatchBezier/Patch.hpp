@@ -11,7 +11,7 @@ extern RotateMode rm;
 struct Patch
 {
 	int n, m;
-	std::vector<Point> Controlpoints;
+	std::vector<Point> controlPoints;
 	std::vector<Point> gridPoints;
 
 	Patch()
@@ -25,19 +25,19 @@ struct Patch
 		n = _n;
 		m = _m;
 
-		for (int i = 0; i < n; ++i)
+		for (int i = 0; i <= n; ++i)
 		{
-			for (int j = 0; j < m; ++j)
+			for (int j = 0; j <= m; ++j)
 			{
 				Point p = Point(i, .0f, j);
-				Controlpoints.push_back(p);
+				controlPoints.push_back(p);
 			}
 		}
 	}
 
 	void MovePoint(int i, float step)
 	{
-		Controlpoints.at(i).y += step;
+		controlPoints.at(i).y += step;
 	}
 
 	void Rotate(int i, float step)
@@ -56,21 +56,21 @@ struct Patch
 	{
 		if (i == 0)
 		{
-			for (Point p : Controlpoints)
+			for (Point p : controlPoints)
 			{
 				p.x += step;
 			}
 		}
 		else if (i == 1)
 		{
-			for (Point p : Controlpoints)
+			for (Point p : controlPoints)
 			{
 				p.y += step;
 			}
 		}
 		else if (i == 2)
 		{
-			for (Point p : Controlpoints)
+			for (Point p : controlPoints)
 			{
 				p.z += step;
 			}
@@ -79,7 +79,7 @@ struct Patch
 
 	void Resize(float step)
 	{
-		for (Point p : Controlpoints)
+		for (Point p : controlPoints)
 		{
 			p.x *= step;
 			p.y *= step;
@@ -96,46 +96,36 @@ struct Patch
 			for (int i = 0; i <= precision; ++i)
 			{
 				gridPoints.push_back(bezierPatch(i / (float)precision, j / (float)precision));
+				std::cout << gridPoints.back().x << " - " << gridPoints.back().y << " - " << gridPoints.back().z << std::endl;
 			}
 		}
 	}
 
 	Point bezierPatch(float u, float v)
 	{
-		Point* uCurve = new Point[n];
-		Point* cP = new Point[n * m];
+		Point Suv = Point(), Si = Point();
 
-		for (int i = 0; i < n; ++i)
+		for (int i = 0; i <= n; ++i)
 		{
-			for (int j = 0; j < m; ++j)
+			Si = .0f;
+			for (int j = 0; j <= m; ++j)
 			{
-				cP[j] = Controlpoints.at(i * m + j);
+				Si +=  controlPoints[i * (m + 1) + j] * BernsteinPoly(j, v, m);
 			}
-			uCurve[i] = bezierCurve(cP, u, m);
+			Suv += Si * BernsteinPoly(i, u, n);
 		}
 
-		return bezierCurve(uCurve, v, n);
-	}
-
-	Point bezierCurve(Point* P, float t, int dim)
-	{
-		Point p = Point(0.f, 0.f, 0.f);
-
-		for (int i = 0; i < dim; ++i)
-		{
-			p.x += BernsteinPoly(i, t, dim) * P[i].x;
-			p.y += BernsteinPoly(i, t, dim) * P[i].y;
-			p.z += BernsteinPoly(i, t, dim) * P[i].z;
-		}
-
-		return p;
+		return Suv;
 	}
 
 	float BernsteinPoly(int i, float t, int dim)
 	{
-		float binomial = Factorial(dim) / (Factorial(i) * Factorial(dim - i));
+		return Binomial(i, dim) * pow(t, i) * pow(1 - t, dim - i);
+	}
 
-		return binomial * pow(t, i) * pow(1 - t, dim - i);
+	int Binomial(int x, int n)
+	{
+		return Factorial(n) / (Factorial(x) * Factorial(n - x));
 	}
 
 	int Factorial(int x)

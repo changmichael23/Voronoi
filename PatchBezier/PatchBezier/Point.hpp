@@ -41,6 +41,30 @@ struct Point {
 		return false;
 	}
 
+	void operator+=(const Point &p)
+	{
+		x += p.x;
+		y += p.y;
+		z += p.z;
+	}
+
+	Point operator*(const float &f)
+	{
+		Point p = Point();
+		p.x = x * f;
+		p.y = y * f;
+		p.z = z * f;
+
+		return p;
+	}
+
+	void operator=(const float &f)
+	{
+		x = f;
+		y = f;
+		z = f;
+	}
+
 	std::string toString()
 	{
 		return "x = " + std::to_string(x) + ", y = " + std::to_string(y) + ", z =" + std::to_string(z);

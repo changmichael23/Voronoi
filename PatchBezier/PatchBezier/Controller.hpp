@@ -111,6 +111,7 @@ void SpecialInput(int key, int x, int y)
 {	
 	if (gs == drawing)
 	{
+		std::cout << "oui!" << std::endl;
 		switch (key)
 		{
 		case GLUT_KEY_RIGHT:
