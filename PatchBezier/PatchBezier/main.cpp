@@ -2,7 +2,7 @@
 #include <vector>
 #include <iostream>
 #include "Camera.hpp"
-#include "UtilStructs.hpp"
+#include "UtilEnums.hpp"
 #include "PatchesController.hpp"
 #include "Controller.hpp"
 #include "EnvInc.hpp"
@@ -52,7 +52,7 @@ std::vector<Patch> patches = std::vector<Patch>();
 Patch tmpPatch;
 int nbPoints;
 int pointIdx, patchIdx;
-int precision = 4;
+int precision = 2;
 
 //Controller variables
 float TimeInSeconds;
@@ -66,7 +66,7 @@ float resizeStep = .05f;
 
 State gs;
 EditMode em;
-RotateMode rm;
+RotateMode rm = matrix;
 int menu_Main, menu_sub1, menu_sub2;
 void CreateGlutMenu();
 
@@ -121,7 +121,7 @@ void MenuFunction(int i)
 	case 2: ConfirmPatch(); break;
 	case 30: RotatePatch(0); break;
 	case 31: RotatePatch(1); break;
-	case 32: RotatePatch(1); break;
+	case 32: RotatePatch(2); break;
 	case 40: TranslatePatch(0); break;
 	case 41: TranslatePatch(1); break;
 	case 42: TranslatePatch(2); break;
@@ -140,10 +140,20 @@ void MenuFunction(int i)
 
 void CreateGlutMenu()
 {
-	menu_sub1 = glutCreateMenu(MenuFunction);
-	glutAddMenuEntry("Lacet", 30);
-	glutAddMenuEntry("Tangage", 31);
-	glutAddMenuEntry("Roulis", 32);
+	if (rm == quaternion)
+	{
+		menu_sub1 = glutCreateMenu(MenuFunction);
+		glutAddMenuEntry("Lacet", 30);
+		glutAddMenuEntry("Tangage", 31);
+		glutAddMenuEntry("Roulis", 32);
+	}
+	else if (rm == matrix)
+	{
+		menu_sub1 = glutCreateMenu(MenuFunction);
+		glutAddMenuEntry("X", 30);
+		glutAddMenuEntry("Y", 31);
+		glutAddMenuEntry("Z", 32);
+	}
 
 	menu_sub2 = glutCreateMenu(MenuFunction);
 	glutAddMenuEntry("X", 40);

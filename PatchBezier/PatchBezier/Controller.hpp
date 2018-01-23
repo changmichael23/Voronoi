@@ -13,15 +13,6 @@ extern float translateStep;
 extern float resizeStep;
 extern Patch tmp;
 
-float COS(float angle)
-{
-	return cos(angle * 2 * 0.00872665);
-}
-float SIN(float angle)
-{
-	return sin(angle * 2 * 0.00872665);
-}
-
 void keyboard(unsigned char key, int x, int y)
 {
 	if (key == 'w')
@@ -183,9 +174,10 @@ void SpecialInput(int key, int x, int y)
 					patches.at(patchIdx).Translate(2, translateStep);
 					break;
 				case 6:
-					patches.at(patchIdx).Resize(resizeStep);
+					patches.at(patchIdx).Resize(1 + resizeStep);
 					break;
 				}
+				break;
 			case GLUT_KEY_DOWN:
 				switch (em)
 				{
@@ -208,9 +200,10 @@ void SpecialInput(int key, int x, int y)
 					patches.at(patchIdx).Translate(2, -translateStep);
 					break;
 				case 6:
-					patches.at(patchIdx).Resize(1 / resizeStep);
+					patches.at(patchIdx).Resize(1 - resizeStep);
 					break;
 				}
+				break;
 			}
 		}
 
