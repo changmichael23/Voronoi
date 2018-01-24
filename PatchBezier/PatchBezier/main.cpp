@@ -146,6 +146,9 @@ void MenuFunction(int i)
 	case 8: DeletePatch(); break;
 	case 9: QuitDelete(); break;
 	case 10: ConfirmDelete(); break;
+	case 11: SubdivisePatch(); break;
+	case 12: ConfirmSubdivise(); break;
+	case 13: CancelSubdivise(); break;
 	default:
 		break;
 	}
@@ -188,6 +191,7 @@ void CreateGlutMenu()
 		glutAddMenuEntry("Redimensionnement", 5);
 		glutAddMenuEntry("Changer la méthode de rotation", 7);
 		glutAddMenuEntry("Supprimer une surface", 8);
+		glutAddMenuEntry("Subdiviser une surface", 11);
 	}
 	else if (gs == editing)
 	{
@@ -207,6 +211,11 @@ void CreateGlutMenu()
 	{
 		glutAddMenuEntry("Annuler la suppression", 9);
 		glutAddMenuEntry("Supprimer la surface", 10);
+	}
+	else if (gs == subdivising)
+	{
+		glutAddMenuEntry("Annuler la subdivision", 13);
+		glutAddMenuEntry("Subdiviser la surface", 12);
 	}
 
 	glutAttachMenu(GLUT_RIGHT_BUTTON);

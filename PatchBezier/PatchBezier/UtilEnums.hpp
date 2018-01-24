@@ -6,7 +6,8 @@ enum State
 	idle = 1,
 	drawing = 2,
 	editing = 3,
-	deleting = 4
+	deleting = 4,
+	subdivising = 5
 };
 enum EditMode
 {

@@ -20,15 +20,17 @@ float SIN(float angle)
 struct Patch
 {
 	int n, m;
+	bool subdivised;
 	std::vector<Point> controlPoints;
 	std::vector<Point> gridPoints;
-	std::vector<Point> subdivisionPoints;
+	//std::vector<Point> subdivisionPoints;
 
 	Patch()
 	{
 		n = 0;
 		m = 0;
-		
+		subdivised = false;
+
 		gridPoints.reserve(pow(precision + 1, 2));
 	}
 
@@ -36,6 +38,7 @@ struct Patch
 	{
 		n = _n;
 		m = _m;
+		subdivised = false;
 
 		for (int i = 0; i <= n; ++i)
 		{
@@ -257,10 +260,11 @@ struct Patch
 	void Subdivise()
 	{
 		int sm;
-		subdivisionPoints.reserve(4 * precision * precision);
 
 		std::vector<Point> centrePoints;
-		std::vector<Point> edgePoints;
+		std::vector<Point> uEdgePoints;
+		std::vector<Point> vEdgePoints;
+		std::vector<Point> vertexPoints;
 
 		std::cout << "Saisir la \"smoothness\" de la subdivision (standard = 4) : ";
 		std::cin >> sm;
@@ -270,8 +274,111 @@ struct Patch
 			for (int j = 0; j < precision; ++j)
 			{
 				Point centre = Point();
-				centre.x = (controlPoints.at(i * m + j).x + controlPoints.at((i + 1)  * m + j).x) / 2;
-				centre.x = (controlPoints.at(i * m + j).x + controlPoints.at((i + 1)  * m + j).x) / 2;	
+
+				centre.x = (gridPoints.at(i * precision + j).x + gridPoints.at((i + 1) * precision + j).x + gridPoints.at(i * precision + j + 1).x + gridPoints.at((i + 1) * precision + j + 1).x) / 4;
+				centre.y = (gridPoints.at(i * precision + j).y + gridPoints.at((i + 1) * precision + j).y + gridPoints.at(i * precision + j + 1).y + gridPoints.at((i + 1) * precision + j + 1).y) / 4;
+				centre.z = (gridPoints.at(i * precision + j).z + gridPoints.at((i + 1) * precision + j).z + gridPoints.at(i * precision + j + 1).z + gridPoints.at((i + 1) * precision + j + 1).z) / 4;
+
+				centrePoints.push_back(centre);
+			}
+		}
+
+		for (int i = 0; i < precision; ++i)
+		{
+			for (int j = 0; j < precision; ++j)
+			{
+				Point edge = Point();
+
+				if (j != precision - 1)
+				{
+					edge.x = (centrePoints.at(i * precision + j).x + centrePoints.at(i * precision + j + 1).x) / 2;
+					edge.y = (centrePoints.at(i * precision + j).y + centrePoints.at(i * precision + j + 1).y) / 2;
+					edge.z = (centrePoints.at(i * precision + j).z + centrePoints.at(i * precision + j + 1).z) / 2;
+
+					vEdgePoints.push_back(edge);
+				}
+
+				if (i != precision - 1)
+				{
+					edge.x = (centrePoints.at(i * precision + j).x + centrePoints.at((i + 1) * precision + j).x) / 2;
+					edge.y = (centrePoints.at(i * precision + j).y + centrePoints.at((i + 1) * precision + j).y) / 2;
+					edge.z = (centrePoints.at(i * precision + j).z + centrePoints.at((i + 1) * precision + j).z) / 2;
+
+					uEdgePoints.push_back(edge);
+				}
+			}
+		}
+
+		for (int i = 1; i < precision; ++i)
+		{
+			for (int j = 1; j < precision; ++j)
+			{
+				Point p = Point();
+
+				p.x = (sm * gridPoints.at(i * (precision + 1) + j).x
+					+ centrePoints.at((i - 1) * precision + (j - 1)).x
+					+ centrePoints.at((i - 1) * precision + j).x
+					+ centrePoints.at(i * precision + (j - 1)).x
+					+ centrePoints.at(i * precision + j).x
+					+ vEdgePoints.at((i - 1) * (precision - 1) + (j - 1)).x
+					+ vEdgePoints.at(i * (precision - 1) + (j - 1)).x
+					+ uEdgePoints.at((i - 1) * (precision - 1) + (j - 1)).x
+					+ uEdgePoints.at((i - 1) * (precision - 1) + j).x)
+					/ (8 + sm);
+				p.y = (sm * gridPoints.at(i * (precision + 1) + j).y
+					+ centrePoints.at((i - 1) * precision + (j - 1)).y
+					+ centrePoints.at((i - 1) * precision + j).y
+					+ centrePoints.at(i * precision + (j - 1)).y
+					+ centrePoints.at(i * precision + j).y
+					+ vEdgePoints.at((i - 1) * (precision - 1) + (j - 1)).y
+					+ vEdgePoints.at(i * (precision - 1) + (j - 1)).y
+					+ uEdgePoints.at((i - 1) * (precision - 1) + (j - 1)).y
+					+ uEdgePoints.at((i - 1) * (precision - 1) + j).y)
+					/ (8 + sm);
+				p.z = (sm * gridPoints.at(i * (precision + 1) + j).z
+					+ centrePoints.at((i - 1) * precision + (j - 1)).z
+					+ centrePoints.at((i - 1) * precision + j).z
+					+ centrePoints.at(i * precision + (j - 1)).z
+					+ centrePoints.at(i * precision + j).z
+					+ vEdgePoints.at((i - 1) * (precision - 1) + (j - 1)).z
+					+ vEdgePoints.at(i * (precision - 1) + (j - 1)).z
+					+ uEdgePoints.at((i - 1) * (precision - 1) + (j - 1)).z
+					+ uEdgePoints.at((i - 1) * (precision - 1) + j).z)
+					/ (8 + sm);
+
+				vertexPoints.push_back(p);
+			}
+		}
+
+		gridPoints.clear();
+		gridPoints.reserve(4 * precision * precision);
+		int cI = 0, uI = 0, vI = 0, vtI = 0;
+		for (int i = 0; i < precision * 2 - 1; ++i)
+		{
+			for (int j = 0; j < precision * 2 - 1; ++j)
+			{
+				if (i % 2 == 0)
+				{
+					if (j % 2 == 0)
+					{
+						gridPoints.push_back(centrePoints.at(cI++));
+					}
+					else
+					{
+						gridPoints.push_back(vEdgePoints.at(vI++));
+					}
+				}
+				else
+				{
+					if (j % 2 == 0)
+					{
+						gridPoints.push_back(uEdgePoints.at(uI++));
+					}
+					else
+					{
+						gridPoints.push_back(vertexPoints.at(vtI++));
+					}
+				}
 			}
 		}
 	}
