@@ -342,7 +342,7 @@ bool Initialize2()
 
 	glGenBuffers(1, &IBO1);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, patches.size()*precision*precision * 4 * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, patches.size()*(sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4 * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
 
 	// le fait de specifier 0 comme BO desactive l'usage des BOs
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -397,7 +397,7 @@ void update()
 		glBufferSubData(GL_ARRAY_BUFFER, 0, gridPoints3D.size() * 9 * sizeof(float), tmpPoints);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VBO0);
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, patches.size()*precision*precision * 4 * sizeof(GLushort), indTmp);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, patches.size()*(sqrt(gridPoints3D.size())-1)*(sqrt(gridPoints3D.size()) - 1) * 4 * sizeof(GLushort), indTmp);
 	}
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -515,7 +515,7 @@ void animate()
 		glEnableVertexAttribArray(color_location);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-		glDrawElements(GL_QUADS, patches.size()*precision*precision * 4, GL_UNSIGNED_SHORT, nullptr);
+		glDrawElements(GL_QUADS, patches.size()*(sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4, GL_UNSIGNED_SHORT, nullptr);
 
 		//----------------
 		glDisableVertexAttribArray(position_location);
@@ -596,19 +596,20 @@ GLushort* createIndForGridPoints()
 {
 	// precision * precision
 	int cpt = 0;
-	GLushort* tmp = new GLushort[patches.size()*precision*precision*4];
-	int tmps = precision*precision * 4;
+	GLushort* tmp = new GLushort[patches.size()*(sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4];
+	//int tmps = precision*precision * 4;
+	int prec = (sqrt(gridPoints3D.size()) - 1);
 	for (int l = 0; l < patches.size(); l++)
 	{
-		for (int i = 0; i < precision; i++)
+		for (int i = 0; i < prec; i++)
 		{
 			int k = 0;
-			for (int j = 0; j < precision; j++)
+			for (int j = 0; j < prec; j++)
 			{
-				tmp[cpt] = l*(precision + 1)*(precision + 1)+i*(precision + 1) + j;
-				tmp[cpt + 1] = l*(precision + 1)*(precision + 1) + i*(precision + 1) + j + 1;
-				tmp[cpt + 2] = l*(precision + 1)*(precision + 1) + (i + 1)*(precision + 1) + j + 1;
-				tmp[cpt + 3] = l*(precision + 1)*(precision + 1) + (i + 1)*(precision + 1) + j;
+				tmp[cpt] = l*(prec + 1)*(prec + 1)+i*(prec + 1) + j;
+				tmp[cpt + 1] = l*(prec + 1)*(prec + 1) + i*(prec + 1) + j + 1;
+				tmp[cpt + 2] = l*(prec + 1)*(prec + 1) + (i + 1)*(prec + 1) + j + 1;
+				tmp[cpt + 3] = l*(prec + 1)*(prec + 1) + (i + 1)*(prec + 1) + j;
 				cpt += 4;
 			}
 

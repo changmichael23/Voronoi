@@ -22,9 +22,14 @@ c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezie
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(229): warning C4018: '<': signed/unsigned mismatch
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(295): warning C4018: '<': signed/unsigned mismatch
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(297): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(345): warning C4244: 'argument': conversion from 'double' to 'GLsizeiptr', possible loss of data
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(380): warning C4018: '<': signed/unsigned mismatch
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(382): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(400): warning C4244: 'argument': conversion from 'double' to 'GLsizeiptr', possible loss of data
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(453): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(601): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(518): warning C4244: 'argument': conversion from 'double' to 'GLsizei', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(599): warning C4244: 'initializing': conversion from 'double' to 'unsigned int', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(601): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(602): warning C4018: '<': signed/unsigned mismatch
   EnvInc3D.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\PatchBezier.exe
   EnvInc3D.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\PatchBezier.pdb (Full PDB)
