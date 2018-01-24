@@ -33,6 +33,7 @@ std::vector<Point> pointsControles3D;           // Tous les points en 3D
 std::vector<Point> gridPoints3D;
 float* tabPoints, *tmpPoints;         //Tous les points en 3D
 GLushort* createInd(int);
+GLushort* createIndForGridPoints(int);
 GLushort* indi;			// Tab indice
 GLushort* indTmp;			// Tab indice
 
@@ -54,7 +55,7 @@ std::vector<Patch> patches = std::vector<Patch>();
 Patch tmpPatch;
 int nbPoints;
 int pointIdx, patchIdx;
-int precision = 2;
+int precision = 8;
 
 //Controller variables
 float TimeInSeconds;
@@ -72,6 +73,9 @@ RotateMode rm = matrix;
 int menu_Main, menu_sub1, menu_sub2;
 void CreateGlutMenu();
 bool Initialize();
+
+
+
 
 float * structToTabColor(std::vector<Point> newPoints, std::vector<Colore> c)
 {
@@ -239,9 +243,9 @@ bool Initialize()
 
 
 	indi = createInd(centerPoints3D.size()*24);
-	indTmp = createInd(gridPoints3D.size());
+	//indTmp = createInd(gridPoints3D.size());
 
-
+	indTmp = createIndForGridPoints(0);
 
 	tmpPoints = structToTabTmp(gridPoints3D,col);
 
@@ -296,7 +300,7 @@ bool Initialize()
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, pointsControles3D.size() * sizeof(GLushort), indi, GL_STATIC_DRAW);
 	glGenBuffers(1, &IBO1);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, gridPoints3D.size() * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, precision*precision * 4 * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
 
 	// le fait de specifier 0 comme BO desactive l'usage des BOs
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -327,7 +331,7 @@ void update()
 
 void animate()
 {
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	// afin d'obtenir le deltatime actuel
 	TimeSinceAppStartedInMS = glutGet(GLUT_ELAPSED_TIME);
 	TimeInSeconds = TimeSinceAppStartedInMS / 1000.0f;
@@ -432,16 +436,16 @@ void animate()
 	
 	
 	glEnableVertexAttribArray(position_location);
-	glEnableVertexAttribArray(normal_location);
-	glEnableVertexAttribArray(color_location);
+	//glEnableVertexAttribArray(normal_location);
+	//glEnableVertexAttribArray(color_location);
 
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-	glDrawElements(GL_LINE_STRIP, gridPoints3D.size(), GL_UNSIGNED_SHORT, nullptr);
+	glDrawElements(GL_QUADS, precision*precision * 4, GL_UNSIGNED_SHORT, nullptr);
 
 	//----------------
 	glDisableVertexAttribArray(position_location);
-	glDisableVertexAttribArray(normal_location);
-	glDisableVertexAttribArray(color_location);
+	//glDisableVertexAttribArray(normal_location);
+	//glDisableVertexAttribArray(color_location);
 	glUseProgram(0);
 
 	
@@ -509,6 +513,27 @@ GLushort* createInd(int n)
 	for (int i = 0; i < n ; i++)
 	{
 		tmp[i] = i;
+	}
+	return tmp;
+}
+
+GLushort* createIndForGridPoints(int n)
+{
+	// precision * precision
+	int cpt = 0;
+	GLushort* tmp = new GLushort[precision*precision*4];
+	for (int i = 0; i < precision; i++)
+	{
+		int k = 0;
+		for (int j = 0; j < precision; j++)
+		{
+			tmp[cpt] = i*(precision+1) + j ;
+			tmp[cpt+ 1] = i*(precision+1) + j + 1;
+			tmp[cpt + 2] = (i + 1)*(precision + 1) + j + 1;
+			tmp[cpt + 3] = (i+1)*(precision+1) + j ;
+			cpt += 4;
+		}
+
 	}
 	return tmp;
 }
