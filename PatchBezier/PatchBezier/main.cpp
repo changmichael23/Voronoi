@@ -362,24 +362,16 @@ void Terminate()
 
 void update()
 {
+	
+	
 	if (initialized1)
 	{
+		
 			pointsControles3D = transformPointsToCube(tmpPatch.controlPoints);
-			//tabPoints = new float[pointsControles3D.size() * 9];
 			structToTabColor(pointsControles3D, col, tabPoints);
 
-			//indi = createInd(tmpPatch.controlPoints.size() * 24);
-
-			// Points controles VBO0
-			glGenVertexArrays(1, &VBO0); // Créer le VAO
-			glBindVertexArray(VBO0); // Lier le VAO pour l'utiliser
-			glEnableVertexAttribArray(0);
-
 			glBindBuffer(GL_ARRAY_BUFFER, VBO0);
-			glBufferData(GL_ARRAY_BUFFER, pointsControles3D.size() * 9 * sizeof(float), tabPoints, GL_STATIC_DRAW);
-			glGenBuffers(1, &IBO);
-			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-			glBufferData(GL_ELEMENT_ARRAY_BUFFER, pointsControles3D.size() * sizeof(GLushort), indi, GL_STATIC_DRAW);
+			glBufferSubData(GL_ARRAY_BUFFER,0, pointsControles3D.size() * 9 * sizeof(float), tabPoints);
 		
 	}
 	if (initialized2)
@@ -393,30 +385,19 @@ void update()
 			}
 		}
 		
-
+		delete(tmpPoints);
 		tmpPoints = new float[gridPoints3D.size()*9];
 
-		//gridPoints3D = patches[0].gridPoints;
 
 		indTmp = createIndForGridPoints();  
 
 		structToTabColor(gridPoints3D, col,tmpPoints);
 
-		//---
-		glGenVertexArrays(1, &VBO1); // Créer le VAO
-		glBindVertexArray(VBO1); // Lier le VAO pour l'utiliser
-		glEnableVertexAttribArray(1);
-
-
-		// 3 pour l instant vu qu il n y a pas les normales
 		glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-		glBufferData(GL_ARRAY_BUFFER, gridPoints3D.size() * 9 * sizeof(float), tmpPoints, GL_STATIC_DRAW);
+		glBufferSubData(GL_ARRAY_BUFFER, 0, gridPoints3D.size() * 9 * sizeof(float), tmpPoints);
 
-		glGenBuffers(1, &IBO1);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, patches.size()*precision*precision * 4 * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
-
-		//Initialize2();
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VBO0);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, patches.size()*precision*precision * 4 * sizeof(GLushort), indTmp);
 	}
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
