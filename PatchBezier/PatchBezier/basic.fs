@@ -6,7 +6,7 @@ varying vec4 v_Color;
 
 uniform sampler2D u_Texture;
 
-const vec3 directionalLight = normalize(-vec3(0.0, -1.0, 0.0));
+const vec3 directionalLight = normalize(-vec3(0.0, -10.0, 10.0));
 
 // composantes ambiantes
 const vec3 lightAmbiantColor = vec3(0.2, 0.2, 0.2);

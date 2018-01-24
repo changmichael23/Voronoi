@@ -88,9 +88,12 @@ void structToTabColor(std::vector<Point> newPoints, std::vector<Colore> c,float 
 		tabP[i + 1] = newPoints[j].y;
 		tabP[i + 2] = newPoints[j].z;
 
-		tabP[i + 3] = newPoints[j].n1;
-		tabP[i + 4] = newPoints[j].n2;
-		tabP[i + 5] = newPoints[j].n3;
+		tabP[i + 3] = -newPoints[j].n1;
+		tabP[i + 4] = -newPoints[j].n2;
+		//tabP[i + 4] = newPoints[j].n2;
+		tabP[i + 5] = -newPoints[j].n3;
+
+		
 
 		/*if (c[j] == Colore(purple))
 		{
@@ -297,12 +300,17 @@ bool Initialize2()
 {
 	initialized2 = true;
 	gridPoints3D = patches[0].gridPoints;
-	tmpPoints = new float[gridPoints3D.size() * 3];
+	tmpPoints = new float[gridPoints3D.size() * 9];
 	
+	glewInit();
+	g_BasicShader.LoadVertexShader("basic.vs");
+	g_BasicShader.LoadFragmentShader("basic.fs");
+	g_BasicShader.CreateProgram();
+
 
 	indTmp = createIndForGridPoints();
 
-	structToTabTmp(gridPoints3D, col,tmpPoints);
+	structToTabColor(gridPoints3D, col,tmpPoints);
 
 	// Points controles VBO0
 	glGenVertexArrays(1, &VBO0); // Créer le VAO
@@ -322,9 +330,8 @@ bool Initialize2()
 	glEnableVertexAttribArray(1);
 
 	
-	// 3 pour l instant vu qu il n y a pas les normales
 	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-	glBufferData(GL_ARRAY_BUFFER, gridPoints3D.size() * 3 * sizeof(float), tmpPoints, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, gridPoints3D.size() * 9 * sizeof(float), tmpPoints, GL_STATIC_DRAW);
 
 
 	// rendu indexe
@@ -341,9 +348,6 @@ bool Initialize2()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	return true;
 }
-
-
-
 
 void Terminate()
 {
@@ -383,7 +387,7 @@ void update()
 
 		//indTmp = createIndForGridPoints();
 
-		structToTabTmp(gridPoints3D, col,tmpPoints);
+		structToTabColor(gridPoints3D, col,tmpPoints);
 
 		//---
 		glGenVertexArrays(1, &VBO1); // Créer le VAO
@@ -393,7 +397,7 @@ void update()
 
 		// 3 pour l instant vu qu il n y a pas les normales
 		glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-		glBufferData(GL_ARRAY_BUFFER, gridPoints3D.size() * 3 * sizeof(float), tmpPoints, GL_STATIC_DRAW);
+		glBufferData(GL_ARRAY_BUFFER, gridPoints3D.size() * 9 * sizeof(float), tmpPoints, GL_STATIC_DRAW);
 
 		glGenBuffers(1, &IBO1);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
@@ -406,130 +410,130 @@ void update()
 
 void animate()
 {
-	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-	// afin d'obtenir le deltatime actuel
-	TimeSinceAppStartedInMS = glutGet(GLUT_ELAPSED_TIME);
-	TimeInSeconds = TimeSinceAppStartedInMS / 1000.0f;
-	DeltaTime = (TimeSinceAppStartedInMS - OldTime) / 1000.0f;
-	OldTime = TimeSinceAppStartedInMS;
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		// afin d'obtenir le deltatime actuel
+		TimeSinceAppStartedInMS = glutGet(GLUT_ELAPSED_TIME);
+		TimeInSeconds = TimeSinceAppStartedInMS / 1000.0f;
+		DeltaTime = (TimeSinceAppStartedInMS - OldTime) / 1000.0f;
+		OldTime = TimeSinceAppStartedInMS;
 
-	glViewport(0, 0, width, height);
-	glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
-	//glColorMask(GL_TRUE, GL_FALSE, GL_TRUE, GL_TRUE);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	glEnable(GL_DEPTH_TEST);
+		glViewport(0, 0, width, height);
+		glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
+		//glColorMask(GL_TRUE, GL_FALSE, GL_TRUE, GL_TRUE);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		glEnable(GL_DEPTH_TEST);
 
-	auto program = g_BasicShader.GetProgram();
-	glUseProgram(program);
+		auto program = g_BasicShader.GetProgram();
+		glUseProgram(program);
 
-	/*	uint32_t texUnit = 0;
-	glActiveTexture(GL_TEXTURE0 + texUnit);
-	glBindTexture(GL_TEXTURE_2D, TexObj);
-	auto texture_location = glGetUniformLocation(program, "u_Texture");
-	glUniform1i(texture_location, texUnit);
-	*/
-	// UNIFORMS
-	Esgi::Mat4 worldMatrix;
-	worldMatrix.MakeScale(1.0f, 1.0f, 1.0f);
+		/*	uint32_t texUnit = 0;
+		glActiveTexture(GL_TEXTURE0 + texUnit);
+		glBindTexture(GL_TEXTURE_2D, TexObj);
+		auto texture_location = glGetUniformLocation(program, "u_Texture");
+		glUniform1i(texture_location, texUnit);
+		*/
+		// UNIFORMS
+		Esgi::Mat4 worldMatrix;
+		worldMatrix.MakeScale(1.0f, 1.0f, 1.0f);
 
-	//  Camera Matrix
-	Esgi::Mat4 cameraMatrix;
-	switch (CamType)
-	{
-	case 0:	//FPS
-		cameraMatrix = FPSCamera(posX, posY, posZ, rotX, rotY);
-		break;
-	case 1:	//Orbit
-		cameraMatrix = OrbitCamera(posX, posY, posZ, distance, rotX, rotY);
-		break;
-	}
+		//  Camera Matrix
+		Esgi::Mat4 cameraMatrix;
+		switch (CamType)
+		{
+		case 0:	//FPS
+			cameraMatrix = FPSCamera(posX, posY, posZ, rotX, rotY);
+			break;
+		case 1:	//Orbit
+			cameraMatrix = OrbitCamera(posX, posY, posZ, distance, rotX, rotY);
+			break;
+		}
 
-	//
+		//
 
-	auto world_location = glGetUniformLocation(program, "u_WorldMatrix");
-	glUniformMatrix4fv(world_location, 1, GL_FALSE, worldMatrix.m);
+		auto world_location = glGetUniformLocation(program, "u_WorldMatrix");
+		glUniformMatrix4fv(world_location, 1, GL_FALSE, worldMatrix.m);
 
-	Esgi::Mat4 projectionMatrix;
-	float w = glutGet(GLUT_WINDOW_WIDTH), h = glutGet(GLUT_WINDOW_HEIGHT);
-	// ProjectionMatrix
-	float aspectRatio = w / h;			// facteur d'aspect
-	float fovy = 45.0f;					// degree d'ouverture
-	float nearZ = 0.1f;
-	float farZ = 10000.0f;
-	projectionMatrix.Perspective(fovy, aspectRatio, nearZ, farZ);
+		Esgi::Mat4 projectionMatrix;
+		float w = glutGet(GLUT_WINDOW_WIDTH), h = glutGet(GLUT_WINDOW_HEIGHT);
+		// ProjectionMatrix
+		float aspectRatio = w / h;			// facteur d'aspect
+		float fovy = 45.0f;					// degree d'ouverture
+		float nearZ = 0.1f;
+		float farZ = 10000.0f;
+		projectionMatrix.Perspective(fovy, aspectRatio, nearZ, farZ);
 
-	//projectionMatrix.MakeScale(1.0f / (0.5f*w), 1.0f / (0.5f*h), 1.0f);
+		//projectionMatrix.MakeScale(1.0f / (0.5f*w), 1.0f / (0.5f*h), 1.0f);
 
-	auto projection_location = glGetUniformLocation(program, "u_ProjectionMatrix");
-	glUniformMatrix4fv(projection_location, 1, GL_FALSE, projectionMatrix.m);
+		auto projection_location = glGetUniformLocation(program, "u_ProjectionMatrix");
+		glUniformMatrix4fv(projection_location, 1, GL_FALSE, projectionMatrix.m);
 
-	auto camera_location = glGetUniformLocation(program, "u_CameraMatrix");
-	glUniformMatrix4fv(camera_location, 1, GL_FALSE, cameraMatrix.m);
+		auto camera_location = glGetUniformLocation(program, "u_CameraMatrix");
+		glUniformMatrix4fv(camera_location, 1, GL_FALSE, cameraMatrix.m);
 
-	auto time_location = glGetUniformLocation(program, "u_Time");
-	glUniform1f(time_location, TimeInSeconds);
+		auto time_location = glGetUniformLocation(program, "u_Time");
+		glUniform1f(time_location, TimeInSeconds);
 
-	/*auto c_location = glGetUniformLocation(program, "color");
-	glUniform4fv(c_location, 1, colore);*/
+		/*auto c_location = glGetUniformLocation(program, "color");
+		glUniform4fv(c_location, 1, colore);*/
 
-	// ATTRIBUTES
-	auto normal_location = glGetAttribLocation(program, "a_Normal");
-	auto position_location = glGetAttribLocation(program, "a_Position");
-	auto color_location = glGetAttribLocation(program, "a_Color");
-	//auto texcoords_location = glGetAttribLocation(program, "a_TexCoords");
-	//glVertexAttrib3f(color_location, 0.0f, 1.0f, 0.0f);
+		// ATTRIBUTES
+		auto normal_location = glGetAttribLocation(program, "a_Normal");
+		auto position_location = glGetAttribLocation(program, "a_Position");
+		auto color_location = glGetAttribLocation(program, "a_Color");
+		//auto texcoords_location = glGetAttribLocation(program, "a_TexCoords");
+		//glVertexAttrib3f(color_location, 0.0f, 1.0f, 0.0f);
 
-	// Le fait de specifier la ligne suivante va modifier le fonctionnement interne de glVertexAttribPointer
-	// lorsque GL_ARRAY_BUFFER != 0 cela indique que les donnees sont stockees sur le GPU
-	glBindBuffer(GL_ARRAY_BUFFER, VBO0);
+		// Le fait de specifier la ligne suivante va modifier le fonctionnement interne de glVertexAttribPointer
+		// lorsque GL_ARRAY_BUFFER != 0 cela indique que les donnees sont stockees sur le GPU
+		glBindBuffer(GL_ARRAY_BUFFER, VBO0);
 
-	//glBindVertexArray(VAO);
+		//glBindVertexArray(VAO);
 
-	glVertexAttribPointer(position_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(0 * sizeof(float)));
-	glVertexAttribPointer(normal_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(3 * sizeof(float)));
-	glVertexAttribPointer(color_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(6 * sizeof(float)));
-	// on interprete les 3 valeurs inconnues comme RGB alors que ce sont les normales
-	//glVertexAttribPointer(texcoords_location, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), reinterpret_cast<const void *>(6 * sizeof(float)));
+		glVertexAttribPointer(position_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(0 * sizeof(float)));
+		glVertexAttribPointer(normal_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(3 * sizeof(float)));
+		glVertexAttribPointer(color_location, 3, GL_FLOAT, GL_FALSE, 9 * sizeof(float), reinterpret_cast<const void *>(6 * sizeof(float)));
+		// on interprete les 3 valeurs inconnues comme RGB alors que ce sont les normales
+		//glVertexAttribPointer(texcoords_location, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), reinterpret_cast<const void *>(6 * sizeof(float)));
 
-	//glEnableVertexAttribArray(texcoords_location);
-	glEnableVertexAttribArray(position_location);
-	glEnableVertexAttribArray(normal_location);
-	glEnableVertexAttribArray(color_location);
-	//glEnableVertexAttribArray(texcoords_location);
+		//glEnableVertexAttribArray(texcoords_location);
+		glEnableVertexAttribArray(position_location);
+		glEnableVertexAttribArray(normal_location);
+		glEnableVertexAttribArray(color_location);
+		//glEnableVertexAttribArray(texcoords_location);
 
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-	glDrawElements(GL_QUADS, pointsControles3D.size(), GL_UNSIGNED_SHORT, nullptr);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+		glDrawElements(GL_QUADS, pointsControles3D.size(), GL_UNSIGNED_SHORT, nullptr);
 
-	//-----------
+		//-----------
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+		glBindBuffer(GL_ARRAY_BUFFER, VBO1);
 
-	int sizeP = 3;
-	glVertexAttribPointer(position_location, 3, GL_FLOAT, GL_FALSE, sizeP * sizeof(float), reinterpret_cast<const void *>(0 * sizeof(float)));
-	//glVertexAttribPointer(normal_location, 3, GL_FLOAT, GL_FALSE, sizeP * sizeof(float), reinterpret_cast<const void *>(3 * sizeof(float)));
-	//glVertexAttribPointer(color_location, 3, GL_FLOAT, GL_FALSE, sizeP * sizeof(float), reinterpret_cast<const void *>(6 * sizeof(float)));
-	
-	
-	glEnableVertexAttribArray(position_location);
-	//glEnableVertexAttribArray(normal_location);
-	//glEnableVertexAttribArray(color_location);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-	glDrawElements(GL_QUADS, precision*precision * 4, GL_UNSIGNED_SHORT, nullptr);
-
-	//----------------
-	glDisableVertexAttribArray(position_location);
-	//glDisableVertexAttribArray(normal_location);
-	//glDisableVertexAttribArray(color_location);
-	glUseProgram(0);
-
-	
-	//Repositionnement du curseur 
-	//glutWarpPointer(width*0.5f, height*0.5f);
-	glEnd();
+		int sizeP = 9;
+		glVertexAttribPointer(position_location, 3, GL_FLOAT, GL_FALSE, sizeP * sizeof(float), reinterpret_cast<const void *>(0 * sizeof(float)));
+		glVertexAttribPointer(normal_location, 3, GL_FLOAT, GL_FALSE, sizeP * sizeof(float), reinterpret_cast<const void *>(3 * sizeof(float)));
+		glVertexAttribPointer(color_location, 3, GL_FLOAT, GL_FALSE, sizeP * sizeof(float), reinterpret_cast<const void *>(6 * sizeof(float)));
 
 
-	glutSwapBuffers();
+		glEnableVertexAttribArray(position_location);
+		glEnableVertexAttribArray(normal_location);
+		glEnableVertexAttribArray(color_location);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
+		glDrawElements(GL_QUADS, precision*precision * 4, GL_UNSIGNED_SHORT, nullptr);
+
+		//----------------
+		glDisableVertexAttribArray(position_location);
+		glDisableVertexAttribArray(normal_location);
+		glDisableVertexAttribArray(color_location);
+		glUseProgram(0);
+
+
+		//Repositionnement du curseur 
+		//glutWarpPointer(width*0.5f, height*0.5f);
+		glEnd();
+
+
+		glutSwapBuffers();
 
 }
 
