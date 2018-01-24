@@ -17,8 +17,8 @@ c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\common\mat4
 c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\common\mat4.h(112): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\math.h(1001): warning C4005: 'M_PI': macro redefinition
   c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\common\mat4.h(12): note: see previous definition of 'M_PI'
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\main.cpp(86): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\main.cpp(127): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\main.cpp(237): warning C4018: '<': signed/unsigned mismatch
-c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\main.cpp(380): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\main.cpp(85): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\main.cpp(126): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\main.cpp(236): warning C4018: '<': signed/unsigned mismatch
+c:\users\maxim\desktop\esgi\5a\maths pour l'info\voronoi\patchbezier\patchbezier\main.cpp(379): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
   EnvInc3D.vcxproj -> C:\Users\maxim\Desktop\ESGI\5A\Maths pour l'info\Voronoi\PatchBezier\PatchBezier\Debug\PatchBezier.exe

@@ -1,9 +1,9 @@
 #pragma once
 #include "Patch.hpp"
 
-extern Patch* patches;
+//extern Patch* patches[10];
 extern int nbPatches;
-//extern std::vector<Patch> patches;
+extern std::vector<Patch> patches;
 extern Patch tmpPatch;
 extern int nbPoints;
 extern int pointIdx, patchIdx;
@@ -40,11 +40,9 @@ void CancelPatch()
 void ConfirmPatch()
 {
 	gs = idle;
-	patches[nbPatches] = tmpPatch;
-	patches[nbPatches].GenerateCurve();
+	patches.push_back(tmpPatch);
+	patches.back().GenerateCurve();
 	++nbPatches;
-	//patches.push_back(tmpPatch);
-	//patches.back().GenerateCurve();
 }
 
 void RotatePatch(int i)
