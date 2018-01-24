@@ -112,7 +112,7 @@ struct Patch
 			}
 		}
 
-		generateCurve();
+		GenerateCurve();
 	}
 
 	void Translate(int i, float step)
@@ -150,7 +150,7 @@ struct Patch
 		}
 	}
 
-	void generateCurve()
+	void GenerateCurve()
 	{
 		gridPoints.clear();
 
@@ -158,13 +158,13 @@ struct Patch
 		{
 			for (int i = 0; i <= precision; ++i)
 			{
-				gridPoints.push_back(bezierPatch(i / (float)precision, j / (float)precision));
-				//std::cout << gridPoints.back().x << " - " << gridPoints.back().y << " - " << gridPoints.back().z << std::endl;
+				gridPoints.push_back(BezierPatch(i / (float)precision, j / (float)precision));
+				CalculateNormale(i / (float)precision, j / (float)precision);
 			}
 		}
 	}
 
-	Point bezierPatch(float u, float v)
+	Point BezierPatch(float u, float v)
 	{
 		Point Suv = Point(), Si = Point();
 
@@ -194,6 +194,65 @@ struct Patch
 	int Factorial(int x)
 	{
 		return (x == 1 || x == 0) ? 1 : x * Factorial(x - 1);
+	}
+
+	void CalculateNormale(float u, float v)
+	{
+		Point Du = Point(), Dv = Point(), Si = Point();
+
+		for (int i = 0; i <= n; ++i)
+		{
+			Si = .0f;
+			for (int j = 0; j <= m; ++j)
+			{
+				Si += controlPoints[i * (m + 1) + j] * BernsteinPoly(j, v, m);
+			}
+			Du += Si * DerivateBernsteinPoly(i, u, n);
+		}
+
+		for (int i = 0; i <= n; ++i)
+		{
+			Si = .0f;
+			for (int j = 0; j <= m; ++j)
+			{
+				Si += controlPoints[i * (m + 1) + j] * DerivateBernsteinPoly(j, v, m);
+			}
+			Dv += Si * BernsteinPoly(i, u, n);
+		}
+
+		Point cp = CrossProduct(Du, Dv);
+
+		gridPoints.back().n1 = cp.x;
+		gridPoints.back().n2 = cp.y;
+		gridPoints.back().n3 = cp.z;
+	}
+
+	float DerivateBernsteinPoly(int i, float t, int dim)
+	{
+		if (i == 0)
+		{
+			return - dim * pow(1 - t, dim - 1);
+		}
+		else if (i == dim)
+		{
+			return dim * pow(t, dim - 1);
+		}
+		else
+		{
+			return i * Binomial(i, dim) * pow(t, i - 1) * pow(1 - t, dim - i)
+				- (dim - i) * Binomial(i, dim) * pow(t, i) * pow(1 - t, dim - i - 1);
+		}
+	}
+
+	Point CrossProduct(Point p1, Point p2)
+	{
+		Point cp = Point();
+
+		cp.x = p1.y * p2.z - p1.z * p2.y;
+		cp.y = p1.z * p2.x - p1.x * p2.z;
+		cp.z = p1.x * p2.y - p1.y * p2.x;
+
+		return cp;
 	}
 };
 

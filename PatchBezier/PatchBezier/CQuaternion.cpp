@@ -1,4 +1,4 @@
-#include "header/CQuaternion.h"
+#include "CQuaternion.h"
 
 CQuaternion::CQuaternion(float angleDegree, CVecteur* pVecteur)
 {
@@ -8,7 +8,7 @@ CQuaternion::CQuaternion(float angleDegree, CVecteur* pVecteur)
 void CQuaternion::reinit(float angleDegree, CVecteur* pVecteur)
 {
     float degRadian;
-    degRadian =  angleDegree * M_PI / 180.0;
+    degRadian =  angleDegree * 3.14159265359 / 180.0;
 
     m_dX = cos(degRadian/2);
     m_dY = pVecteur->getX() * sin(degRadian/2);

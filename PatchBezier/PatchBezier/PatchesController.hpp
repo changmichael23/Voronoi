@@ -1,7 +1,9 @@
 #pragma once
 #include "Patch.hpp"
 
-extern std::vector<Patch> patches;
+extern Patch* patches;
+extern int nbPatches;
+//extern std::vector<Patch> patches;
 extern Patch tmpPatch;
 extern int nbPoints;
 extern int pointIdx, patchIdx;
@@ -25,7 +27,7 @@ void StartNewPatch()
 
 void CancelPatch()
 {
-	if (patches.size() == 0)
+	if (nbPatches == 0)
 	{
 		gs = first;
 	}
@@ -38,8 +40,11 @@ void CancelPatch()
 void ConfirmPatch()
 {
 	gs = idle;
-	patches.push_back(tmpPatch);
-	patches.back().generateCurve();
+	patches[nbPatches] = tmpPatch;
+	patches[nbPatches].GenerateCurve();
+	++nbPatches;
+	//patches.push_back(tmpPatch);
+	//patches.back().GenerateCurve();
 }
 
 void RotatePatch(int i)
@@ -112,7 +117,7 @@ void DeletePatch()
 
 void QuitDelete()
 {
-	if (patches.size() == 0)
+	if (nbPatches == 0)
 	{
 		gs = first;
 	}
@@ -124,8 +129,13 @@ void QuitDelete()
 
 void ConfirmDelete()
 {
-	patches.erase(patches.begin() + patchIdx);
-	if (patches.size() == 0)
+	for (int i = patchIdx; i < nbPatches - 1; ++i)
+	{
+		patches[i] = patches[i + 1];
+	}
+	--nbPatches;
+
+	if (nbPatches == 0)
 	{
 		QuitDelete();
 	}

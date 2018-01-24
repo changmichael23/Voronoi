@@ -51,7 +51,9 @@ float sizeCube = 0.1f;
 std::vector<Colore> col;
 
 //PatchController variables
-std::vector<Patch> patches = std::vector<Patch>();
+Patch* patches;
+int nbPatches = 0;
+//std::vector<Patch> patches = std::vector<Patch>();
 Patch tmpPatch;
 int nbPoints;
 int pointIdx, patchIdx;

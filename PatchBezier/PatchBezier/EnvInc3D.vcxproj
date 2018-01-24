@@ -156,10 +156,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\CQuaternion.cpp" />
+    <ClCompile Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\CVecteur.cpp" />
+    <ClCompile Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\SquareMatrice.cpp" />
     <ClCompile Include="..\Common\EsgiShader.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\CQuaternion.h" />
+    <ClInclude Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\CVecteur.h" />
+    <ClInclude Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\SquareMatrice.h" />
     <ClInclude Include="Patch.hpp" />
     <ClInclude Include="UtilEnums.hpp" />
     <ClInclude Include="PatchesController.hpp" />

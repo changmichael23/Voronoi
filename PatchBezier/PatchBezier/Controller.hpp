@@ -102,7 +102,6 @@ void SpecialInput(int key, int x, int y)
 {	
 	if (gs == drawing)
 	{
-		std::cout << "oui!" << std::endl;
 		switch (key)
 		{
 		case GLUT_KEY_RIGHT:
@@ -134,7 +133,7 @@ void SpecialInput(int key, int x, int y)
 		{
 		case GLUT_KEY_RIGHT:
 			++patchIdx;
-			if (patchIdx == patches.size())
+			if (patchIdx == nbPatches)
 			{
 				patchIdx = 0;
 			}
@@ -143,7 +142,7 @@ void SpecialInput(int key, int x, int y)
 			--patchIdx;
 			if (patchIdx < 0)
 			{
-				patchIdx = patches.size() - 1;
+				patchIdx = nbPatches - 1;
 			}
 			break;
 		}
@@ -156,25 +155,25 @@ void SpecialInput(int key, int x, int y)
 				switch (em)
 				{
 				case 0:
-					patches.at(patchIdx).Rotate(0, rotateStep);
+					patches[patchIdx].Rotate(0, rotateStep);
 					break;
 				case 1:
-					patches.at(patchIdx).Rotate(1, rotateStep);
+					patches[patchIdx].Rotate(1, rotateStep);
 					break;
 				case 2:
-					patches.at(patchIdx).Rotate(2, rotateStep);
+					patches[patchIdx].Rotate(2, rotateStep);
 					break;
 				case 3:
-					patches.at(patchIdx).Translate(0, translateStep);
+					patches[patchIdx].Translate(0, translateStep);
 					break;
 				case 4:
-					patches.at(patchIdx).Translate(1, translateStep);
+					patches[patchIdx].Translate(1, translateStep);
 					break;
 				case 5:
-					patches.at(patchIdx).Translate(2, translateStep);
+					patches[patchIdx].Translate(2, translateStep);
 					break;
 				case 6:
-					patches.at(patchIdx).Resize(1 + resizeStep);
+					patches[patchIdx].Resize(1 + resizeStep);
 					break;
 				}
 				break;
@@ -182,25 +181,25 @@ void SpecialInput(int key, int x, int y)
 				switch (em)
 				{
 				case 0:
-					patches.at(patchIdx).Rotate(0, -rotateStep);
+					patches[patchIdx].Rotate(0, -rotateStep);
 					break;
 				case 1:
-					patches.at(patchIdx).Rotate(1, -rotateStep);
+					patches[patchIdx].Rotate(1, -rotateStep);
 					break;
 				case 2:
-					patches.at(patchIdx).Rotate(2, -rotateStep);
+					patches[patchIdx].Rotate(2, -rotateStep);
 					break;
 				case 3:
-					patches.at(patchIdx).Translate(0, -translateStep);
+					patches[patchIdx].Translate(0, -translateStep);
 					break;
 				case 4:
-					patches.at(patchIdx).Translate(1, -translateStep);
+					patches[patchIdx].Translate(1, -translateStep);
 					break;
 				case 5:
-					patches.at(patchIdx).Translate(2, -translateStep);
+					patches[patchIdx].Translate(2, -translateStep);
 					break;
 				case 6:
-					patches.at(patchIdx).Resize(1 - resizeStep);
+					patches[patchIdx].Resize(1 - resizeStep);
 					break;
 				}
 				break;
