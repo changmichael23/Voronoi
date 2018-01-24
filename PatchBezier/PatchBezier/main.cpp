@@ -304,6 +304,17 @@ bool Initialize2()
 
 	structToTabTmp(gridPoints3D, col,tmpPoints);
 
+	// Points controles VBO0
+	glGenVertexArrays(1, &VBO0); // Créer le VAO
+	glBindVertexArray(VBO0); // Lier le VAO pour l'utiliser
+	glEnableVertexAttribArray(0);
+
+	//glGenBuffers(1, &VBO0);
+
+	glBindBuffer(GL_ARRAY_BUFFER, VBO0);
+	glBufferData(GL_ARRAY_BUFFER, pointsControles3D.size() * 9 * sizeof(float), tabPoints, GL_STATIC_DRAW);
+	//---
+
 
 	//---
 	glGenVertexArrays(1, &VBO1); // Créer le VAO
@@ -314,6 +325,12 @@ bool Initialize2()
 	// 3 pour l instant vu qu il n y a pas les normales
 	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
 	glBufferData(GL_ARRAY_BUFFER, gridPoints3D.size() * 3 * sizeof(float), tmpPoints, GL_STATIC_DRAW);
+
+
+	// rendu indexe
+	glGenBuffers(1, &IBO);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, pointsControles3D.size() * sizeof(GLushort), indi, GL_STATIC_DRAW);
 
 	glGenBuffers(1, &IBO1);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
