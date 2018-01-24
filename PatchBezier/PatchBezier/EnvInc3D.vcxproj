@@ -156,17 +156,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\CQuaternion.cpp" />
-    <ClCompile Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\CVecteur.cpp" />
-    <ClCompile Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\SquareMatrice.cpp" />
     <ClCompile Include="..\Common\EsgiShader.cpp" />
+    <ClCompile Include="CQuaternion.cpp" />
+    <ClCompile Include="CVecteur.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="SquareMatrice.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\CQuaternion.h" />
-    <ClInclude Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\CVecteur.h" />
-    <ClInclude Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\SquareMatrice.h" />
+    <ClInclude Include="CQuaternion.h" />
+    <ClInclude Include="CVecteur.h" />
     <ClInclude Include="Patch.hpp" />
+    <ClInclude Include="SquareMatrice.h" />
     <ClInclude Include="UtilEnums.hpp" />
     <ClInclude Include="PatchesController.hpp" />
     <ClInclude Include="..\Common\EsgiShader.h" />

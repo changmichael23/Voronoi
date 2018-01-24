@@ -33,7 +33,7 @@ std::vector<Point> pointsControles3D;           // Tous les points en 3D
 std::vector<Point> gridPoints3D;
 float* tabPoints, *tmpPoints;         //Tous les points en 3D
 GLushort* createInd(int);
-GLushort* createIndForGridPoints(int);
+GLushort* createIndForGridPoints();
 GLushort* indi;			// Tab indice
 GLushort* indTmp;			// Tab indice
 
@@ -73,14 +73,14 @@ EditMode em;
 RotateMode rm = matrix;
 int menu_Main, menu_sub1, menu_sub2;
 void CreateGlutMenu();
-bool Initialize();
+bool Initialize1();
+bool Initialize2();
 
+bool initialized1 = false;
+bool initialized2 = false;
 
-
-
-float * structToTabColor(std::vector<Point> newPoints, std::vector<Colore> c)
+void structToTabColor(std::vector<Point> newPoints, std::vector<Colore> c,float * tabP)
 {
-	float* tabP = new float[newPoints.size() * 9];
 	int j = 0;
 	for (int i = 0; i < newPoints.size() * 9; i += 9)
 	{
@@ -116,12 +116,11 @@ float * structToTabColor(std::vector<Point> newPoints, std::vector<Colore> c)
 		j++;
 	}
 
-	return tabP;
 }
 
-float * structToTabTmp(std::vector<Point> newPoints, std::vector<Colore> c)
+void structToTabTmp(std::vector<Point> newPoints, std::vector<Colore> c,float * tabP)
 {
-	float* tabP = new float[newPoints.size() * 3];
+	
 	int j = 0;
 	for (int i = 0; i < newPoints.size() * 3; i += 3)
 	{
@@ -130,17 +129,17 @@ float * structToTabTmp(std::vector<Point> newPoints, std::vector<Colore> c)
 		tabP[i + 2] = newPoints[j].z;
 		j++;
 	}
-	return tabP;
 }
 void MenuFunction(int i)
 {
 	switch (i)
 	{
-	case 0: StartNewPatch(); break;
+	case 0: StartNewPatch();
+		Initialize1(); break;
 	case 1: CancelPatch(); break;
 	case 2: 
 		ConfirmPatch();
-		Initialize();
+		Initialize2();
 	break;
 	case 30: RotatePatch(0); break;
 	case 31: RotatePatch(1); break;
@@ -220,14 +219,15 @@ void CreateGlutMenu()
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
-bool Initialize()
+bool Initialize1()
 {
+	initialized1 = true;
 	colore[0] = 0.0;
 	colore[1] = 1.0;
 	colore[2] = 1.0;
 	colore[3] = 1.0;
 
-	std::vector<Point> centerPoints3D = patches[0].controlPoints;
+	std::vector<Point> centerPoints3D = tmpPatch.controlPoints;
 
 	std::vector<Colore> tmpColore;
 	
@@ -238,40 +238,35 @@ bool Initialize()
 		tmpColore.push_back(Colore(red));
 	}
 
-	tabPoints = structToTabColor(pointsControles3D,tmpColore);
+	tabPoints = new float[pointsControles3D.size()*9];
 
-	gridPoints3D = patches[0].gridPoints;
-
+	structToTabColor(pointsControles3D,tmpColore,tabPoints);
 
 	indi = createInd(centerPoints3D.size()*24);
-	//indTmp = createInd(gridPoints3D.size());
 
-	indTmp = createIndForGridPoints(0);
-
-	tmpPoints = structToTabTmp(gridPoints3D,col);
 
 	glewInit();
 	g_BasicShader.LoadVertexShader("basic.vs");
 	g_BasicShader.LoadFragmentShader("basic.fs");
 	g_BasicShader.CreateProgram();
 
-	glGenTextures(1, &TexObj);
-	glBindTexture(GL_TEXTURE_2D, TexObj);
-	int w, h, c; //largeur, hauteur et # de composantes du fichier
-	uint8_t* bitmapRGBA = stbi_load("../data/dragon.png",
-		&w, &h, &c, STBI_rgb_alpha);
+	//glGenTextures(1, &TexObj);
+	//glBindTexture(GL_TEXTURE_2D, TexObj);
+	//int w, h, c; //largeur, hauteur et # de composantes du fichier
+	//uint8_t* bitmapRGBA = stbi_load("../data/dragon.png",
+	//	&w, &h, &c, STBI_rgb_alpha);
 
-	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); //GL_NEAREST)
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, // Destination
-		GL_RGBA, GL_UNSIGNED_BYTE, bitmapRGBA);		// Source
+	////glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR); //GL_NEAREST)
+	//glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	//glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, w, h, 0, // Destination
+	//	GL_RGBA, GL_UNSIGNED_BYTE, bitmapRGBA);		// Source
 
-	glGenerateMipmap(GL_TEXTURE_2D);
+	//glGenerateMipmap(GL_TEXTURE_2D);
 
-	stbi_image_free(bitmapRGBA);
+	//stbi_image_free(bitmapRGBA);
 
-	glBindTexture(GL_TEXTURE_2D, 0);
+	//glBindTexture(GL_TEXTURE_2D, 0);
 	
 	// Points controles VBO0
 	glGenVertexArrays(1, &VBO0); // Créer le VAO
@@ -284,21 +279,42 @@ bool Initialize()
 	glBindBuffer(GL_ARRAY_BUFFER, VBO0);
 	glBufferData(GL_ARRAY_BUFFER, pointsControles3D.size() * 9 * sizeof(float), tabPoints, GL_STATIC_DRAW);
 	//---
-	glGenVertexArrays(1, &VBO1); // Créer le VAO
-	glBindVertexArray(VBO1); // Lier le VAO pour l'utiliser
-	glEnableVertexAttribArray(0);
-
-
-	//glGenBuffers(1, &VBO0);
-
-	// 3 pour l instant vu qu il n y a pas les normales
-	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
-	glBufferData(GL_ARRAY_BUFFER, gridPoints3D.size() * 3 * sizeof(float), tmpPoints, GL_STATIC_DRAW);
 
 	// rendu indexe
 	glGenBuffers(1, &IBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, pointsControles3D.size() * sizeof(GLushort), indi, GL_STATIC_DRAW);
+
+	// le fait de specifier 0 comme BO desactive l'usage des BOs
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	ChangeCam(CamType);
+	return true;
+}
+
+bool Initialize2()
+{
+	initialized2 = true;
+	gridPoints3D = patches[0].gridPoints;
+	tmpPoints = new float[gridPoints3D.size() * 3];
+	
+
+	indTmp = createIndForGridPoints();
+
+	structToTabTmp(gridPoints3D, col,tmpPoints);
+
+
+	//---
+	glGenVertexArrays(1, &VBO1); // Créer le VAO
+	glBindVertexArray(VBO1); // Lier le VAO pour l'utiliser
+	glEnableVertexAttribArray(1);
+
+	
+	// 3 pour l instant vu qu il n y a pas les normales
+	glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+	glBufferData(GL_ARRAY_BUFFER, gridPoints3D.size() * 3 * sizeof(float), tmpPoints, GL_STATIC_DRAW);
+
 	glGenBuffers(1, &IBO1);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, precision*precision * 4 * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
@@ -306,14 +322,11 @@ bool Initialize()
 	// le fait de specifier 0 comme BO desactive l'usage des BOs
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	ChangeCam(CamType);
-
-
-	
-
 	return true;
 }
+
+
+
 
 void Terminate()
 {
@@ -327,6 +340,50 @@ void Terminate()
 
 void update()
 {
+	if (initialized1)
+	{
+		pointsControles3D = transformPointsToCube(tmpPatch.controlPoints);
+		//tabPoints = new float[pointsControles3D.size() * 9];
+		structToTabColor(pointsControles3D, col, tabPoints);
+
+		//indi = createInd(tmpPatch.controlPoints.size() * 24);
+
+		// Points controles VBO0
+		glGenVertexArrays(1, &VBO0); // Créer le VAO
+		glBindVertexArray(VBO0); // Lier le VAO pour l'utiliser
+		glEnableVertexAttribArray(0);
+
+		glBindBuffer(GL_ARRAY_BUFFER, VBO0);
+		glBufferData(GL_ARRAY_BUFFER, pointsControles3D.size() * 9 * sizeof(float), tabPoints, GL_STATIC_DRAW);
+		glGenBuffers(1, &IBO);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, pointsControles3D.size() * sizeof(GLushort), indi, GL_STATIC_DRAW);
+
+	}
+	if (initialized2)
+	{
+		gridPoints3D = patches[0].gridPoints;
+
+		//indTmp = createIndForGridPoints();
+
+		structToTabTmp(gridPoints3D, col,tmpPoints);
+
+		//---
+		glGenVertexArrays(1, &VBO1); // Créer le VAO
+		glBindVertexArray(VBO1); // Lier le VAO pour l'utiliser
+		glEnableVertexAttribArray(1);
+
+
+		// 3 pour l instant vu qu il n y a pas les normales
+		glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+		glBufferData(GL_ARRAY_BUFFER, gridPoints3D.size() * 3 * sizeof(float), tmpPoints, GL_STATIC_DRAW);
+
+		glGenBuffers(1, &IBO1);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, precision*precision * 4 * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
+	}
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glutPostRedisplay();
 }
 
@@ -518,7 +575,7 @@ GLushort* createInd(int n)
 	return tmp;
 }
 
-GLushort* createIndForGridPoints(int n)
+GLushort* createIndForGridPoints()
 {
 	// precision * precision
 	int cpt = 0;

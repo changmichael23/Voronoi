@@ -27,13 +27,13 @@
     <ClCompile Include="main.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\CQuaternion.cpp">
+    <ClCompile Include="CQuaternion.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\CVecteur.cpp">
+    <ClCompile Include="CVecteur.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\SquareMatrice.cpp">
+    <ClCompile Include="SquareMatrice.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,13 +65,13 @@
     <ClInclude Include="Patch.hpp">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\CQuaternion.h">
+    <ClInclude Include="CQuaternion.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\CVecteur.h">
+    <ClInclude Include="CVecteur.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\..\Maths pour l%27info\Voronoi\PatchBezier\PatchBezier\SquareMatrice.h">
+    <ClInclude Include="SquareMatrice.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>

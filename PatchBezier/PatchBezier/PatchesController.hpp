@@ -23,6 +23,7 @@ void StartNewPatch()
 	tmpPatch = Patch(n, m);
 	nbPoints = (n + 1) * (m + 1);
 	pointIdx = 0;
+	
 }
 
 void CancelPatch()
