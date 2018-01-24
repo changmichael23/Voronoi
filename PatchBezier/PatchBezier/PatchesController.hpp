@@ -128,10 +128,7 @@ void QuitDelete()
 
 void ConfirmDelete()
 {
-	for (int i = patchIdx; i < nbPatches - 1; ++i)
-	{
-		patches[i] = patches[i + 1];
-	}
+	patches.erase(patches.begin() + patchIdx);
 	--nbPatches;
 
 	if (nbPatches == 0)

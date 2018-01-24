@@ -22,6 +22,7 @@ struct Patch
 	int n, m;
 	std::vector<Point> controlPoints;
 	std::vector<Point> gridPoints;
+	std::vector<Point> subdivisionPoints;
 
 	Patch()
 	{
@@ -76,7 +77,7 @@ struct Patch
 		{
 			if (a == 0)
 			{
-				for (Point p : controlPoints)
+				for (Point &p : gridPoints)
 				{
 					x = p.x;
 					y = p.y;
@@ -88,7 +89,7 @@ struct Patch
 			}
 			else if (a == 1)
 			{
-				for (Point p : controlPoints)
+				for (Point &p : gridPoints)
 				{
 					x = p.x;
 					y = p.y;
@@ -100,7 +101,7 @@ struct Patch
 			}
 			else if (a == 2)
 			{
-				for (Point p : controlPoints)
+				for (Point &p : gridPoints)
 				{
 					x = p.x;
 					y = p.y;
@@ -111,29 +112,27 @@ struct Patch
 				}
 			}
 		}
-
-		GenerateCurve();
 	}
 
 	void Translate(int i, float step)
 	{
 		if (i == 0)
 		{
-			for (Point p : controlPoints)
+			for (Point &p : gridPoints)
 			{
 				p.x += step;
 			}
 		}
 		else if (i == 1)
 		{
-			for (Point p : controlPoints)
+			for (Point &p : gridPoints)
 			{
 				p.y += step;
 			}
 		}
 		else if (i == 2)
 		{
-			for (Point p : controlPoints)
+			for (Point &p : gridPoints)
 			{
 				p.z += step;
 			}
@@ -142,7 +141,7 @@ struct Patch
 
 	void Resize(float step)
 	{
-		for (Point p : controlPoints)
+		for (Point &p : gridPoints)
 		{
 			p.x *= step;
 			p.y *= step;
@@ -253,6 +252,28 @@ struct Patch
 		cp.z = p1.x * p2.y - p1.y * p2.x;
 
 		return cp;
+	}
+
+	void Subdivise()
+	{
+		int sm;
+		subdivisionPoints.reserve(4 * precision * precision);
+
+		std::vector<Point> centrePoints;
+		std::vector<Point> edgePoints;
+
+		std::cout << "Saisir la \"smoothness\" de la subdivision (standard = 4) : ";
+		std::cin >> sm;
+		
+		for (int i = 0; i < precision; ++i)
+		{
+			for (int j = 0; j < precision; ++j)
+			{
+				Point centre = Point();
+				centre.x = (controlPoints.at(i * m + j).x + controlPoints.at((i + 1)  * m + j).x) / 2;
+				centre.x = (controlPoints.at(i * m + j).x + controlPoints.at((i + 1)  * m + j).x) / 2;	
+			}
+		}
 	}
 };
 
