@@ -37,6 +37,9 @@ GLushort* createIndForGridPoints();
 GLushort* indi;			// Tab indice
 GLushort* indTmp;			// Tab indice
 
+std::vector<Point> allGridPoints = std::vector<Point>();
+std::vector<Point> allControlPoints= std::vector<Point>();
+int cptCtrlPts = 0;
 
 
 GLuint VAO;
@@ -56,7 +59,7 @@ std::vector<Patch> patches = std::vector<Patch>();
 Patch tmpPatch;
 int nbPoints;
 int pointIdx, patchIdx;
-int precision = 8;
+int precision = 4;
 
 //Controller variables
 float TimeInSeconds;
@@ -95,24 +98,11 @@ void structToTabColor(std::vector<Point> newPoints, std::vector<Colore> c,float 
 
 		
 
-		/*if (c[j] == Colore(purple))
-		{
-			tabP[i + 6] = RandomFloat(0,1);
+		
+			/*tabP[i + 6] = RandomFloat(0, 1);
 			tabP[i + 7] = RandomFloat(0, 1);
-			tabP[i + 8] = RandomFloat(0, 1);
-		}
-		if (c[j] == Colore(red))
-		{
-			tabP[i + 6] = RandomFloat(0, 1);
-			tabP[i + 7] = RandomFloat(0, 1);
-			tabP[i + 8] = RandomFloat(0, 1);
-		}
-		if (c[j] == Colore(blue))
-		{
-			tabP[i + 6] = RandomFloat(0, 1);
-			tabP[i + 7] = RandomFloat(0, 1);
-			tabP[i + 8] = RandomFloat(0, 1);
-		}*/
+			tabP[i + 8] = RandomFloat(0, 1);*/
+		
 		tabP[i + 6] = 0;
 		tabP[i + 7] = 1;
 		tabP[i + 8] = 0;
@@ -299,9 +289,20 @@ bool Initialize1()
 bool Initialize2()
 {
 	initialized2 = true;
-	gridPoints3D = patches[0].gridPoints;
+	//gridPoints3D = patches[0].gridPoints;
+	//tmpPoints = new float[gridPoints3D.size() * 9];
+	gridPoints3D.clear();
+	for (int i = 0; i < patches.size(); i++)
+	{
+		for (int j = 0; j < patches[i].gridPoints.size(); j++)
+		{
+			gridPoints3D.push_back(patches[i].gridPoints[j]);
+		}
+	}
+
+
 	tmpPoints = new float[gridPoints3D.size() * 9];
-	
+
 	glewInit();
 	g_BasicShader.LoadVertexShader("basic.vs");
 	g_BasicShader.LoadFragmentShader("basic.fs");
@@ -341,7 +342,7 @@ bool Initialize2()
 
 	glGenBuffers(1, &IBO1);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, precision*precision * 4 * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, patches.size()*precision*precision * 4 * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
 
 	// le fait de specifier 0 comme BO desactive l'usage des BOs
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -363,29 +364,41 @@ void update()
 {
 	if (initialized1)
 	{
-		pointsControles3D = transformPointsToCube(tmpPatch.controlPoints);
-		//tabPoints = new float[pointsControles3D.size() * 9];
-		structToTabColor(pointsControles3D, col, tabPoints);
+			pointsControles3D = transformPointsToCube(tmpPatch.controlPoints);
+			//tabPoints = new float[pointsControles3D.size() * 9];
+			structToTabColor(pointsControles3D, col, tabPoints);
 
-		//indi = createInd(tmpPatch.controlPoints.size() * 24);
+			//indi = createInd(tmpPatch.controlPoints.size() * 24);
 
-		// Points controles VBO0
-		glGenVertexArrays(1, &VBO0); // Créer le VAO
-		glBindVertexArray(VBO0); // Lier le VAO pour l'utiliser
-		glEnableVertexAttribArray(0);
+			// Points controles VBO0
+			glGenVertexArrays(1, &VBO0); // Créer le VAO
+			glBindVertexArray(VBO0); // Lier le VAO pour l'utiliser
+			glEnableVertexAttribArray(0);
 
-		glBindBuffer(GL_ARRAY_BUFFER, VBO0);
-		glBufferData(GL_ARRAY_BUFFER, pointsControles3D.size() * 9 * sizeof(float), tabPoints, GL_STATIC_DRAW);
-		glGenBuffers(1, &IBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, pointsControles3D.size() * sizeof(GLushort), indi, GL_STATIC_DRAW);
-
+			glBindBuffer(GL_ARRAY_BUFFER, VBO0);
+			glBufferData(GL_ARRAY_BUFFER, pointsControles3D.size() * 9 * sizeof(float), tabPoints, GL_STATIC_DRAW);
+			glGenBuffers(1, &IBO);
+			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
+			glBufferData(GL_ELEMENT_ARRAY_BUFFER, pointsControles3D.size() * sizeof(GLushort), indi, GL_STATIC_DRAW);
+		
 	}
 	if (initialized2)
 	{
-		gridPoints3D = patches[0].gridPoints;
+		gridPoints3D.clear();
+		for (int i = 0; i < patches.size(); i++)
+		{
+			for (int j = 0; j < patches[i].gridPoints.size(); j++)
+			{
+				gridPoints3D.push_back(patches[i].gridPoints[j]);
+			}
+		}
+		
 
-		//indTmp = createIndForGridPoints();
+		tmpPoints = new float[gridPoints3D.size()*9];
+
+		//gridPoints3D = patches[0].gridPoints;
+
+		indTmp = createIndForGridPoints();  
 
 		structToTabColor(gridPoints3D, col,tmpPoints);
 
@@ -401,7 +414,9 @@ void update()
 
 		glGenBuffers(1, &IBO1);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, precision*precision * 4 * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
+		glBufferData(GL_ELEMENT_ARRAY_BUFFER, patches.size()*precision*precision * 4 * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
+
+		//Initialize2();
 	}
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -519,7 +534,7 @@ void animate()
 		glEnableVertexAttribArray(color_location);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-		glDrawElements(GL_QUADS, precision*precision * 4, GL_UNSIGNED_SHORT, nullptr);
+		glDrawElements(GL_QUADS, patches.size()*precision*precision * 4, GL_UNSIGNED_SHORT, nullptr);
 
 		//----------------
 		glDisableVertexAttribArray(position_location);
@@ -600,19 +615,23 @@ GLushort* createIndForGridPoints()
 {
 	// precision * precision
 	int cpt = 0;
-	GLushort* tmp = new GLushort[precision*precision*4];
-	for (int i = 0; i < precision; i++)
+	GLushort* tmp = new GLushort[patches.size()*precision*precision*4];
+	int tmps = precision*precision * 4;
+	for (int l = 0; l < patches.size(); l++)
 	{
-		int k = 0;
-		for (int j = 0; j < precision; j++)
+		for (int i = 0; i < precision; i++)
 		{
-			tmp[cpt] = i*(precision+1) + j ;
-			tmp[cpt+ 1] = i*(precision+1) + j + 1;
-			tmp[cpt + 2] = (i + 1)*(precision + 1) + j + 1;
-			tmp[cpt + 3] = (i+1)*(precision+1) + j ;
-			cpt += 4;
-		}
+			int k = 0;
+			for (int j = 0; j < precision; j++)
+			{
+				tmp[cpt] = l*(precision + 1)*(precision + 1)+i*(precision + 1) + j;
+				tmp[cpt + 1] = l*(precision + 1)*(precision + 1) + i*(precision + 1) + j + 1;
+				tmp[cpt + 2] = l*(precision + 1)*(precision + 1) + (i + 1)*(precision + 1) + j + 1;
+				tmp[cpt + 3] = l*(precision + 1)*(precision + 1) + (i + 1)*(precision + 1) + j;
+				cpt += 4;
+			}
 
+		}
 	}
 	return tmp;
 }

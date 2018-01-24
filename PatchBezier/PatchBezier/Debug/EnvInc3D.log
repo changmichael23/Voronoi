@@ -17,9 +17,14 @@ c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezie
 c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\common\mat4.h(112): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 c:\program files (x86)\windows kits\10\include\10.0.10240.0\ucrt\math.h(1001): warning C4005: 'M_PI': macro redefinition
   c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\common\mat4.h(12): note: see previous definition of 'M_PI'
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(85): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(127): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(238): warning C4018: '<': signed/unsigned mismatch
-c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(456): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(88): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(118): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(229): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(295): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(297): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(388): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(390): warning C4018: '<': signed/unsigned mismatch
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(472): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+c:\users\michael\documents\visual studio 2015\projects\opengl\voronoi\patchbezier\patchbezier\main.cpp(620): warning C4018: '<': signed/unsigned mismatch
   EnvInc3D.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\PatchBezier.exe
   EnvInc3D.vcxproj -> C:\Users\Michael\Documents\Visual Studio 2015\Projects\OpenGL\Debug\PatchBezier.pdb (Full PDB)
