@@ -105,18 +105,30 @@ void SpecialInput(int key, int x, int y)
 		switch (key)
 		{
 		case GLUT_KEY_RIGHT:
+			tmpPatch.controlPoints[pointIdx].c1 = 0;
+			tmpPatch.controlPoints[pointIdx].c2 = 1.0f;
+			tmpPatch.controlPoints[pointIdx].c3 = 0;
 			++pointIdx;
 			if (pointIdx == nbPoints)
 			{
 				pointIdx = 0;
 			}
+			tmpPatch.controlPoints[pointIdx].c1 = 1.0f;
+			tmpPatch.controlPoints[pointIdx].c2 = 0;
+			tmpPatch.controlPoints[pointIdx].c3 = 1.0f;
 			break;
 		case GLUT_KEY_LEFT:
+			tmpPatch.controlPoints[pointIdx].c1 = 0;
+			tmpPatch.controlPoints[pointIdx].c2 = 1.0f;
+			tmpPatch.controlPoints[pointIdx].c3 = 0;
 			--pointIdx;
 			if (pointIdx < 0)
 			{
 				pointIdx = nbPoints - 1;
 			}
+			tmpPatch.controlPoints[pointIdx].c1 = 1.0f;
+			tmpPatch.controlPoints[pointIdx].c2 = 0;
+			tmpPatch.controlPoints[pointIdx].c3 = 1.0f;
 			break;
 		case GLUT_KEY_UP:
 			tmpPatch.MovePoint(pointIdx, heightStep);
@@ -132,18 +144,22 @@ void SpecialInput(int key, int x, int y)
 		switch (key)
 		{
 		case GLUT_KEY_RIGHT:
+			patches[patchIdx].ChangeColor(0.0f, 1.0f, 0.0f);
 			++patchIdx;
 			if (patchIdx == nbPatches)
 			{
 				patchIdx = 0;
 			}
+			patches[patchIdx].ChangeColor(0.0f, 0.0f, 1.0f);
 			break;
 		case GLUT_KEY_LEFT:
+			patches[patchIdx].ChangeColor(0.0f, 1.0f, 0.0f);
 			--patchIdx;
 			if (patchIdx < 0)
 			{
 				patchIdx = nbPatches - 1;
 			}
+			patches[patchIdx].ChangeColor(0.0f, 0.0f, 1.0f);
 			break;
 		}
 

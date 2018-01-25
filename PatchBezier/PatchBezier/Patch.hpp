@@ -52,6 +52,15 @@ struct Patch
 		gridPoints.reserve(pow(precision + 1, 2));
 	}
 
+	void ChangeColor(float col1,float col2,float col3)
+	{
+		for (Point &p : gridPoints)
+		{
+			p.c1 = col1;
+			p.c2 = col2;
+			p.c3 = col3;
+		}
+	}
 	void MovePoint(int i, float step)
 	{
 		controlPoints.at(i).y += step;

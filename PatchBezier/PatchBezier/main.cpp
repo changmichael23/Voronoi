@@ -34,13 +34,14 @@ std::vector<Point> gridPoints3D;
 float* tabPoints, *tmpPoints;         //Tous les points en 3D
 GLushort* createInd(int);
 GLushort* createIndForGridPoints();
+GLushort* createIndForGridPoints(std::vector<int> tmpCptGP);
 GLushort* indi;			// Tab indice
 GLushort* indTmp;			// Tab indice
 
 std::vector<Point> allGridPoints = std::vector<Point>();
 std::vector<Point> allControlPoints= std::vector<Point>();
 int cptCtrlPts = 0;
-
+int sumStatic = 0;
 
 GLuint VAO;
 GLuint VBO0;	// identifiant du Vertex Buffer Object 0
@@ -103,9 +104,10 @@ void structToTabColor(std::vector<Point> newPoints, std::vector<Colore> c,float 
 			tabP[i + 7] = RandomFloat(0, 1);
 			tabP[i + 8] = RandomFloat(0, 1);*/
 		
-		tabP[i + 6] = 0;
-		tabP[i + 7] = 1;
-		tabP[i + 8] = 0;
+		tabP[i + 6] = newPoints[j].c1;
+		tabP[i + 7] = newPoints[j].c2;
+		tabP[i + 8] = newPoints[j].c3;
+
 		j++;
 	}
 
@@ -297,16 +299,21 @@ bool Initialize1()
 
 bool Initialize2()
 {
+	sumStatic = 0;
 	initialized2 = true;
 	//gridPoints3D = patches[0].gridPoints;
 	//tmpPoints = new float[gridPoints3D.size() * 9];
 	gridPoints3D.clear();
+	std::vector<int> cptGridPoints;
 	for (int i = 0; i < patches.size(); i++)
 	{
 		for (int j = 0; j < patches[i].gridPoints.size(); j++)
 		{
 			gridPoints3D.push_back(patches[i].gridPoints[j]);
 		}
+
+		cptGridPoints.push_back(sqrt(patches[i].gridPoints.size()) - 1);
+		sumStatic += (sqrt(patches[i].gridPoints.size()) - 1)*(sqrt(patches[i].gridPoints.size()) - 1) * 4;
 	}
 
 
@@ -316,9 +323,9 @@ bool Initialize2()
 	g_BasicShader.LoadVertexShader("basic.vs");
 	g_BasicShader.LoadFragmentShader("basic.fs");
 	g_BasicShader.CreateProgram();
+	
 
-
-	indTmp = createIndForGridPoints();
+	indTmp = createIndForGridPoints(cptGridPoints);
 
 	structToTabColor(gridPoints3D, col,tmpPoints);
 
@@ -351,7 +358,7 @@ bool Initialize2()
 
 	glGenBuffers(1, &IBO1);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, patches.size()*(sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4 * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sumStatic * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
 
 	// le fait de specifier 0 comme BO desactive l'usage des BOs
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -385,6 +392,9 @@ void update()
 	}
 	if (initialized2)
 	{
+		sumStatic = 0;
+		std::vector<int> cptGridPoints;
+
 		gridPoints3D.clear();
 		for (int i = 0; i < patches.size(); i++)
 		{
@@ -392,13 +402,15 @@ void update()
 			{
 				gridPoints3D.push_back(patches[i].gridPoints[j]);
 			}
+			cptGridPoints.push_back(sqrt(patches[i].gridPoints.size()) - 1);
+			sumStatic += (sqrt(patches[i].gridPoints.size()) - 1)*(sqrt(patches[i].gridPoints.size()) - 1)*4;
 		}
 		
 		delete(tmpPoints);
 		tmpPoints = new float[gridPoints3D.size()*9];
 
 
-		indTmp = createIndForGridPoints();  
+		indTmp = createIndForGridPoints(cptGridPoints);
 
 		structToTabColor(gridPoints3D, col,tmpPoints);
 
@@ -406,7 +418,7 @@ void update()
 		glBufferSubData(GL_ARRAY_BUFFER, 0, gridPoints3D.size() * 9 * sizeof(float), tmpPoints);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VBO0);
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, patches.size()*(sqrt(gridPoints3D.size())-1)*(sqrt(gridPoints3D.size()) - 1) * 4 * sizeof(GLushort), indTmp);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sumStatic * sizeof(GLushort), indTmp);
 	}
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -524,7 +536,7 @@ void animate()
 		glEnableVertexAttribArray(color_location);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-		glDrawElements(GL_QUADS, patches.size()*(sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4, GL_UNSIGNED_SHORT, nullptr);
+		glDrawElements(GL_QUADS, sumStatic, GL_UNSIGNED_SHORT, nullptr);
 
 		//----------------
 		glDisableVertexAttribArray(position_location);
@@ -626,3 +638,32 @@ GLushort* createIndForGridPoints()
 	}
 	return tmp;
 }
+
+GLushort* createIndForGridPoints(std::vector<int> tmpCptGP)
+{
+	// precision * precision
+	int cpt = 0;
+	GLushort* tmp = new GLushort[sumStatic];
+	//int tmps = precision*precision * 4;
+	//int prec = (sqrt(gridPoints3D.size()) - 1);
+	int prec;
+	for (int l = 0; l < patches.size(); l++)
+	{
+		prec = tmpCptGP[l];
+		for (int i = 0; i < prec; i++)
+		{
+			int k = 0;
+			for (int j = 0; j < prec; j++)
+			{
+				tmp[cpt] = l*(prec + 1)*(prec + 1) + i*(prec + 1) + j;
+				tmp[cpt + 1] = l*(prec + 1)*(prec + 1) + i*(prec + 1) + j + 1;
+				tmp[cpt + 2] = l*(prec + 1)*(prec + 1) + (i + 1)*(prec + 1) + j + 1;
+				tmp[cpt + 3] = l*(prec + 1)*(prec + 1) + (i + 1)*(prec + 1) + j;
+				cpt += 4;
+			}
+
+		}
+	}
+	return tmp;
+}
+
