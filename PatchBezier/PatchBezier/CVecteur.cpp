@@ -61,6 +61,25 @@ CVecteur* CVecteur::AdditionVecteur(CVecteur* v1, CVecteur* v2)
     return vecteurResultat;
 }
 
+float CVecteur::DotProduct(CVecteur* v1, CVecteur* v2)
+{
+	return (v1->getX() * v2->getX()) + (v1->getY() * v2->getY()) + (v1->getX() * v2->getZ());
+}
+
+CVecteur* CVecteur::CrossProduct(CVecteur* v1, CVecteur* v2)
+{
+	float a = v1->getY() * v2->getZ() - v1->getZ() * v2->getY();
+	float b = v1->getZ() * v2->getX() - v1->getX() * v2->getZ();
+	float c = v1->getX() * v2->getY() - v1->getY() * v2->getX();
+
+	return new CVecteur(a, b, c);
+}
+
+CVecteur* CVecteur::Scalar(CVecteur* v1, float f)
+{
+	return new CVecteur(v1->getX() * f, v1->getY() * f, v1->getZ() * f);
+}
+
 void CVecteur::normalizeData()
 {
     float norme = this->getNorme();

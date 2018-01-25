@@ -19,7 +19,9 @@ class CVecteur
         float getNorme();
         void normalizeData();
         static CVecteur* AdditionVecteur(CVecteur* v1, CVecteur* v2);
-
+		static float DotProduct(CVecteur* v1, CVecteur* v2);
+		static CVecteur* CrossProduct(CVecteur* v1, CVecteur* v2);
+		static CVecteur* Scalar(CVecteur* v1, float f);
     protected:
     private:
         float m_dX;

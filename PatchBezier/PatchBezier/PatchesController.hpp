@@ -102,7 +102,7 @@ void ChangeRotationMethod()
 	{
 		rm = quaternion;
 	}
-	if (rm == quaternion)
+	else if (rm == quaternion)
 	{
 		rm = matrix;
 	}

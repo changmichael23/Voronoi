@@ -158,9 +158,9 @@ void CreateGlutMenu()
 	if (rm == quaternion)
 	{
 		menu_sub1 = glutCreateMenu(MenuFunction);
-		glutAddMenuEntry("Lacet", 30);
-		glutAddMenuEntry("Tangage", 31);
-		glutAddMenuEntry("Roulis", 32);
+		glutAddMenuEntry("X (1, 0, 0)", 30);
+		glutAddMenuEntry("Y (0, 1, 0)", 31);
+		glutAddMenuEntry("Z (0, 0, 1)", 32);
 	}
 	else if (rm == matrix)
 	{

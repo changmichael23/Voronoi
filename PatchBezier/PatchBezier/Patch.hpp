@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include "Point.hpp"
+#include "CQuaternion.h"
 
 #ifndef PATCH_HPP
 #define PATCH_HPP
@@ -23,13 +24,18 @@ struct Patch
 	std::vector<Point> controlPoints;
 	std::vector<Point> gridPoints;
 	std::vector<Point> subdivisionPoints;
+	float rotationAngle;
+	SquareMatrice *rotationMatrix;
+	CQuaternion *quatRotation;
 
 	Patch()
 	{
 		n = 0;
 		m = 0;
-		
+		this->rotationAngle = 0.f;
 		gridPoints.reserve(pow(precision + 1, 2));
+		quatRotation = new CQuaternion(rotationAngle, new CVecteur(1, 0, 0));
+		rotationMatrix = quatRotation->QuaternionToMatrice();
 	}
 
 	Patch(int _n, int _m)
@@ -45,13 +51,26 @@ struct Patch
 				controlPoints.push_back(p);
 			}
 		}
-
+		this->rotationAngle = 0.f;
+		quatRotation = new CQuaternion(rotationAngle, new CVecteur(1, 0, 0));
+		rotationMatrix = quatRotation->QuaternionToMatrice();
 		gridPoints.reserve(pow(precision + 1, 2));
 	}
 
 	void MovePoint(int i, float step)
 	{
 		controlPoints.at(i).y += step;
+	}
+
+	CVecteur* rotate_vector_by_quaternion(CVecteur* v, CQuaternion* q)
+	{
+		CVecteur u(q->GetY(), q->GetZ(), q->GetW());
+
+		float s = q->GetX();
+
+		return CVecteur::AdditionVecteur(CVecteur::AdditionVecteur(CVecteur::Scalar(&u, 2.0f * CVecteur::DotProduct(&u, v))
+			, CVecteur::Scalar(v, (s*s - CVecteur::DotProduct(&u, &u)))),
+			+CVecteur::Scalar(CVecteur::CrossProduct(&u, v), 2.0f * s));
 	}
 
 	void Rotate(int a, float step)
@@ -62,15 +81,66 @@ struct Patch
 		{
 			if (a == 0)
 			{
+				rotationAngle += 0.25;
+				if (rotationAngle == 360)
+					rotationAngle = 0;
 
+				this->quatRotation->reinit(this->rotationAngle, new CVecteur(1, 0, 0, true));
+
+				for (Point &p : gridPoints)
+				{
+					CVecteur* v = new CVecteur(p.x, p.y, p.z);
+					CVecteur* res = rotate_vector_by_quaternion(v, this->quatRotation);
+
+					p.x = res->getX();
+					p.y = res->getY();
+					p.z = res->getZ();
+
+					delete v;
+					delete res;
+				}
 			}
 			else if (a == 1)
 			{
+				rotationAngle += 0.25;
+				if (rotationAngle == 360)
+					rotationAngle = 0;
 
+				this->quatRotation->reinit(this->rotationAngle, new CVecteur(0, 1, 0, true));
+
+				for (Point &p : gridPoints)
+				{
+					CVecteur* v = new CVecteur(p.x, p.y, p.z);
+					CVecteur* res = rotate_vector_by_quaternion(v, this->quatRotation);
+
+					p.x = res->getX();
+					p.y = res->getY();
+					p.z = res->getZ();
+
+					delete v;
+					delete res;
+				}
 			}
 			else if (a == 2)
 			{
+				rotationAngle += 0.25;
+				if (rotationAngle == 360)
+					rotationAngle = 0;
 
+				this->quatRotation->reinit(this->rotationAngle, new CVecteur(0, 0, 1, true));
+
+				for (Point &p : gridPoints)
+				{
+					CVecteur* v = new CVecteur(p.x, p.y, p.z);
+					CVecteur* res = rotate_vector_by_quaternion(v, this->quatRotation);
+
+					p.x = res->getX();
+					p.y = res->getY();
+					p.z = res->getZ();
+
+					delete v;
+					delete res;
+				}
 			}
 		}
 		else if (rm == matrix)
@@ -82,7 +152,7 @@ struct Patch
 					x = p.x;
 					y = p.y;
 					z = p.z;
-					
+
 					p.y = y * COS(step) - z * SIN(step);
 					p.z = y * SIN(step) + z * COS(step);
 				}
@@ -172,7 +242,7 @@ struct Patch
 			Si = .0f;
 			for (int j = 0; j <= m; ++j)
 			{
-				Si +=  controlPoints[i * (m + 1) + j] * BernsteinPoly(j, v, m);
+				Si += controlPoints[i * (m + 1) + j] * BernsteinPoly(j, v, m);
 			}
 			Suv += Si * BernsteinPoly(i, u, n);
 		}
@@ -230,7 +300,7 @@ struct Patch
 	{
 		if (i == 0)
 		{
-			return - dim * pow(1 - t, dim - 1);
+			return -dim * pow(1 - t, dim - 1);
 		}
 		else if (i == dim)
 		{
@@ -264,14 +334,14 @@ struct Patch
 
 		std::cout << "Saisir la \"smoothness\" de la subdivision (standard = 4) : ";
 		std::cin >> sm;
-		
+
 		for (int i = 0; i < precision; ++i)
 		{
 			for (int j = 0; j < precision; ++j)
 			{
 				Point centre = Point();
 				centre.x = (controlPoints.at(i * m + j).x + controlPoints.at((i + 1)  * m + j).x) / 2;
-				centre.x = (controlPoints.at(i * m + j).x + controlPoints.at((i + 1)  * m + j).x) / 2;	
+				centre.x = (controlPoints.at(i * m + j).x + controlPoints.at((i + 1)  * m + j).x) / 2;
 			}
 		}
 	}
