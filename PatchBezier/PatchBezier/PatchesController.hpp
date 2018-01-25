@@ -136,3 +136,19 @@ void ConfirmDelete()
 		QuitDelete();
 	}
 }
+
+void SubdivisePatch()
+{
+	gs = subdivising;
+	patchIdx = 0;
+}
+
+void CancelSubdivise()
+{
+	gs = idle;
+}
+
+void ConfirmSubdivise()
+{
+	patches.at(patchIdx).Subdivise();
+}
