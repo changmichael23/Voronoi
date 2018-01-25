@@ -83,7 +83,7 @@ struct Patch
 
 		return CVecteur::AdditionVecteur(CVecteur::AdditionVecteur(CVecteur::Scalar(&u, 2.0f * CVecteur::DotProduct(&u, v))
 			, CVecteur::Scalar(v, (s*s - CVecteur::DotProduct(&u, &u)))),
-			+CVecteur::Scalar(CVecteur::CrossProduct(&u, v), 2.0f * s));
+			CVecteur::Scalar(CVecteur::CrossProduct(&u, v), 2.0f * s));
 	}
 
 	void Rotate(int a, float step)
@@ -94,7 +94,11 @@ struct Patch
 		{
 			if (a == 0)
 			{
-				rotationAngle += 0.25;
+				if(step < 0)
+					rotationAngle -= 0.25;
+				else
+					rotationAngle += 0.25;
+
 				if (rotationAngle == 360)
 					rotationAngle = 0;
 
