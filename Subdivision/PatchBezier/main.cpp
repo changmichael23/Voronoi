@@ -840,7 +840,10 @@ void animate()
 		glEnableVertexAttribArray(color_location);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-		glDrawElements(GL_QUADS, (sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4, GL_UNSIGNED_SHORT, nullptr);
+		if (initialized2)
+		{
+			glDrawElements(GL_QUADS, (sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4, GL_UNSIGNED_SHORT, nullptr);
+		}
 		//(sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1)*4
 		//----------------
 		glDisableVertexAttribArray(position_location);
