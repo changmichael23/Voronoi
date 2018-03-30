@@ -100,7 +100,7 @@ std::vector<int> indVector;
 
 std::vector<int> sindex =
 {
-	 0, 4, 1 
+	 0, 4, 1
 	, 0, 9, 4,
 	 9, 5, 4 ,
 	 4, 5, 8 ,
@@ -119,7 +119,7 @@ std::vector<int> sindex =
 	 9, 0, 11 ,
 	 9, 11, 2 ,
 	 9, 2, 5 ,
-	 7, 2, 11 
+	 7, 2, 11
 };
 
 
@@ -141,7 +141,7 @@ void initializeIcosaedre()
 	gridPoints3D.push_back(Point{ -Z, -X, 0 });
 }
 
-struct PointKob 
+struct PointKob
 {
 public:
 	float x;
@@ -231,20 +231,20 @@ int findEdge(Edge* tmpEdge, std::vector<Edge*> listEdge)
 }
 
 
-void initCleanStruct(std::vector<Point> pointsCube, std::vector<int> indexTriangle,std::vector<PointKob*>& vertexes, std::vector<Edge*>& edges, std::vector<Face*> &faces)
+void initCleanStruct(std::vector<Point> pointsCube, std::vector<int> indexTriangle, std::vector<PointKob*>& vertexes, std::vector<Edge*>& edges, std::vector<Face*> &faces)
 {
 
 	for (unsigned i = 0; i < pointsCube.size(); ++i)
 	{
-		PointKob pTm(pointsCube[i].x, pointsCube[i].y, pointsCube[i].z) ;
+		PointKob pTm(pointsCube[i].x, pointsCube[i].y, pointsCube[i].z);
 		//vertexes.push_back(&pTm);
 		vertexes.push_back(new PointKob(pointsCube[i].x, pointsCube[i].y, pointsCube[i].z));
 	}
 	std::vector<Point> faceDescript;
-	for (unsigned i = 0; i < indexTriangle.size(); i+=3)
+	for (unsigned i = 0; i < indexTriangle.size(); i += 3)
 	{
 
-		Point tmp(indexTriangle[i], indexTriangle[i+1], indexTriangle[i+2]);
+		Point tmp(indexTriangle[i], indexTriangle[i + 1], indexTriangle[i + 2]);
 		faceDescript.push_back(tmp);
 
 
@@ -254,62 +254,62 @@ void initCleanStruct(std::vector<Point> pointsCube, std::vector<int> indexTriang
 	for (unsigned i = 0; i < faceDescript.size(); ++i)
 	{
 		Face *tmpFace = new Face();
-			Edge* edgeTmp= new Edge(vertexes[faceDescript[i].x], vertexes[faceDescript[i].y]);
+		Edge* edgeTmp = new Edge(vertexes[faceDescript[i].x], vertexes[faceDescript[i].y]);
 
-			if (findEdge(edgeTmp,edges) == -1)
-			{
-				edges.push_back(edgeTmp);
-				vertexes[faceDescript[i].x]->adjacentEdge.push_back(edgeTmp);
-				vertexes[faceDescript[i].y]->adjacentEdge.push_back(edgeTmp);
+		if (findEdge(edgeTmp, edges) == -1)
+		{
+			edges.push_back(edgeTmp);
+			vertexes[faceDescript[i].x]->adjacentEdge.push_back(edgeTmp);
+			vertexes[faceDescript[i].y]->adjacentEdge.push_back(edgeTmp);
 
-				edgeTmp->adjacentFace.push_back(tmpFace);
-				tmpFace->edges.push_back(edgeTmp);
-			}
-			else
-			{
-				edges[findEdge(edgeTmp, edges)]->adjacentFace.push_back(tmpFace);
-				tmpFace->edges.push_back(edges[findEdge(edgeTmp, edges)]);
+			edgeTmp->adjacentFace.push_back(tmpFace);
+			tmpFace->edges.push_back(edgeTmp);
+		}
+		else
+		{
+			edges[findEdge(edgeTmp, edges)]->adjacentFace.push_back(tmpFace);
+			tmpFace->edges.push_back(edges[findEdge(edgeTmp, edges)]);
 
-			}
-			Edge *edgeTmp1= new Edge(vertexes[faceDescript[i].y], vertexes[faceDescript[i].z]);
+		}
+		Edge *edgeTmp1 = new Edge(vertexes[faceDescript[i].y], vertexes[faceDescript[i].z]);
 
-			if (findEdge(edgeTmp1, edges) == -1)
-			{
-				edges.push_back(edgeTmp1);
-				vertexes[faceDescript[i].y]->adjacentEdge.push_back(edgeTmp1);
-				vertexes[faceDescript[i].z]->adjacentEdge.push_back(edgeTmp1);
+		if (findEdge(edgeTmp1, edges) == -1)
+		{
+			edges.push_back(edgeTmp1);
+			vertexes[faceDescript[i].y]->adjacentEdge.push_back(edgeTmp1);
+			vertexes[faceDescript[i].z]->adjacentEdge.push_back(edgeTmp1);
 
-				edgeTmp1->adjacentFace.push_back(tmpFace);
-				tmpFace->edges.push_back(edgeTmp1);
-			}
-			else
-			{
-				edges[findEdge(edgeTmp1, edges)]->adjacentFace.push_back(tmpFace);
-				tmpFace->edges.push_back(edges[findEdge(edgeTmp1, edges)]);
+			edgeTmp1->adjacentFace.push_back(tmpFace);
+			tmpFace->edges.push_back(edgeTmp1);
+		}
+		else
+		{
+			edges[findEdge(edgeTmp1, edges)]->adjacentFace.push_back(tmpFace);
+			tmpFace->edges.push_back(edges[findEdge(edgeTmp1, edges)]);
 
-			}
+		}
 
-			Edge *edgeTmp2 = new Edge(vertexes[faceDescript[i].x], vertexes[faceDescript[i].z]);
+		Edge *edgeTmp2 = new Edge(vertexes[faceDescript[i].x], vertexes[faceDescript[i].z]);
 
-			if (findEdge(edgeTmp2, edges) == -1)
-			{
-				edges.push_back(edgeTmp2);
-				vertexes[faceDescript[i].x]->adjacentEdge.push_back(edgeTmp2);
-				vertexes[faceDescript[i].z]->adjacentEdge.push_back(edgeTmp2);
+		if (findEdge(edgeTmp2, edges) == -1)
+		{
+			edges.push_back(edgeTmp2);
+			vertexes[faceDescript[i].x]->adjacentEdge.push_back(edgeTmp2);
+			vertexes[faceDescript[i].z]->adjacentEdge.push_back(edgeTmp2);
 
-				edgeTmp2->adjacentFace.push_back(tmpFace);
-				tmpFace->edges.push_back(edgeTmp2);
-			}
-			else
-			{
-				edges[findEdge(edgeTmp2, edges)]->adjacentFace.push_back(tmpFace);
-				tmpFace->edges.push_back(edges[findEdge(edgeTmp2, edges)]);
-			}
+			edgeTmp2->adjacentFace.push_back(tmpFace);
+			tmpFace->edges.push_back(edgeTmp2);
+		}
+		else
+		{
+			edges[findEdge(edgeTmp2, edges)]->adjacentFace.push_back(tmpFace);
+			tmpFace->edges.push_back(edges[findEdge(edgeTmp2, edges)]);
+		}
 
-			vertexes[faceDescript[i].x]->adjacentFace.push_back(tmpFace);
-			vertexes[faceDescript[i].y]->adjacentFace.push_back(tmpFace);
-			vertexes[faceDescript[i].z]->adjacentFace.push_back(tmpFace);
-			faces.push_back(tmpFace);
+		vertexes[faceDescript[i].x]->adjacentFace.push_back(tmpFace);
+		vertexes[faceDescript[i].y]->adjacentFace.push_back(tmpFace);
+		vertexes[faceDescript[i].z]->adjacentFace.push_back(tmpFace);
+		faces.push_back(tmpFace);
 	}
 
 
@@ -450,12 +450,22 @@ std::vector<PointKob*> letsPertubate(std::vector<PointKob*> points)
 			}
 		}
 
-		PointKob perturbatePoint;
-		perturbatePoint.x = (*(*it) * (1 - alpha)).x + sumAdj.x * (alpha / (float)((*it)->adjacentEdge.size()));
-		perturbatePoint.y = (*(*it) * (1 - alpha)).y + sumAdj.y * (alpha / (float)((*it)->adjacentEdge.size()));
-		perturbatePoint.z = (*(*it) * (1 - alpha)).z + sumAdj.z * (alpha / (float)((*it)->adjacentEdge.size()));
+		PointKob* perturbatePoint = new PointKob();
+		perturbatePoint->x = (*(*it) * (1 - alpha)).x + sumAdj.x * (alpha / (float)((*it)->adjacentEdge.size()));
+		perturbatePoint->y = (*(*it) * (1 - alpha)).y + sumAdj.y * (alpha / (float)((*it)->adjacentEdge.size()));
+		perturbatePoint->z = (*(*it) * (1 - alpha)).z + sumAdj.z * (alpha / (float)((*it)->adjacentEdge.size()));
 
-		pertubatedPoints.push_back(&perturbatePoint);
+		for (int i = 0; i < (*it)->adjacentFace.size(); ++i)
+		{
+			perturbatePoint->adjacentFace.push_back((*it)->adjacentFace[i]);
+		}
+
+		for (int i = 0; i < (*it)->adjacentEdge.size(); ++i)
+		{
+			perturbatePoint->adjacentEdge.push_back((*it)->adjacentEdge[i]);
+		}
+
+		pertubatedPoints.push_back(perturbatePoint);
 	}
 
 	return pertubatedPoints;
@@ -466,17 +476,43 @@ void letsGoKobbelt(std::vector<Face*> faces, std::vector<PointKob*>& points, std
 	// Calcul barycentre de chaque face
 	for (auto it = faces.begin(); it != faces.end(); ++it)
 	{
-		PointKob* p1 = (*it)->edges[0]->points[0];
-		PointKob* p2 = (*it)->edges[0]->points[1];
-		PointKob* p3 = (*it)->edges[1]->points[1];
+		PointKob* p = nullptr, *pk1 = nullptr, *pk2 = nullptr;
 
-		PointKob barycentre;
+		Edge* e1 = (*it)->edges[0];
+		Edge* e2 = (*it)->edges[1];
 
-		barycentre.x = ((p1->x + p2->x) + p3->x) / 3;
-		barycentre.y = ((p1->y + p2->y) + p3->y) / 3;
-		barycentre.z = ((p1->z + p2->z) + p3->z) / 3;
+		if (e1->points[0] == e2->points[0])
+		{
+			p = e1->points[0];
+			pk1 = e1->points[1];
+			pk2 = e2->points[1];
+		}
+		else if (e1->points[0] == e2->points[1])
+		{
+			p = e1->points[0];
+			pk1 = e1->points[1];
+			pk2 = e2->points[0];
+		}
+		else if (e1->points[1] == e2->points[0])
+		{
+			p = e1->points[1];
+			pk1 = e1->points[0];
+			pk2 = e2->points[1];
+		}
+		else if (e1->points[1] == e2->points[1])
+		{
+			p = e1->points[1];
+			pk1 = e1->points[0];
+			pk2 = e2->points[0];
+		}
 
-		(*it)->barycentre = &barycentre;
+		PointKob* barycentre = new PointKob();
+
+		barycentre->x = ((p->x + pk1->x) + pk2->x) / 3;
+		barycentre->y = ((p->y + pk1->y) + pk2->y) / 3;
+		barycentre->z = ((p->z + pk1->z) + pk2->z) / 3;
+
+		(*it)->barycentre = barycentre;
 	}
 
 	// Flipping
@@ -519,6 +555,8 @@ void letsGoKobbelt(std::vector<Face*> faces, std::vector<PointKob*>& points, std
 			perturbatedPoints[i]->adjacentFace[j]->barycentre->adjacentEdge.push_back(baryEdge);
 			newEdges.push_back(baryEdge);
 		}
+
+		perturbatedPoints[i]->adjacentFace.clear();
 	}
 
 	for (int i = 0; i < edges.size(); ++i)
@@ -547,80 +585,92 @@ void letsGoKobbelt(std::vector<Face*> faces, std::vector<PointKob*>& points, std
 
 	for (int i = 0; i < points.size(); ++i)
 	{
-		for (int j = 0; j < perturbatedPoints[i]->adjacentEdge.size() - 1; ++j)
+		for (int j = 0; j < perturbatedPoints[i]->adjacentEdge.size(); ++j)
 		{
-			Edge* e1 = perturbatedPoints[i]->adjacentEdge[j];
-			Edge* e2 = perturbatedPoints[i]->adjacentEdge[j+1];
+			Edge* e1 = nullptr, *e2 = nullptr;
 
-			bool found = false;
-			for (int k = 0; k < borderEdge.size(); ++k)
+			if (j == perturbatedPoints[i]->adjacentEdge.size() - 1)
 			{
-				if (e1 == borderEdge[k])
-					found = true;
+				e1 = perturbatedPoints[i]->adjacentEdge[j];
+				e2 = perturbatedPoints[i]->adjacentEdge[0];
 			}
+			else
+			{
 
-			if (found)
-				continue;
+				e1 = perturbatedPoints[i]->adjacentEdge[j];
+				e2 = perturbatedPoints[i]->adjacentEdge[j + 1];
 
-			found = false;
-			for (int k = 0; k < borderEdge.size(); ++k)
-			{
-				if (e2 == borderEdge[k])
-					found = true;
-			}
+				bool found = false;
+				for (int k = 0; k < borderEdge.size(); ++k)
+				{
+					if (e1 == borderEdge[k])
+						found = true;
+				}
 
-			if (found)
-				continue;
-				
-			if (edgeAlreadyExist(e1, edges))
-			{
-				borderEdge.push_back(e1);
-				e1->adjacentFace.clear();
-			}
-			else if (edgeAlreadyExist(e2, edges))
-			{
-				borderEdge.push_back(e2);
-				e2->adjacentFace.clear();
-			}
+				if (found)
+					continue;
 
-			Edge* e3 = foundEdge(e1, e2);
-			Face* newFace = new Face(e1, e2, e3);
-			
-			newFaces.push_back(newFace);
-			e1->adjacentFace.push_back(newFace);
-			e2->adjacentFace.push_back(newFace);
-			e3->adjacentFace.push_back(newFace);
+				found = false;
+				for (int k = 0; k < borderEdge.size(); ++k)
+				{
+					if (e2 == borderEdge[k])
+						found = true;
+				}
 
-			PointKob* p = nullptr, *pk1 = nullptr, *pk2 = nullptr;
+				if (found)
+					continue;
 
-			if (e1->points[0] == e2->points[0])
-			{
-				p = e1->points[0];
-				pk1 = e1->points[1];
-				pk2 = e2->points[1];
-			}
-			else if (e1->points[0] == e2->points[1])
-			{
-				p = e1->points[0];
-				pk1 = e1->points[1];
-				pk2 = e2->points[0];
-			}
-			else if (e1->points[1] == e2->points[0])
-			{
-				p = e1->points[1];
-				pk1 = e1->points[0];
-				pk2 = e2->points[1];
-			}
-			else if (e1->points[1] == e2->points[1])
-			{
-				p = e1->points[1];
-				pk1 = e1->points[0];
-				pk2 = e2->points[0];
-			}
+				if (edgeAlreadyExist(e1, edges))
+				{
+					borderEdge.push_back(e1);
+					e1->adjacentFace.clear();
+				}
+				else if (edgeAlreadyExist(e2, edges))
+				{
+					borderEdge.push_back(e2);
+					e2->adjacentFace.clear();
+				}
 
-			p->adjacentFace.push_back(newFace);
-			pk1->adjacentFace.push_back(newFace);
-			pk2->adjacentFace.push_back(newFace);
+				Edge* e3 = foundEdge(e1, e2);
+
+				Face* newFace = new Face(e1, e2, e3);
+
+				newFaces.push_back(newFace);
+				e1->adjacentFace.push_back(newFace);
+				e2->adjacentFace.push_back(newFace);
+				e3->adjacentFace.push_back(newFace);
+
+				PointKob* p = nullptr, *pk1 = nullptr, *pk2 = nullptr;
+
+				if (e1->points[0] == e2->points[0])
+				{
+					p = e1->points[0];
+					pk1 = e1->points[1];
+					pk2 = e2->points[1];
+				}
+				else if (e1->points[0] == e2->points[1])
+				{
+					p = e1->points[0];
+					pk1 = e1->points[1];
+					pk2 = e2->points[0];
+				}
+				else if (e1->points[1] == e2->points[0])
+				{
+					p = e1->points[1];
+					pk1 = e1->points[0];
+					pk2 = e2->points[1];
+				}
+				else if (e1->points[1] == e2->points[1])
+				{
+					p = e1->points[1];
+					pk1 = e1->points[0];
+					pk2 = e2->points[0];
+				}
+
+				p->adjacentFace.push_back(newFace);
+				pk1->adjacentFace.push_back(newFace);
+				pk2->adjacentFace.push_back(newFace);
+			}
 		}
 	}
 
@@ -899,13 +949,15 @@ bool Initialize2()
 		gridPoints3D.push_back(tmpCoons.points[i]);
 	}
 	*/
-	
+
 	initializeIcosaedre();
 	std::vector<PointKob*> pkP;
 	std::vector<Edge*> edgesP;
 	std::vector<Face*> facesP;
 
 	initCleanStruct(gridPoints3D, sindex, pkP, edgesP, facesP);
+
+	//letsGoKobbelt(facesP, pkP, edgesP);
 
 	tmpPoints = new float[gridPoints3D.size() * 9];
 
@@ -921,11 +973,11 @@ bool Initialize2()
 
 	//indTmp = createIndFromVector(tmpCoons.triangles);
 
-	
+
 	//indVector = tmpCoons.triangles;
 
-	
-	
+
+
 	indTmp = createIndFromVector(sindex);
 	indVector = sindex;
 
@@ -1192,7 +1244,7 @@ void animate()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
 	if (initialized2)
 	{
-			glDrawElements(GL_TRIANGLES, indVector.size(), GL_UNSIGNED_SHORT, nullptr);
+		glDrawElements(GL_TRIANGLES, indVector.size(), GL_UNSIGNED_SHORT, nullptr);
 	}
 	//(sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1)*4
 	//----------------
