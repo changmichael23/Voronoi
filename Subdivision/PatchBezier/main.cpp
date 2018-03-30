@@ -40,6 +40,7 @@ GLushort* createInd(int);
 GLushort* createIndForGridPoints();
 GLushort* createIndFromVector(std::vector<int> indexesVector);
 GLushort* createIndForGridPoints(std::vector<int> tmpCptGP);
+GLushort* createIndFromVectors(std::vector<PatchCoons*> CoonsVector);
 GLushort* indi;			// Tab indice
 GLushort* indTmp;			// Tab indice
 
@@ -62,6 +63,7 @@ std::vector<Colore> col;
 //PatchController variables
 int nbPatches = 0;
 std::vector<Patch> patches = std::vector<Patch>();
+std::vector<PatchCoons*> patchesCoons;
 Patch tmpPatch;
 int nbPoints;
 int pointIdx, patchIdx;
@@ -886,26 +888,27 @@ bool Initialize2()
 
 
 	testCurve = chaikinOnControlPoints(tmpPatch.controlPoints);
-	gridPoints3D.clear();
+	//gridPoints3D.clear();
 	std::vector<int> cptGridPoints;
 
-	PatchCoons tmpCoons(testCurve[0].n, testCurve[1].n, &testCurve[0], &testCurve[1], &testCurve[2], &testCurve[3]);
+	PatchCoons tmpCoons = *new PatchCoons(testCurve[0].n, testCurve[1].n, &testCurve[0], &testCurve[1], &testCurve[2], &testCurve[3]);
 
 	tmpCoons.GeneratePatch();
 
+	patchesCoons.push_back(&tmpCoons);
 
-	/*for (int i = 0; i < tmpCoons.points.size(); ++i)
+	for (int i = 0; i < tmpCoons.points.size(); ++i)
 	{
 		gridPoints3D.push_back(tmpCoons.points[i]);
 	}
-	*/
 	
-	initializeIcosaedre();
+	
+	//initializeIcosaedre();
 	std::vector<PointKob*> pkP;
 	std::vector<Edge*> edgesP;
 	std::vector<Face*> facesP;
 
-	initCleanStruct(gridPoints3D, sindex, pkP, edgesP, facesP);
+	//initCleanStruct(gridPoints3D, sindex, pkP, edgesP, facesP);
 
 	tmpPoints = new float[gridPoints3D.size() * 9];
 
@@ -919,21 +922,16 @@ bool Initialize2()
 	//indTmp = createInd(gridPoints3D.size());
 	//indTmp = createIndForGridPoints();
 
-	//indTmp = createIndFromVector(tmpCoons.triangles);
+	indTmp = createIndFromVectors(patchesCoons);
 
 	
 	//indVector = tmpCoons.triangles;
 
 	
 	
-	indTmp = createIndFromVector(sindex);
-	indVector = sindex;
+	//indTmp = createIndFromVector(sindex);
+	//indVector = tmpCoons.triangles;
 
-	for (int i = 0; i < (sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4; ++i)
-	{
-		std::cerr << "TEST" << indTmp[i] << std::endl;
-
-	}
 	structToTabColor(gridPoints3D, col, tmpPoints);
 
 	// Points controles VBO0
@@ -965,7 +963,7 @@ bool Initialize2()
 
 	glGenBuffers(1, &IBO1);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indVector.size() * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, patchesCoons.size()*patchesCoons[0]->triangles.size() * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
 
 	// le fait de specifier 0 comme BO desactive l'usage des BOs
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -1014,15 +1012,23 @@ void update()
 		gridPoints3D.push_back(testCurve[i].newPoints[j]);
 		}
 		}*/
-
-
+		for (int j = 0; j < patchesCoons.size(); ++j)
+		{
+			for (int i = 0; i < patchesCoons[j]->points.size(); ++i)
+			{
+				gridPoints3D.push_back(patchesCoons[j]->points[i]);
+			}
+		}
 
 		if (keyMode == 0)
 		{
 
-			for (int i = 0; i < tmpCoons.points.size(); ++i)
+			for (int j = 0; j < patchesCoons.size(); ++j)
 			{
-				gridPoints3D.push_back(tmpCoons.points[i]);
+				for (int i = 0; i < patchesCoons[j]->points.size(); ++i)
+				{
+					gridPoints3D.push_back(patchesCoons[j]->points[i]);
+				}
 			}
 		}
 		else
@@ -1030,9 +1036,12 @@ void update()
 			if (keyMode == 1)
 			{
 
-				for (int i = 0; i < tmpCoons.uPoints.size(); ++i)
+				for (int j = 0; j < patchesCoons.size(); ++j)
 				{
-					gridPoints3D.push_back(tmpCoons.uPoints[i]);
+					for (int i = 0; i < patchesCoons[j]->uPoints.size(); ++i)
+					{
+						gridPoints3D.push_back(patchesCoons[j]->uPoints[i]);
+					}
 				}
 			}
 			else
@@ -1040,9 +1049,12 @@ void update()
 				if (keyMode == 2)
 				{
 
-					for (int i = 0; i < tmpCoons.vPoints.size(); ++i)
+					for (int j = 0; j < patchesCoons.size(); ++j)
 					{
-						gridPoints3D.push_back(tmpCoons.vPoints[i]);
+						for (int i = 0; i < patchesCoons[j]->vPoints.size(); ++i)
+						{
+							gridPoints3D.push_back(patchesCoons[j]->vPoints[i]);
+						}
 					}
 				}
 				else
@@ -1050,9 +1062,12 @@ void update()
 					if (keyMode == 3)
 					{
 
-						for (int i = 0; i < tmpCoons.vPoints.size(); ++i)
+						for (int j = 0; j < patchesCoons.size(); ++j)
 						{
-							gridPoints3D.push_back(tmpCoons.bPoints[i]);
+							for (int i = 0; i < patchesCoons[j]->bPoints.size(); ++i)
+							{
+								gridPoints3D.push_back(patchesCoons[j]->bPoints[i]);
+							}
 						}
 					}
 				}
@@ -1062,7 +1077,7 @@ void update()
 
 		delete(tmpPoints);
 		tmpPoints = new float[gridPoints3D.size() * 9];
-		indTmp = createIndFromVector(tmpCoons.triangles);
+		indTmp = createIndFromVectors(patchesCoons);
 		indVector = tmpCoons.triangles;
 		//indTmp = createInd(gridPoints3D.size());
 
@@ -1072,10 +1087,14 @@ void update()
 		glBufferSubData(GL_ARRAY_BUFFER, 0, gridPoints3D.size() * 9 * sizeof(float), tmpPoints);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, indVector.size() * sizeof(GLushort), indTmp);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, patchesCoons.size()*patchesCoons[0]->triangles.size() * sizeof(GLushort), indTmp);
 	}
-	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	//glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+
+
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glutPostRedisplay();
 }
 
@@ -1192,7 +1211,9 @@ void animate()
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
 	if (initialized2)
 	{
-			glDrawElements(GL_TRIANGLES, indVector.size(), GL_UNSIGNED_SHORT, nullptr);
+		std::cerr << patchesCoons.size()*patchesCoons[0]->triangles.size() << std::endl;
+			glDrawElements(GL_TRIANGLES, 
+				patchesCoons.size()*patchesCoons[0]->triangles.size(), GL_UNSIGNED_SHORT, nullptr);
 	}
 	//(sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1)*4
 	//----------------
@@ -1294,8 +1315,6 @@ GLushort* createInd(int n)
 //	return tmp;
 //}
 
-
-
 GLushort* createIndForGridPoints()
 {
 	// precision * precision
@@ -1321,6 +1340,7 @@ GLushort* createIndForGridPoints()
 
 	return tmp;
 }
+
 GLushort* createIndFromVector(std::vector<int> indexesVector)
 {
 	GLushort* tmp = new GLushort[indexesVector.size()];
@@ -1330,6 +1350,22 @@ GLushort* createIndFromVector(std::vector<int> indexesVector)
 	}
 	return tmp;
 }
+
+GLushort* createIndFromVectors(std::vector<PatchCoons*> CoonsVector)
+{
+	GLushort* tmp = new GLushort[CoonsVector.size()*CoonsVector[0]->triangles.size()];
+	int cpt = 0;
+	for (int i = 0; i < CoonsVector.size(); i++)
+	{
+		for (int j = 0; j < CoonsVector[i]->triangles.size(); j++)
+		{
+			tmp[cpt] = i*CoonsVector[0]->points.size()+CoonsVector[i]->triangles[j];
+			++cpt;
+		}
+	}
+	return tmp;
+}
+
 
 GLushort* createIndForGridPoints(std::vector<int> tmpCptGP)
 {
