@@ -15,12 +15,19 @@ float SIN(float angle)
 	return sin(angle * 2 * 0.00872664625);
 }
 
+float ACOS(float x)
+{
+	return acos(x) * 2 * 0.00872664625;
+}
+
 struct PatchCoons
 {
 	int n, m;
 
 	Curve* curves[4];
 	std::vector<Point> points;
+
+	std::vector<int> triangles;
 	std::vector<Point> uPoints, vPoints, bPoints;
 	
 	PatchCoons()
@@ -42,6 +49,30 @@ struct PatchCoons
 		curves[3] = _d;
 
 		points.reserve(pow(precision + 1, 2));
+	}
+
+	std::vector<int> generateTriangles()
+	{
+		triangles.clear();
+		int height = curves[1]->newPoints.size();
+		int width = curves[0]->newPoints.size();
+		for (int i = 0; i < (width)*(height-1); i++)
+		{
+			if (i%width == width-1)
+			{
+
+				continue;
+			}
+
+			triangles.push_back(i);
+			triangles.push_back(i + width);
+			triangles.push_back(i + width + 1);
+
+			triangles.push_back(i);
+			triangles.push_back(i + width + 1);
+			triangles.push_back(i + 1);
+		}
+		return triangles;
 	}
 
 	void ChangeColor(float col1, float col2, float col3)
@@ -120,6 +151,16 @@ struct PatchCoons
 		}
 	}
 
+	void Translate(Point step)
+	{
+		for (Point &p : points)
+		{
+			p.x += step.x;
+			p.y += step.y;
+			p.z += step.z;
+		}
+	}
+
 	void GeneratePatch()
 	{
 		points.clear();
@@ -140,6 +181,8 @@ struct PatchCoons
 				points.push_back(Point(x, y, z));
 			}
 		}
+
+		generateTriangles();
 	}
 
 	std::vector<Point> GenerateRuledSurface(Curve* c1, Curve* c2, int v)
@@ -190,6 +233,8 @@ struct PatchCoons
 
 		return Suv;
 	}
+
+
 
 	float BernsteinPoly(int i, float t, int dim)
 	{
