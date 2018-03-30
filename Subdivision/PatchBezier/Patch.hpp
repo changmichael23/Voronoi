@@ -9,14 +9,6 @@
 extern int precision;
 extern RotateMode rm;
 
-float COS(float angle)
-{
-	return cos(angle * 2 * 0.00872664625);
-}
-float SIN(float angle)
-{
-	return sin(angle * 2 * 0.00872664625);
-}
 
 struct Patch
 {
@@ -47,14 +39,43 @@ struct Patch
 		m = _m;
 		subdivised = false;
 
-		for (int i = 0; i <= n; ++i)
+		/*for (int i = 0; i <= n; ++i)
 		{
 			for (int j = 0; j <= m; ++j)
 			{
 				Point p = Point(i, .0f, j);
 				controlPoints.push_back(p);
 			}
+		}*/
+
+	
+		for (int j = 0; j < m -1; ++j)
+		{
+			Point p = Point(0, .0f, j);
+			controlPoints.push_back(p);
 		}
+
+		for (int j = 0; j < n-1; ++j)
+		{
+			Point p = Point(j, .0f, m-1);
+			controlPoints.push_back(p);
+		}
+		
+		for (int j = m-1; j > 0; --j)
+		{
+			Point p = Point(n-1, .0f, j);
+			controlPoints.push_back(p);
+		}
+
+		for (int j = n-1; j > 0; --j)
+		{
+			Point p = Point(j, .0f, 0);
+			controlPoints.push_back(p);
+		}
+
+
+
+
 		this->rotationAngle = 0.f;
 		quatRotation = new CQuaternion(rotationAngle, new CVecteur(1, 0, 0));
 		rotationMatrix = quatRotation->QuaternionToMatrice();
@@ -236,7 +257,7 @@ struct Patch
 		}
 	}
 
-	void GenerateCurve()
+	/*void GenerateCurve()
 	{
 		gridPoints.clear();
 
@@ -248,9 +269,9 @@ struct Patch
 				CalculateNormale(i / (float)precision, j / (float)precision);
 			}
 		}
-	}
+	}*/
 
-	Point BezierPatch(float u, float v)
+	/*Point BezierPatch(float u, float v)
 	{
 		Point Suv = Point(), Si = Point();
 
@@ -265,7 +286,7 @@ struct Patch
 		}
 
 		return Suv;
-	}
+	}*/
 
 	float BernsteinPoly(int i, float t, int dim)
 	{

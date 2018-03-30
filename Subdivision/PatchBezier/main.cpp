@@ -1,8 +1,10 @@
 #include <math.h>
 #include <vector>
+#include <map>
 #include <iostream>
 #include "Camera.hpp"
 #include "UtilEnums.hpp"
+#include "PatchCoons.hpp"
 #include "PatchesController.hpp"
 #include "Controller.hpp"
 #include "Colore.hpp"
@@ -82,6 +84,235 @@ bool Initialize2();
 
 bool initialized1 = false;
 bool initialized2 = false;
+
+
+struct Face;
+struct Edge;
+
+
+struct PointKob 
+{
+public :
+	float x;
+	float y;
+	float z;
+
+	std::vector<Edge*> adjacentEdge;
+	std::vector<Face*> adjacentFace;
+
+	PointKob() {};
+
+	PointKob(float x, float y, float z) 
+	{
+		this->x = x;
+		this->y = y;
+		this->z = z;
+	}
+
+	PointKob operator +(PointKob* p)
+	{
+		return PointKob(this->x + p->x, this->y + p->y, this->z + p->z);
+	}
+
+	PointKob operator /(int i)
+	{
+		return PointKob(this->x / i, this->y / i, this->z / i);;
+	}
+
+	PointKob operator /(float i)
+	{
+		return PointKob(this->x / i, this->y / i, this->z / i);;
+	}
+
+	PointKob operator *(float i)
+	{
+		return PointKob(this->x * i, this->y * i, this->z * i);
+	}
+};
+
+struct Edge 
+{
+public:
+	std::vector<PointKob*> points;
+	std::vector<Face*> adjacentFace;
+
+	Edge(PointKob* p1, PointKob* p2)
+	{
+		points.push_back(p1);
+		points.push_back(p2);
+	}
+};
+
+struct Face 
+{
+public:
+	std::vector<Edge*> edges;
+	PointKob* barycentre;
+
+	Face(Edge* e1, Edge* e2, Edge* e3)
+	{
+		edges.push_back(e1);
+		edges.push_back(e2);
+		edges.push_back(e3);
+	}
+
+};
+
+
+std::vector<PointKob*> letsPertubate(std::vector<PointKob*> points)
+{
+	std::vector<PointKob*> pertubatedPoints;
+
+	for (auto it = points.begin(); it != points.end(); ++it)
+	{
+		float alpha = 1 / 9 * (4 - 2 * cos((2 * M_PI) / (*it)->adjacentEdge.size()));
+
+		PointKob sumAdj(0.f, 0.f, 0.f);
+		for (auto itAdj = (*it)->adjacentEdge.begin(); itAdj != (*it)->adjacentEdge.end(); itAdj++)
+		{
+			if ((*itAdj)->points[0] != (*it))
+			{
+				sumAdj = sumAdj + (*itAdj)->points[0];
+			}
+			else
+			{
+				sumAdj = sumAdj + (*itAdj)->points[1];
+			}
+		}
+
+		PointKob perturbatePoint;
+		perturbatePoint.x = (*(*it) * (1 - alpha)).x + sumAdj.x * (alpha / (float)((*it)->adjacentEdge.size()));
+		perturbatePoint.y = (*(*it) * (1 - alpha)).y + sumAdj.y * (alpha / (float)((*it)->adjacentEdge.size()));
+		perturbatePoint.z = (*(*it) * (1 - alpha)).z + sumAdj.z * (alpha / (float)((*it)->adjacentEdge.size()));
+
+		pertubatedPoints.push_back(&perturbatePoint);
+	}
+
+	return pertubatedPoints;
+}
+
+void letsGoKobbelt(std::vector<Face*> faces, std::vector<PointKob*>& points)
+{
+	// Calcul barycentre de chaque face
+	for (auto it = faces.begin(); it != faces.end(); ++it)
+	{
+		PointKob* p1 = (*it)->edges[0]->points[0];
+		PointKob* p2 = (*it)->edges[0]->points[1];
+		PointKob* p3 = (*it)->edges[1]->points[1];
+
+		PointKob barycentre;
+		
+		barycentre.x = ((p1->x + p2->x) + p3->x) / 3;
+		barycentre.y = ((p1->y + p2->y) + p3->y) / 3;
+		barycentre.z = ((p1->z + p2->z) + p3->z) / 3;
+
+		(*it)->barycentre = &barycentre;
+	}
+
+	//std::vector<Edge*> newEdges;
+	//std::vector<Face*> newFaces = faces;
+
+	// Relier chaque barycentre aux points qui composent sa face
+	//for (auto it = faces.begin(); it != faces.end(); ++it)
+	//{
+	//	newEdges.push_back(new Edge((*it)->barycentre, (*it)->edges[0]->points[0]));
+	//	newEdges.push_back(new Edge((*it)->barycentre, (*it)->edges[0]->points[1]));
+	//	newEdges.push_back(new Edge((*it)->barycentre, (*it)->edges[1]->points[1]));
+	//}
+
+	// Flipping
+	std::vector<PointKob*> perturbatedPoints = letsPertubate(points);
+
+	for (int i = 0; i < faces.size(); ++i)
+	{
+		if (faces[i]->barycentre == NULL)
+		{
+			break;
+		}
+
+		for (int j = 0; j < faces[i]->edges.size(); ++j)
+		{
+			if (faces[i]->edges[j]->adjacentFace.size() > 1)
+			{
+				if (faces[i]->edges[j]->adjacentFace[0] != faces[i])
+				{
+					//newEdges.push_back(new Edge(faces[i]->barycentre, faces[i]->edges[j]->adjacentFace[0]->barycentre));
+
+
+					// TODO : Update all !!
+					// Update Edge
+					Edge* edge1 = new Edge(faces[i]->edges[j]->points[0], faces[i]->barycentre);
+					Edge* edge2 = new Edge(faces[i]->edges[j]->points[0], faces[i]->edges[j]->adjacentFace[0]->barycentre);
+					Edge* edge3 = new Edge(faces[i]->barycentre, faces[i]->edges[j]->adjacentFace[0]->barycentre);
+
+					//edge1->adjacentFace.push
+
+
+					// Update Face
+					Face* newFace1 = new Face(edge1, edge2, edge3);
+
+					Face* newFace2 = new Face(new Edge(faces[i]->edges[j]->points[1], faces[i]->barycentre),
+						new Edge(faces[i]->edges[j]->points[1], faces[i]->edges[j]->adjacentFace[0]->barycentre),
+						new Edge(faces[i]->barycentre, faces[i]->edges[j]->adjacentFace[0]->barycentre));
+
+					faces.push_back(newFace1);
+					faces.push_back(newFace2);
+				}
+				else
+				{
+					//newEdges.push_back(new Edge(faces[i]->barycentre, faces[i]->edges[j]->adjacentFace[1]->barycentre));
+
+					// Update
+					Face* newFace1 = new Face(new Edge(faces[i]->edges[j]->points[0], faces[i]->barycentre),
+						new Edge(faces[i]->edges[j]->points[0], faces[i]->edges[j]->adjacentFace[1]->barycentre),
+						new Edge(faces[i]->barycentre, faces[i]->edges[j]->adjacentFace[1]->barycentre));
+
+					Face* newFace2 = new Face(new Edge(faces[i]->edges[j]->points[1], faces[i]->barycentre),
+						new Edge(faces[i]->edges[j]->points[1], faces[i]->edges[j]->adjacentFace[1]->barycentre),
+						new Edge(faces[i]->barycentre, faces[i]->edges[j]->adjacentFace[1]->barycentre));
+
+					faces.push_back(newFace1);
+					faces.push_back(newFace2);
+				}
+			}
+		}
+
+		faces.erase(faces.begin() + i);
+	}
+
+	points = perturbatedPoints;
+}
+
+std::vector<Curve> chaikinOnControlPoints(std::vector<Point> controlPoints)
+{
+	std::vector<Curve> fourCurves;
+	for (unsigned i = 0; i < 4; ++i)
+	{
+		std::vector<Point> tmp;
+		for (unsigned j = i * controlPoints.size() / 4; j <= (i+1) * controlPoints.size() / 4 ; ++j)
+		{
+			if (j == controlPoints.size())
+			{
+				tmp.push_back(controlPoints[0]);
+			}
+			else
+			{
+				tmp.push_back(controlPoints[j]);
+			}
+
+		}
+
+		Curve tmpCurve(tmp,false);
+
+
+		tmpCurve.SubdiviseCurve();
+		fourCurves.push_back(tmpCurve);
+	}
+
+	return fourCurves;
+
+}
+
 
 void structToTabColor(std::vector<Point> newPoints, std::vector<Colore> c,float * tabP)
 {
@@ -297,15 +528,27 @@ bool Initialize1()
 	return true;
 }
 
+
+std::vector<Curve> testCurve;
 bool Initialize2()
 {
 	sumStatic = 0;
 	initialized2 = true;
 	//gridPoints3D = patches[0].gridPoints;
 	//tmpPoints = new float[gridPoints3D.size() * 9];
+
+
+	
+	testCurve = chaikinOnControlPoints(tmpPatch.controlPoints);
 	gridPoints3D.clear();
 	std::vector<int> cptGridPoints;
-	for (int i = 0; i < patches.size(); i++)
+
+	PatchCoons tmpCoons(testCurve[0].n, testCurve[1].n, &testCurve[0], &testCurve[1], &testCurve[2], &testCurve[3]);
+
+	tmpCoons.GeneratePatch();
+
+
+	/*for (int i = 0; i < patches.size(); i++)
 	{
 		for (int j = 0; j < patches[i].gridPoints.size(); j++)
 		{
@@ -314,8 +557,23 @@ bool Initialize2()
 
 		cptGridPoints.push_back(sqrt(patches[i].gridPoints.size()) - 1);
 		sumStatic += (sqrt(patches[i].gridPoints.size()) - 1)*(sqrt(patches[i].gridPoints.size()) - 1) * 4;
-	}
+	}*/
 
+	
+
+	/*for (int i = 0; i < testCurve.size(); ++i)
+	{
+		for (int j = 0; j < testCurve[i].newPoints.size(); j++)
+		{
+			gridPoints3D.push_back(testCurve[i].newPoints[j]);
+		}
+	}*/
+
+	for (int i = 0; i < tmpCoons.points.size(); ++i)
+	{
+		gridPoints3D.push_back(tmpCoons.points[i]);
+	}
+	
 
 	tmpPoints = new float[gridPoints3D.size() * 9];
 
@@ -325,8 +583,14 @@ bool Initialize2()
 	g_BasicShader.CreateProgram();
 	
 
-	indTmp = createIndForGridPoints(cptGridPoints);
+	//indTmp = createIndForGridPoints(cptGridPoints);
+	//indTmp = createInd(gridPoints3D.size());
+	indTmp = createIndForGridPoints();
+	for (int i = 0; i < (sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4; ++i)
+	{
+		std::cerr<<"TEST" << indTmp[i]<<std::endl;
 
+	}
 	structToTabColor(gridPoints3D, col,tmpPoints);
 
 	// Points controles VBO0
@@ -358,7 +622,7 @@ bool Initialize2()
 
 	glGenBuffers(1, &IBO1);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sumStatic * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, (sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4 * sizeof(GLushort), indTmp, GL_STATIC_DRAW);
 
 	// le fait de specifier 0 comme BO desactive l'usage des BOs
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -396,32 +660,79 @@ void update()
 		std::vector<int> cptGridPoints;
 
 		gridPoints3D.clear();
-		for (int i = 0; i < patches.size(); i++)
+		PatchCoons tmpCoons(testCurve[0].n, testCurve[1].n, &testCurve[0], &testCurve[1], &testCurve[2], &testCurve[3]);
+
+		tmpCoons.GeneratePatch();
+
+		/*for (int i = 0; i < testCurve.size(); ++i)
 		{
-			for (int j = 0; j < patches[i].gridPoints.size(); j++)
-			{
-				gridPoints3D.push_back(patches[i].gridPoints[j]);
-			}
-			cptGridPoints.push_back(sqrt(patches[i].gridPoints.size()) - 1);
-			sumStatic += (sqrt(patches[i].gridPoints.size()) - 1)*(sqrt(patches[i].gridPoints.size()) - 1)*4;
+		for (int j = 0; j < testCurve[i].newPoints.size(); j++)
+		{
+		gridPoints3D.push_back(testCurve[i].newPoints[j]);
 		}
+		}*/
+
+		
+
+		if (keyMode == 0)
+		{
+
+			for (int i = 0; i < tmpCoons.points.size(); ++i)
+			{
+				gridPoints3D.push_back(tmpCoons.points[i]);
+			}
+		}
+		else
+		{
+			if (keyMode == 1)
+			{
+
+				for (int i = 0; i < tmpCoons.uPoints.size(); ++i)
+				{
+					gridPoints3D.push_back(tmpCoons.uPoints[i]);
+				}
+			}
+			else
+			{
+				if (keyMode == 2)
+				{
+
+					for (int i = 0; i < tmpCoons.vPoints.size(); ++i)
+					{
+						gridPoints3D.push_back(tmpCoons.vPoints[i]);
+					}
+				}
+				else
+				{
+					if (keyMode == 3)
+					{
+
+						for (int i = 0; i < tmpCoons.vPoints.size(); ++i)
+						{
+							gridPoints3D.push_back(tmpCoons.bPoints[i]);
+						}
+					}
+				}
+			}
+		}
+		indTmp = createIndForGridPoints();
 		
 		delete(tmpPoints);
 		tmpPoints = new float[gridPoints3D.size()*9];
 
 
-		indTmp = createIndForGridPoints(cptGridPoints);
+		//indTmp = createInd(gridPoints3D.size());
 
 		structToTabColor(gridPoints3D, col,tmpPoints);
 
 		glBindBuffer(GL_ARRAY_BUFFER, VBO1);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, gridPoints3D.size() * 9 * sizeof(float), tmpPoints);
 
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VBO0);
-		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, sumStatic * sizeof(GLushort), indTmp);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
+		glBufferSubData(GL_ELEMENT_ARRAY_BUFFER, 0, (sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4 * sizeof(GLushort), indTmp);
 	}
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	//glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glutPostRedisplay();
 }
 
@@ -536,8 +847,11 @@ void animate()
 		glEnableVertexAttribArray(color_location);
 
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO1);
-		glDrawElements(GL_QUADS, sumStatic, GL_UNSIGNED_SHORT, nullptr);
-
+		if (initialized2)
+		{
+			glDrawElements(GL_QUADS, (sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4, GL_UNSIGNED_SHORT, nullptr);
+		}
+		//(sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1)*4
 		//----------------
 		glDisableVertexAttribArray(position_location);
 		glDisableVertexAttribArray(normal_location);
@@ -556,8 +870,6 @@ void animate()
 
 int main(int argc, const char* argv[])
 {
-
-
 	// passe les parametres de la ligne de commande a glut
 	glutInit(&argc, (char**)argv);
 	// defini deux color buffers (un visible, un cache) RGBA
@@ -613,29 +925,57 @@ GLushort* createInd(int n)
 	return tmp;
 }
 
+//GLushort* createIndForGridPoints()
+//{
+//	// precision * precision
+//	int cpt = 0;
+//	GLushort* tmp = new GLushort[patches.size()*(sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4];
+//	//int tmps = precision*precision * 4;
+//	int prec = (sqrt(gridPoints3D.size()) - 1);
+//	for (int l = 0; l < patches.size(); l++)
+//	{
+//		for (int i = 0; i < prec; i++)
+//		{
+//			int k = 0;
+//			for (int j = 0; j < prec; j++)
+//			{
+//				tmp[cpt] = l*(prec + 1)*(prec + 1)+i*(prec + 1) + j;
+//				tmp[cpt + 1] = l*(prec + 1)*(prec + 1) + i*(prec + 1) + j + 1;
+//				tmp[cpt + 2] = l*(prec + 1)*(prec + 1) + (i + 1)*(prec + 1) + j + 1;
+//				tmp[cpt + 3] = l*(prec + 1)*(prec + 1) + (i + 1)*(prec + 1) + j;
+//				cpt += 4;
+//			}
+//
+//		}
+//	}
+//	return tmp;
+//}
+
+
+
 GLushort* createIndForGridPoints()
 {
 	// precision * precision
 	int cpt = 0;
-	GLushort* tmp = new GLushort[patches.size()*(sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4];
+	GLushort* tmp = new GLushort[(sqrt(gridPoints3D.size()) - 1)*(sqrt(gridPoints3D.size()) - 1) * 4];
 	//int tmps = precision*precision * 4;
 	int prec = (sqrt(gridPoints3D.size()) - 1);
-	for (int l = 0; l < patches.size(); l++)
-	{
+
 		for (int i = 0; i < prec; i++)
 		{
 			int k = 0;
 			for (int j = 0; j < prec; j++)
 			{
-				tmp[cpt] = l*(prec + 1)*(prec + 1)+i*(prec + 1) + j;
-				tmp[cpt + 1] = l*(prec + 1)*(prec + 1) + i*(prec + 1) + j + 1;
-				tmp[cpt + 2] = l*(prec + 1)*(prec + 1) + (i + 1)*(prec + 1) + j + 1;
-				tmp[cpt + 3] = l*(prec + 1)*(prec + 1) + (i + 1)*(prec + 1) + j;
+
+				tmp[cpt] =  i*(prec + 1) + j;
+				tmp[cpt + 1] =  i*(prec + 1) + j + 1;
+				tmp[cpt + 2] =  (i + 1)*(prec + 1) + j + 1;
+				tmp[cpt + 3] =  (i + 1)*(prec + 1) + j;
 				cpt += 4;
 			}
 
 		}
-	}
+	
 	return tmp;
 }
 
